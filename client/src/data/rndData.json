@@ -2,11 +2,11 @@
   "projects": [
     {
       "id": "ai-attendance-monitoring",
-      "title": "AI CCTV Gate Attendance & Monitoring System",
+      "title": "AI CCTV Attendance & Monitoring System",
       "domain": "AI & Computer Vision",
       "desc": "Hardware-agnostic AI attendance system that connects to existing CCTV/IP cameras and turnstiles for contactless, high-accuracy facial recognition attendance with real-time monitoring.",
       "impact": "99.9% accuracy with anti-spoofing technology, zero-touch payroll sync, and real-time shift integrity alerts across all gates and locations.",
-      "fullDescription": "A hardware-agnostic AI attendance solution that connects to your existing CCTV/IP cameras and turnstiles for a setup that takes days, not months. Military-grade facial recognition distinguishes between a real face and a photo/video, ensuring zero payroll fraud. Attendance logs push directly to SAP, Oracle, or your HRMS, eliminating manual Excel uploads and data entry errors.",
+      "fullDescription": "A hardware-agnostic AI attendance solution that connects to your existing CCTV/IP cameras and turnstiles for a setup that takes days, not months. Military-grade facial recognition distinguishes between a real face and a photo/video, reducing payroll fraud. Attendance logs push directly to SAP, Oracle, or your HRMS, eliminating manual Excel uploads and data entry errors.",
       "objectives": [
         "Deliver 99.9% accurate facial recognition with anti-spoofing technology",
         "Enable zero-touch payroll synchronization with existing HRMS systems",
@@ -34,8 +34,8 @@
         "Digital Visitor Management",
         "CCTV/IP Camera Integration"
       ],
-      "timeline": "Deployment-ready with days-long setup",
-      "teamSize": "AI engineering team with security and HRMS integration specialists",
+      "timeline": "Rapid deployment with minimal setup time and efficiency",
+      "teamSize": "AI engineering team with security and HRMS specialists",
       "outcomes": [
         "99.9% accuracy in detection and classification",
         "Zero payroll fraud through anti-spoofing",
@@ -97,7 +97,7 @@
         "Mobile Application",
         "Edge Processing"
       ],
-      "timeline": "Ready for institutional deployment",
+      "timeline": "Ready for seamless institutional platform deployment",
       "teamSize": "AI and education technology integration team",
       "outcomes": [
         "Zero-touch, error-free attendance tracking",
@@ -158,7 +158,7 @@
         "Real-Time Presence Dashboard"
       ],
       "timeline": "Ready for organizational deployment",
-      "teamSize": "Virtual workplace development team with UX specialists",
+      "teamSize": "Virtual workplace UX team",
       "outcomes": [
         "Enhanced employee engagement through gamification",
         "Reduced context switching between multiple tools",
@@ -219,13 +219,14 @@
         "Battery Backup Systems"
       ],
       "timeline": "Ready for industrial deployment",
-      "teamSize": "Industrial IoT and safety systems engineering team",
+      "teamSize": "Industrial IoT Safety Engineering",
       "outcomes": [
         "Real-time worker location visibility during emergencies",
         "Automated attendance with accurate time logging",
         "Instant emergency alerts with battery backup",
         "Restricted area monitoring with immediate notifications",
-        "Centralized safety and workforce dashboard"
+        "Centralized safety and workforce dashboard",
+        "Predictive safety analytics for risk prevention"
       ],
       "features": [
         "2D Industrial Digital Twin",
@@ -279,7 +280,7 @@
         "Mobile/Web Dashboards",
         "Battery Backup Systems"
       ],
-      "timeline": "Ready for educational institution deployment",
+      "timeline": "Ready for institutional deployment",
       "teamSize": "EdTech and IoT engineering team",
       "outcomes": [
         "Complete campus situational awareness",
@@ -321,7 +322,8 @@
         "Integrate built-in industry tools (compilers, simulators, 3D design)",
         "Provide AI assistant and human mentor support per room",
         "Connect LMS features with interactive virtual campus",
-        "Host global events, webinars, and hackathons"
+        "Host global events, webinars, and hackathons",
+        "Ensure secure access control and data privacy across the platform"
       ],
       "methodology": [
         "Design domain-based blocks with structured floor and room layouts",
@@ -343,8 +345,8 @@
         "LMS Integration",
         "Gamification Engine"
       ],
-      "timeline": "Scalable development with phased implementation",
-      "teamSize": "Cross-functional team including developers, AI engineers, UI/UX designers, and academic-industry mentors",
+      "timeline": "Scalable development approach with structured phased implementation",
+      "teamSize": "Cross-functional team of developers, AI engineers, designers, and mentors",
       "outcomes": [
         "Interactive 2D campus-style digital learning environment",
         "Room-based automatic meetings with contextual collaboration",
@@ -412,7 +414,8 @@
         "Reduced manpower costs for manual video review",
         "Improved compliance enforcement",
         "Enhanced safety outcomes",
-        "Better utilization of CCTV investments"
+        "Better utilization of CCTV investments",
+        "Real-time incident detection and alerts"
       ],
       "features": [
         "Retroactive Person Search",
@@ -466,14 +469,15 @@
         "Role-Based Access Control",
         "Operational Dashboard"
       ],
-      "timeline": "Ready for public safety deployment",
-      "teamSize": "AI surveillance and public safety specialists",
+      "timeline": "Ready for secure public safety deployment systems",
+      "teamSize": "AI surveillance and public safety specialists with security",
       "outcomes": [
         "Real-time identification of persons of interest",
         "Automated multi-camera tracking",
         "Instant alerts to nearest response units",
         "Reduced manual monitoring burden",
-        "Enhanced public safety response times"
+        "Enhanced public safety response times",
+        "Centralized monitoring and control system"
       ],
       "features": [
         "Intelligent Person Identification",

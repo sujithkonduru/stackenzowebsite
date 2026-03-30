@@ -37,41 +37,41 @@ function Footer() {
   ];
 
   return (
-    <footer className="bg-[#E8F5E9] border-t border-gray-200">
+    <footer className="bg-[#FFF4ED] border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-12 mb-12">
           {/* Company Info - Takes 2 columns on large screens */}
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block mb-4">
-              <span className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[#1E301E] to-[#2E7D32] text-transparent bg-clip-text hover:from-[#2E7D32] hover:to-[#1E301E] transition-all">
+              <span className="font-[san] font-bold tracking-wider text-2xl sm:text-5xl font-bold bg-gradient-to-r from-[#E66B26] to-[#C5531A] text-transparent bg-clip-text hover:from-[#C5531A] hover:to-[#E66B26] transition-all">
                 Stackenzo
               </span>
+              <p className="text-lg sm:text-xl font-semibold text-[#1A1A1A]">
+                Learn Build Inspire
+              </p>
             </Link>
-            <p className="text-[#1A1A1A] mb-6 leading-relaxed text-sm sm:text-base">
-              Bridging education, innovation, and enterprise solutions to transform ideas into impactful digital realities.
-            </p>
             <div className="space-y-3">
-              <a 
-                href="mailto:Hello@stackenzo.com" 
-                className="flex items-center gap-3 text-[#1A1A1A] hover:text-[#1E301E] transition-colors group"
+              <a
+                href="mailto:hello@stackenzo.com"
+                className="flex items-center gap-3 text-[#1A1A1A] hover:text-[#E66B26] transition-colors group"
               >
                 <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:bg-[#D4AF37]/20 transition-colors border border-gray-200">
-                  <Mail className="w-4 h-4 text-[#1E301E]" />
+                  <Mail className="w-4 h-4 text-[#E66B26]" />
                 </div>
-                <span className="text-sm sm:text-base">Hello@stackenzo.com</span>
+                <span className="text-sm sm:text-base">hello@stackenzo.com</span>
               </a>
-              <a 
-                href="tel:+919876543210" 
-                className="flex items-center gap-3 text-[#1A1A1A] hover:text-[#1E301E] transition-colors group"
+              <a
+                href="tel:+919247577907"
+                className="flex items-center gap-3 text-[#1A1A1A] hover:text-[#E66B26] transition-colors group"
               >
                 <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:bg-[#D4AF37]/20 transition-colors border border-gray-200">
-                  <Phone className="w-4 h-4 text-[#1E301E]" />
+                  <Phone className="w-4 h-4 text-[#E66B26]" />
                 </div>
-                <span className="text-sm sm:text-base">+91 98765 43210</span>
+                <span className="text-sm sm:text-base">+91 9247577907</span>
               </a>
               <div className="flex items-center gap-3 text-[#1A1A1A] group">
                 <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center border border-gray-200">
-                  <MapPin className="w-4 h-4 text-[#1E301E]" />
+                  <MapPin className="w-4 h-4 text-[#E66B26]" />
                 </div>
                 <span className="text-sm sm:text-base">Nellore, Andhra Pradesh, India</span>
               </div>
@@ -87,9 +87,9 @@ function Footer() {
             <ul className="space-y-3 mt-6">
               {services.map((service) => (
                 <li key={service.path}>
-                  <Link 
-                    to={service.path} 
-                    className="text-[#1A1A1A] hover:text-[#1E301E] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
+                  <Link
+                    to={service.path}
+                    className="text-[#1A1A1A] hover:text-[#E66B26] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
                   >
                     {service.name}
                   </Link>
@@ -107,9 +107,9 @@ function Footer() {
             <ul className="space-y-3 mt-6">
               {programs.map((program) => (
                 <li key={program.path}>
-                  <Link 
-                    to={program.path} 
-                    className="text-[#1A1A1A] hover:text-[#1E301E] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
+                  <Link
+                    to={program.path}
+                    className="text-[#1A1A1A] hover:text-[#E66B26] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
                   >
                     {program.name}
                   </Link>
@@ -127,9 +127,9 @@ function Footer() {
             <ul className="space-y-3 mt-6">
               {company.map((item) => (
                 <li key={item.path}>
-                  <Link 
-                    to={item.path} 
-                    className="text-[#1A1A1A] hover:text-[#1E301E] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
+                  <Link
+                    to={item.path}
+                    className="text-[#1A1A1A] hover:text-[#E66B26] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
                   >
                     {item.name}
                   </Link>
@@ -147,16 +147,16 @@ function Footer() {
             <ul className="space-y-3 mt-6 mb-8">
               {legal.map((item) => (
                 <li key={item.path}>
-                  <Link 
-                    to={item.path} 
-                    className="text-[#1A1A1A] hover:text-[#1E301E] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
+                  <Link
+                    to={item.path}
+                    className="text-[#1A1A1A] hover:text-[#E66B26] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
                   >
                     {item.name}
                   </Link>
                 </li>
               ))}
             </ul>
-            
+
             <h3 className="text-[#1A1A1A] font-semibold text-lg mb-4 relative inline-block">
               Follow Us
               <span className="absolute -bottom-1 left-0 w-8 h-0.5 bg-gradient-to-r from-[#D4AF37] to-[#D4AF37] rounded-full"></span>
@@ -165,13 +165,13 @@ function Footer() {
               {socialLinks.map((social, index) => {
                 const Icon = social.icon;
                 return (
-                  <a 
+                  <a
                     key={index}
                     href={social.href}
-                    target="_blank" 
+                    target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-[#1A1A1A] hover:bg-[#1E301E] hover:text-white transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 border border-gray-200"
+                    className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-[#1A1A1A] hover:bg-[#E66B26] hover:text-white transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 border border-gray-200"
                   >
                     <Icon className="w-5 h-5" />
                   </a>
@@ -185,7 +185,6 @@ function Footer() {
         {isHomePage && (
           <div className="mb-12">
             <div className="relative max-w-4xl mx-auto">
-              {/* Decorative elements */}
               <div className="absolute -inset-1 bg-gradient-to-r from-[#D4AF37]/20 to-[#D4AF37]/20 rounded-2xl blur-xl"></div>
               <div className="relative bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-2xl">
                 <div className="aspect-[21/9] w-full">
@@ -199,10 +198,10 @@ function Footer() {
                     className="w-full h-full"
                   />
                 </div>
-                
+
                 {/* Map overlay with location info */}
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-4 py-2 border border-[#D4AF37]/20">
-                  <p className="text-sm font-medium text-[#1E301E] flex items-center gap-2">
+                  <p className="text-sm font-medium text-[#E66B26] flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-[#D4AF37]" />
                     Our Headquarters
                   </p>
@@ -220,16 +219,12 @@ function Footer() {
               © {new Date().getFullYear()} Stackenzo. All Rights Reserved.
             </p>
             <div className="flex items-center gap-4 order-1 md:order-2">
-              <Link to="/Terms" className="text-[#1A1A1A] hover:text-[#1E301E] text-xs sm:text-sm transition-colors">
+              <Link to="/Terms" className="text-[#1A1A1A] hover:text-[#E66B26] text-xs sm:text-sm transition-colors">
                 Terms
               </Link>
               <span className="text-gray-400">•</span>
-              <Link to="/Privacy" className="text-[#1A1A1A] hover:text-[#1E301E] text-xs sm:text-sm transition-colors">
+              <Link to="/Privacy" className="text-[#1A1A1A] hover:text-[#E66B26] text-xs sm:text-sm transition-colors">
                 Privacy
-              </Link>
-              <span className="text-gray-400">•</span>
-              <Link to="/Sitemap" className="text-[#1A1A1A] hover:text-[#1E301E] text-xs sm:text-sm transition-colors">
-                Sitemap
               </Link>
             </div>
             <p className="text-[#1A1A1A] text-xs sm:text-sm order-3 flex items-center gap-1">

@@ -2,30 +2,36 @@
 
 /* Custom Color Theme for Stackenzo */
 @theme {
-  /* Primary - Dark Green #1E301E */
-  --color-primary: #1E301E;
-  --color-primary-light: #2a452a;
-  --color-primary-dark: #152315;
-  
-  /* Secondary - Leaf Green #2E7D32 */
-  --color-secondary: #2E7D32;
-  --color-secondary-light: #4caf50;
-  --color-secondary-dark: #1b5e20;
-  
+  /* Primary - Orange #E66B26 */
+  --color-primary: #E66B26;
+  --color-primary-light: #F08040;
+  --color-primary-dark: #C5531A;
+
+  /* Secondary - Burnt Orange #C5531A */
+  --color-secondary: #C5531A;
+  --color-secondary-light: #D96830;
+  --color-secondary-dark: #8B3A0F;
+
   /* Accent - Gold #D4AF37 */
   --color-accent: #D4AF37;
-  --color-accent-light: #e5c158;
-  --color-accent-dark: #b8962e;
-  
-  /* Light Background - Soft Green #E8F5E9 */
-  --color-light-bg: #E8F5E9;
-  
+  --color-accent-light: #E5C158;
+  --color-accent-dark: #B8962E;
+
+  /* Light Background - Warm Peach #FFF4ED */
+  --color-light-bg: #FFF4ED;
+
   /* Text - Dark Gray #1A1A1A */
   --color-text: #1A1A1A;
-  --color-text-light: #4a4a4a;
-  
+  --color-text-light: #4A4A4A;
+
   /* Background - White #FFFFFF */
   --color-background: #FFFFFF;
+
+  /* Extra warm tints */
+  --color-light-tint: #FFD5B8;
+  --color-light-tint-2: #FFCBA4;
+  --color-warm-bg: #FFF0E6;
+  --color-very-dark: #3D1A0A;
 }
 
 /* Global white background */
