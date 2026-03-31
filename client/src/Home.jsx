@@ -37,11 +37,56 @@ const STATS = [
   { label: "Community Members",   value: "3000+", icon: Globe,     iconKey: "globe",    description: "Growing tech community"         },
 ];
 const SERVICES = [
-  { id:1, title:"Research & Development", shortDesc:"Cutting-edge R&D projects",    fullDesc:"We drive innovation through cutting-edge research, combining academic rigor with real-world impact to solve complex challenges in AI, robotics, and sustainable technology.", icon:CpuIcon,    accent:"#4CAF50", features:["AI & Machine Learning","Sustainable Tech","Prototype Development","Industry Collaboration"] },
-  { id:2, title:"IT Services",            shortDesc:"Custom web & mobile dev",       fullDesc:"We empower businesses with scalable IT solutions—from custom platforms to enterprise cloud systems—tailored to drive growth and efficiency.",  icon:Code2,      accent:"#2196F3", features:["Digital Platforms","Cloud Solutions","Enterprise Systemss","Scalable Architecture"] },
-  { id:3, title:"EdTech",                shortDesc:"Strategic EdTech initiatives",  fullDesc:"We transform education through innovative EdTech solutions, making learning engaging, accessible, and impactful while empowering future leaders.",       icon:BookOpen,   accent:"#FF9800", features:["Robotics education with hands-on learning","Coding bootcamps using real tools","Problem-solving focused training","Guidance from experienced mentors"] },
-  { id:4, title:"Digital Marketing",      shortDesc:"SEO, branding & growth",        fullDesc:"We use data-driven digital marketing to build strong online presence, connect with the right audience, and drive engagement with measurable ROI.",           icon:TrendingUp, accent:"#E91E63", features:["SEO Optimization","Content Strategy","Social Media","Analytics & Reporting"] },
-  { id:5, title:"GSIN Platform",          shortDesc:"Gamified tech ecosystem",        fullDesc:"Our innovative GSIN platform creates an engaging ecosystem where tech enthusiasts collaborate, compete, and grow through challenges, leaderboards, project showcases, and community events that foster innovation.",            icon:Globe,      accent:"#00BCD4", features:["Coding challenges with rewards","Project collaboration ecosystem","Leaderboards for engagement","Community events with mentorship"] },
+  {
+    id:1,
+    title:"Research & Development",
+    path:"/R_AND_D",
+    shortDesc:"Cutting-edge R&D projects",
+    fullDesc:"We drive innovation through cutting-edge research, combining academic rigor with real-world impact to solve complex challenges in AI, robotics, and sustainable technology.",
+    icon:CpuIcon,
+    accent:"#4CAF50",
+    features:["AI & Machine Learning","Sustainable Tech","Prototype Development","Industry Collaboration"]
+  },
+  {
+    id:2,
+    title:"IT Services",
+    path:"/WebServices",
+    shortDesc:"Custom web & mobile dev",
+    fullDesc:"We empower businesses with scalable IT solutions—from custom platforms to enterprise cloud systems—tailored to drive growth and efficiency.",
+    icon:Code2,
+    accent:"#2196F3",
+    features:["Digital Platforms","Cloud Solutions","Enterprise Systemss","Scalable Architecture"]
+  },
+  {
+    id:3,
+    title:"EdTech",
+    path:"/Robotics",
+    shortDesc:"Strategic EdTech initiatives",
+    fullDesc:"We transform education through innovative EdTech solutions, making learning engaging, accessible, and impactful while empowering future leaders.",
+    icon:BookOpen,
+    accent:"#FF9800",
+    features:["Robotics education with hands-on learning","Coding bootcamps using real tools","Problem-solving focused training","Guidance from experienced mentors"]
+  },
+  {
+    id:4,
+    title:"Digital Marketing",
+    path:"/DigitalMarketing",
+    shortDesc:"SEO, branding & growth",
+    fullDesc:"We use data-driven digital marketing to build strong online presence, connect with the right audience, and drive engagement with measurable ROI.",
+    icon:TrendingUp,
+    accent:"#E91E63",
+    features:["SEO Optimization","Content Strategy","Social Media","Analytics & Reporting"]
+  },
+  {
+    id:5,
+    title:"GSIN Platform",
+    path:"/Community",
+    shortDesc:"Gamified tech ecosystem",
+    fullDesc:"Our innovative GSIN platform creates an engaging ecosystem where tech enthusiasts collaborate, compete, and grow through challenges, leaderboards, project showcases, and community events that foster innovation.",
+    icon:Globe,
+    accent:"#00BCD4",
+    features:["Coding challenges with rewards","Project collaboration ecosystem","Leaderboards for engagement","Community events with mentorship"]
+  },
 ];
 const WHY = [
   { icon: Zap,        title: "Swift Assistance", desc: "Quick turnaround without compromising quality"           },
@@ -153,12 +198,17 @@ function StaggerContainer({ children, className = "", stagger = 0.1, from = "bot
 /* ════════════════════════════════════════════════════════════
    FLOATING ELEMENT  (drifts upward continuously)
 ════════════════════════════════════════════════════════════ */
-function Float({ children, className = "", duration = 2, yRange = 10, delay = 0 }) {
+function Float({ children, className = "", duration = 3, yRange = 12, delay = 0 }) {
   return (
     <motion.div
       className={className}
-      animate={{ y: [-yRange / 2, yRange / 2, -yRange / 2] }}
-      transition={{ duration: duration, repeat: Infinity, ease: "linear", delay }}
+      animate={{ y: [0, -yRange, 0] }}
+      transition={{
+        duration,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay,
+      }}
     >
       {children}
     </motion.div>
@@ -252,7 +302,7 @@ function PageLoader({ onDone }) {
   className="w-14 h-14 flex items-center justify-center"
 >
   <img 
-    src="/images/Stackenzo small Logo.jpg.jpeg" 
+    src="/images/Stackenzo small Logo.jpeg" 
           alt="Stackenzo"  
     className="w-10 h-10 object-contain"
   />
@@ -336,10 +386,16 @@ function CustomCursor() {
 ════════════════════════════════════════════════════════════ */
 function ScrollProgressBar() {
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+  const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+
   return (
-    <motion.div className="fixed top-0 left-0 right-0 h-[3px] origin-left z-[9997]"
-      style={{ scaleX, background: "linear-gradient(90deg,#3D1A0A,#E66B26,#D4AF37,#C5531A,#D4AF37)" }} />
+    <motion.div
+      className="fixed top-0 right-0 w-[4px] h-full origin-top z-[9997]"
+      style={{
+        scaleY,
+        background: "linear-gradient(to bottom,#0d1f0d,#1E301E,#D4AF37,#2E7D32,#D4AF37)"
+      }}
+    />
   );
 }
 
@@ -362,27 +418,46 @@ function SectionNavDots() {
   return (
     <div className="fixed right-5 top-1/2 -translate-y-1/2 z-[900] flex-col gap-4 hidden md:flex">
       {NAV_SECTIONS.map((id, i) => (
-        <motion.button key={i}
-          onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })}
-          className="relative flex items-center gap-2 group"
-          title={labels[i]}>
-          {/* Label tooltip */}
-          <motion.span
-            initial={{ opacity: 0, x: 8 }} animate={{ opacity: active === i ? 1 : 0, x: active === i ? 0 : 8 }}
-            className="absolute right-6 text-[11px] font-bold text-[#D4AF37] bg-[#0f0f0f]/80 backdrop-blur-sm px-2 py-1 rounded-md whitespace-nowrap pointer-events-none">
-          
-          </motion.span>
-          <motion.div
-            animate={{ scale: active === i ? 1.4 : 1, background: active === i ? "#D4AF37" : "rgba(230,107,38,0.4)" }}
-            transition={{ type: "spring", stiffness: 300, damping: 22 }}
-            className="w-2.5 h-2.5 rounded-full" />
-          {active === i && (
-            <motion.div layoutId="nav-pulse" className="absolute inset-0 rounded-full"
-              style={{ scale: 2, border: "1.5px solid #D4AF37", opacity: 0.5 }}
-              animate={{ scale: [2, 2.8, 2], opacity: [0.5, 0, 0.5] }}
-              transition={{ duration: 1.8, repeat: Infinity }} />
-          )}
-        </motion.button>
+        <motion.button
+  key={i}
+  onClick={() =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+  }
+  className="relative flex items-center gap-2"
+  title={labels[i]}
+>
+  {/* 🔹 DOT */}
+  <motion.div
+    animate={{
+      scale: active === i ? 1.4 : 1,
+      background: active === i ? "#D4AF37" : "rgba(230,107,38,0.4)"
+    }}
+    transition={{ type: "spring", stiffness: 300, damping: 22 }}
+    className="w-2.5 h-2.5 rounded-full"
+  />
+
+  {/* 🔥 PULSE */}
+  {active === i && (
+    <motion.div
+      layoutId="nav-pulse"
+      className="absolute inset-0 rounded-full"
+      style={{ border: "1.5px solid #D4AF37" }}
+      animate={{ scale: [2, 2.8, 2], opacity: [0.5, 0, 0.5] }}
+      transition={{ duration: 1.8, repeat: Infinity }}
+    />
+  )}
+
+  {/* 🔥 ARROW OUTSIDE */}
+  {active === i && (
+    <motion.div
+      initial={{ opacity: 0, x: 10 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="absolute right-6"
+    >
+      <ArrowRight className="w-4 h-4 text-black" />
+    </motion.div>
+  )}
+</motion.button>
       ))}
     </div>
   );
@@ -639,7 +714,7 @@ function HeroSection({ apiPrograms, loading }) {
   const secRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: secRef, offset: ["start start", "end start"] });
   const hY   = useTransform(scrollYProgress, [0,1], [0,-110]);
-  const hO   = useTransform(scrollYProgress, [0,.6], [1,0]);
+  const hO   = useTransform(scrollYProgress, [0,.6], [1,0.9]);
   const hS   = useTransform(scrollYProgress, [0,1], [1,.83]);
   const bigY = useTransform(scrollYProgress, [0,1], [0, 200]);
 
@@ -723,7 +798,16 @@ function HeroSection({ apiPrograms, loading }) {
         </motion.div>
 
         <div className="flex items-center justify-center mb-6" style={{ minHeight: "clamp(110px,18vw,240px)" }}>
-          <h1 className="text-[clamp(2.2rem,5.4vw,4.8rem)] font-black leading-[1.08] tracking-tight text-[#1A1A1A]">{displayed}</h1>
+          <motion.h1
+  key={hIdx}
+  initial={{ opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  exit={{ opacity: 0, y: -30 }}
+  transition={{ duration: 0.6 }}
+  className="text-[clamp(2.2rem,5.4vw,4.8rem)] font-black leading-[1.08] tracking-tight text-[#1A1A1A]"
+>
+  {headlines[hIdx]}
+</motion.h1>
         </div>
 
         <motion.p initial={{ opacity:0, y:24 }} animate={{ opacity:1, y:0 }} transition={{ duration:.8, delay:.45, ease: EASE_EXPO }}
@@ -845,11 +929,15 @@ function ServicesSection() {
                       </div>
                     ))}
                   </StaggerContainer>
-                  <Link to={`/services/${SERVICES[active].id}`}>
-                    <motion.button whileHover={{ x:5 }} className="flex items-center gap-2 text-sm font-bold" style={{ color:SERVICES[active].accent }}>
-                      Explore Service <ArrowRight className="w-4 h-4" />
-                    </motion.button>
-                  </Link>
+                  <Link to={SERVICES[active].path}>
+  <motion.button
+    whileHover={{ x:5 }}
+    className="flex items-center gap-2 text-sm font-bold"
+    style={{ color: SERVICES[active].accent }}
+  >
+    Explore Service <ArrowRight className="w-4 h-4" />
+  </motion.button>
+</Link>
                 </TiltCard>
                 {/* Timer bar */}
                 <div className="mt-6 pt-5 border-t border-white/10">

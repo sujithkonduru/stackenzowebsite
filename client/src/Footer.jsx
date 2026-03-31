@@ -39,18 +39,20 @@ function Footer() {
   return (
     <footer className="bg-[#FFF4ED] border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-12 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-12 mb-12 text-center sm:text-center md:text-left">
           {/* Company Info - Takes 2 columns on large screens */}
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block mb-4">
-              <span className="font-[san] font-bold tracking-wider text-2xl sm:text-5xl font-bold bg-gradient-to-r from-[#E66B26] to-[#C5531A] text-transparent bg-clip-text hover:from-[#C5531A] hover:to-[#E66B26] transition-all">
-                Stackenzo
-              </span>
+              <img 
+          src="/images/logo for footer.png" 
+          alt="Stackenzo" 
+          className="h-8 sm:h-10 md:h-12 w-auto hover:opacity-80 transition-opacity"
+        />
               <p className="text-lg sm:text-xl font-semibold text-[#1A1A1A]">
-                Learn Build Inspire
+              Learn Build Inspire
               </p>
             </Link>
-            <div className="space-y-3">
+            <div className="flex flex-col items-center md:items-start">
               <a
                 href="mailto:hello@stackenzo.com"
                 className="flex items-center gap-3 text-[#1A1A1A] hover:text-[#E66B26] transition-colors group"
@@ -161,7 +163,7 @@ function Footer() {
               Follow Us
               <span className="absolute -bottom-1 left-0 w-8 h-0.5 bg-gradient-to-r from-[#D4AF37] to-[#D4AF37] rounded-full"></span>
             </h3>
-            <div className="flex gap-3 mt-6">
+            <div className="flex flex-row justify-center md:justify-start gap-3 mt-6">
               {socialLinks.map((social, index) => {
                 const Icon = social.icon;
                 return (

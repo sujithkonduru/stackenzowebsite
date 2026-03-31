@@ -201,42 +201,87 @@ function CustomCursor() {
 ══════════════════════════════════════════════ */
 function ScrollProgressBar() {
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness:120, damping:30 });
+  const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+
   return (
-    <motion.div className="fixed top-0 left-0 right-0 h-[3px] origin-left z-[9997]"
-      style={{ scaleX, background:"linear-gradient(90deg,#3D1A0A,#E66B26,#D4AF37,#C5531A,#D4AF37)" }} />
+    <motion.div
+      className="fixed top-0 right-0 w-[4px] h-full origin-top z-[9997]"
+      style={{
+        scaleY,
+        background: "linear-gradient(to bottom,#0d1f0d,#1E301E,#D4AF37,#2E7D32,#D4AF37)"
+      }}
+    />
   );
 }
-
 /* ══════════════════════════════════════════════
    SECTION NAV DOTS
 ══════════════════════════════════════════════ */
 function SectionNavDots() {
   const [active, setActive] = useState(0);
+
   useEffect(() => {
     const obs = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) { const i = NAV_SECTIONS.indexOf(e.target.id); if (i !== -1) setActive(i); } }),
-      { threshold: 0.4 }
+      entries =>
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const i = NAV_SECTIONS.indexOf(e.target.id);
+            if (i !== -1) setActive(i);
+          }
+        }),
+      { threshold: 0.3 }
     );
-    NAV_SECTIONS.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el); });
+
+    NAV_SECTIONS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+
     return () => obs.disconnect();
   }, []);
+
   return (
     <div className="fixed right-5 top-1/2 -translate-y-1/2 z-[900] flex-col gap-4 hidden md:flex">
       {NAV_SECTIONS.map((id, i) => (
-        <motion.button key={i} onClick={() => document.getElementById(id)?.scrollIntoView({ behavior:"smooth" })}
-          className="relative flex items-center gap-2 group" title={NAV_LABELS[i]}>
-          <motion.span initial={{ opacity:0, x:8 }} animate={{ opacity:active===i?1:0, x:active===i?0:8 }}
-            className="absolute right-6 text-[11px] font-bold text-[#D4AF37] bg-[#0f0f0f]/80 backdrop-blur-sm px-2 py-1 rounded-md whitespace-nowrap pointer-events-none">
-          </motion.span>
-          <motion.div animate={{ scale:active===i?1.4:1, background:active===i?"#D4AF37":"rgba(230,107,38,0.4)" }}
-            transition={{ type:"spring", stiffness:300, damping:22 }} className="w-2.5 h-2.5 rounded-full" />
-          {active === i && (
-            <motion.div layoutId="career-nav-pulse" className="absolute inset-0 rounded-full"
-              style={{ scale:2, border:"1.5px solid #D4AF37", opacity:.5 }}
-              animate={{ scale:[2,2.8,2], opacity:[.5,0,.5] }} transition={{ duration:1.8, repeat:Infinity }} />
-          )}
-        </motion.button>
+        <motion.button
+  key={i}
+  onClick={() =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+  }
+  className="relative flex items-center justify-center"
+  title={NAV_LABELS[i]}
+>
+  {/* 🔹 DOT */}
+  <motion.div
+    animate={{
+      scale: active === i ? 1.4 : 1,
+      background: active === i ? "#D4AF37" : "rgba(230,107,38,0.4)"
+    }}
+    transition={{ type: "spring", stiffness: 300, damping: 22 }}
+    className="w-2.5 h-2.5 rounded-full"
+  />
+
+  {/* 🔥 RING */}
+  {active === i && (
+    <motion.div
+      layoutId="pf-nav-pulse"
+      className="absolute inset-0 rounded-full"
+      style={{ border: "1.5px solid #D4AF37" }}
+      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
+      transition={{ duration: 1.5, repeat: Infinity }}
+    />
+  )}
+
+  {/* 🔥 ARROW (OUTSIDE LEFT) */}
+  {active === i && (
+    <motion.div
+      initial={{ opacity: 0, x: 10 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="absolute right-6" 
+    >
+      <ArrowRight className="w-4 h-4 text-black" />
+    </motion.div>
+  )}
+</motion.button>
       ))}
     </div>
   );
@@ -427,7 +472,7 @@ function HeroSection({ jobCount, onScrollToOpenings }) {
   const secRef = useRef(null);
   const { scrollYProgress } = useScroll({ target:secRef, offset:["start start","end start"] });
   const hY   = useTransform(scrollYProgress,[0,1],[0,-110]);
-  const hO   = useTransform(scrollYProgress,[0,.6],[1,0]);
+  const hO   = useTransform(scrollYProgress,[0,.6],[1,0.9]);
   const hS   = useTransform(scrollYProgress,[0,1],[1,.84]);
   const bigY = useTransform(scrollYProgress,[0,1],[0,180]);
   const imgS = useTransform(scrollYProgress,[0,1],[1,1.14]);
@@ -514,7 +559,7 @@ function HeroSection({ jobCount, onScrollToOpenings }) {
         </motion.div>
 
         <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:.9,ease:EASE_EXPO}}
-          className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
           <MagBtn onClick={onScrollToOpenings}
             className="group px-8 py-4 bg-gradient-to-r from-[#E66B26] to-[#C5531A] text-white rounded-full font-semibold shadow-lg shadow-[#E66B26]/25 hover:shadow-xl hover:shadow-[#E66B26]/35 transition-shadow flex items-center gap-2">
             View Open Positions
@@ -1006,7 +1051,7 @@ function CTASection({ hasOpenings, onBrowse, onSendResume }) {
           </Reveal>
 
           <Reveal from="bottom" delay={.35}>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
               <MagBtn onClick={hasOpenings ? onBrowse : onSendResume}
                 className="px-8 py-4 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#E66B26] transition-all flex items-center justify-center gap-2">
                 {hasOpenings ? "Browse Openings" : "Send Resume"}

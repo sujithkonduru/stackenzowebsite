@@ -153,10 +153,16 @@ function CustomCursor() {
 ══════════════════════════════════════════════ */
 function ScrollProgressBar() {
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+  const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+
   return (
-    <motion.div className="fixed top-0 left-0 right-0 h-[3px] origin-left z-[9997]"
-      style={{ scaleX, background: "linear-gradient(90deg,#3D1A0A,#E66B26,#D4AF37,#C5531A,#D4AF37)" }} />
+    <motion.div
+      className="fixed top-0 right-0 w-[4px] h-full origin-top z-[9997]"
+      style={{
+        scaleY,
+        background: "linear-gradient(to bottom,#0d1f0d,#1E301E,#D4AF37,#2E7D32,#D4AF37)"
+      }}
+    />
   );
 }
 
@@ -264,7 +270,7 @@ function Terms() {
   const heroRef = useRef(null);
   const { scrollYProgress: heroP } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY = useTransform(heroP, [0, 1], [0, -80]);
-  const heroO = useTransform(heroP, [0, .6], [1, 0]);
+  const heroO = useTransform(heroP, [0, .6], [1, 0.9]);
   const heroS = useTransform(heroP, [0, 1], [1, .88]);
   const bigY  = useTransform(heroP, [0, 1], [0, 140]);
 

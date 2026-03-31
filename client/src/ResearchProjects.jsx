@@ -183,10 +183,16 @@ function CustomCursor() {
 /* ══ SCROLL PROGRESS BAR ══ */
 function ScrollProgressBar() {
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+  const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+
   return (
-    <motion.div className="fixed top-0 left-0 right-0 h-[3px] origin-left z-[9997]"
-      style={{ scaleX, background: `linear-gradient(90deg,${C.veryDark},${C.mid},${C.gold},${C.dark},${C.gold})` }} />
+    <motion.div
+      className="fixed top-0 right-0 w-[4px] h-full origin-top z-[9997]"
+      style={{
+        scaleY,
+        background: "linear-gradient(to bottom,#0d1f0d,#1E301E,#D4AF37,#2E7D32,#D4AF37)"
+      }}
+    />
   );
 }
 
@@ -208,7 +214,7 @@ function SectionNavDots() {
           className="relative flex items-center gap-2" title={NAV_LABELS[i]}>
           <motion.span initial={{ opacity: 0, x: 8 }} animate={{ opacity: active === i ? 1 : 0, x: active === i ? 0 : 8 }}
             className="absolute right-6 text-[11px] font-bold bg-[#0f0f0f]/80 backdrop-blur-sm px-2 py-1 rounded-md whitespace-nowrap pointer-events-none"
-            style={{ color: C.gold }}>{NAV_LABELS[i]}</motion.span>
+            style={{ color: C.gold }}></motion.span>
           <motion.div animate={{ scale: active === i ? 1.4 : 1, background: active === i ? C.gold : C.p(.4) }}
             transition={{ type: "spring", stiffness: 300, damping: 22 }} className="w-2.5 h-2.5 rounded-full" />
           {active === i && (
@@ -368,7 +374,7 @@ function ResearchProjects() {
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY = useTransform(heroScroll, [0, 1], [0, -80]);
-  const heroO = useTransform(heroScroll, [0, .6], [1, 0]);
+  const heroO = useTransform(heroScroll, [0, .6], [1, 0.9]);
   const heroS = useTransform(heroScroll, [0, 1], [1, .88]);
   const bigY  = useTransform(heroScroll, [0, 1], [0, 140]);
 

@@ -41,13 +41,13 @@ const MISSION_ITEMS = [
 ];
 
 const VALUES = [
-  { icon: <Heart className="w-10 h-10" />,  title: "Integrity",      desc: "We maintain the highest standards of integrity and transparency in all our operations.",                         color: "from-red-400 to-pink-400"       },
+  { icon: <Heart className="w-10 h-10" />,  title: "Integrity",      desc: "We maintain the highest standards of integrity and transparency in all our operations at Stackenzo.",                         color: "from-red-400 to-pink-400"       },
 
   { icon: <Award className="w-10 h-10" />,  title: "Excellence",     desc: "We strive for excellence in everything we do, from curriculum design to learner success and support.",            color: "from-yellow-400 to-orange-400"  },
 
   { icon: <Zap className="w-10 h-10" />,    title: "Innovation",     desc: "We continuously innovate our teaching methods and programs to stay ahead of industry trends.",                   color: "from-[#E66B26] to-[#C5531A]"   },
 
-  { icon: <Users className="w-10 h-10" />,  title: "Collaboration",  desc: "We believe in strong collaboration between students, educators, and industry to drive innovation.",                color: "from-blue-400 to-purple-400"    },
+  { icon: <Users className="w-10 h-10" />,  title: "Collaboration",  desc: "We believe strong collab between students, educators, and industry to drive innovation.",                color: "from-blue-400 to-purple-400"    },
 
   { icon: <Globe className="w-10 h-10" />,  title: "Accessibility",  desc: "We make quality education accessible to students from all backgrounds and locations.",                            color: "from-orange-400 to-red-400"     },
 
@@ -233,10 +233,16 @@ function CustomCursor() {
 ══════════════════════════════════════════════ */
 function ScrollProgressBar() {
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness:120, damping:30 });
+  const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+
   return (
-    <motion.div className="fixed top-0 left-0 right-0 h-[3px] origin-left z-[9997]"
-      style={{ scaleX, background:"linear-gradient(90deg,#3D1A0A,#E66B26,#D4AF37,#C5531A,#D4AF37)" }} />
+    <motion.div
+      className="fixed top-0 right-0 w-[4px] h-full origin-top z-[9997]"
+      style={{
+        scaleY,
+        background: "linear-gradient(to bottom,#0d1f0d,#1E301E,#D4AF37,#2E7D32,#D4AF37)"
+      }}
+    />
   );
 }
 
@@ -245,31 +251,70 @@ function ScrollProgressBar() {
 ══════════════════════════════════════════════ */
 function SectionNavDots() {
   const [active, setActive] = useState(0);
+
   useEffect(() => {
     const obs = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) { const i = NAV_SECTIONS.indexOf(e.target.id); if (i !== -1) setActive(i); } }),
-      { threshold: 0.4 }
+      entries =>
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const i = NAV_SECTIONS.indexOf(e.target.id);
+            if (i !== -1) setActive(i);
+          }
+        }),
+      { threshold: 0.3 }
     );
-    NAV_SECTIONS.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el); });
+
+    NAV_SECTIONS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+
     return () => obs.disconnect();
   }, []);
+
   return (
     <div className="fixed right-5 top-1/2 -translate-y-1/2 z-[900] flex-col gap-4 hidden md:flex">
       {NAV_SECTIONS.map((id, i) => (
-        <motion.button key={i} onClick={() => document.getElementById(id)?.scrollIntoView({ behavior:"smooth" })}
-          className="relative flex items-center gap-2 group" title={NAV_LABELS[i]}>
-          <motion.span initial={{ opacity:0, x:8 }} animate={{ opacity:active===i?1:0, x:active===i?0:8 }}
-            className="absolute right-6 text-[11px] font-bold text-[#D4AF37] bg-[#0f0f0f]/80 backdrop-blur-sm px-2 py-1 rounded-md whitespace-nowrap pointer-events-none">
-            
-          </motion.span>
-          <motion.div animate={{ scale:active===i?1.4:1, background:active===i?"#D4AF37":"rgba(230,107,38,0.4)" }}
-            transition={{ type:"spring", stiffness:300, damping:22 }} className="w-2.5 h-2.5 rounded-full" />
-          {active === i && (
-            <motion.div layoutId="about-nav-pulse" className="absolute inset-0 rounded-full"
-              style={{ scale:2, border:"1.5px solid #D4AF37", opacity:.5 }}
-              animate={{ scale:[2,2.8,2], opacity:[.5,0,.5] }} transition={{ duration:1.8, repeat:Infinity }} />
-          )}
-        </motion.button>
+        <motion.button
+  key={i}
+  onClick={() =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+  }
+  className="relative flex items-center justify-center"
+  title={NAV_LABELS[i]}
+>
+  {/* 🔹 DOT */}
+  <motion.div
+    animate={{
+      scale: active === i ? 1.4 : 1,
+      background: active === i ? "#D4AF37" : "rgba(230,107,38,0.4)"
+    }}
+    transition={{ type: "spring", stiffness: 300, damping: 22 }}
+    className="w-2.5 h-2.5 rounded-full"
+  />
+
+  {/* 🔥 RING */}
+  {active === i && (
+    <motion.div
+      layoutId="pf-nav-pulse"
+      className="absolute inset-0 rounded-full"
+      style={{ border: "1.5px solid #D4AF37" }}
+      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
+      transition={{ duration: 1.5, repeat: Infinity }}
+    />
+  )}
+
+  {/* 🔥 ARROW (OUTSIDE LEFT) */}
+  {active === i && (
+    <motion.div
+      initial={{ opacity: 0, x: 10 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="absolute right-6" 
+    >
+      <ArrowRight className="w-4 h-4 text-black" />
+    </motion.div>
+  )}
+</motion.button>
       ))}
     </div>
   );
@@ -460,7 +505,7 @@ function HeroSection() {
   const secRef = useRef(null);
   const { scrollYProgress } = useScroll({ target:secRef, offset:["start start","end start"] });
   const hY   = useTransform(scrollYProgress,[0,1],[0,-110]);
-  const hO   = useTransform(scrollYProgress,[0,.6],[1,0]);
+  const hO   = useTransform(scrollYProgress,[0,.6],[1,0.9]);
   const hS   = useTransform(scrollYProgress,[0,1],[1,.84]);
   const bigY = useTransform(scrollYProgress,[0,1],[0,180]);
   const imgS = useTransform(scrollYProgress,[0,1],[1,1.14]);
@@ -648,24 +693,38 @@ function StorySection() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#E66B26] via-transparent to-transparent" />
 
                   {IMAGE_STATS.map((s, i) => {
-                    const Icon = s.icon;
-                    return (
-                      <motion.div key={i}
-                        initial={s.anim} whileInView={{opacity:1,x:0,y:0}}
-                        transition={{delay:.3+i*.12}} viewport={{once:false}}
-                        className={`absolute ${s.pos} bg-[#E66B26]/90 backdrop-blur-sm p-4 rounded-xl border border-[#D4AF37]/30`}>
-                        <Float duration={4+i*.6} yRange={6} delay={i*.4}>
-                          <div className="flex items-center gap-3">
-                            <Icon className="w-8 h-8 text-[#D4AF37]" />
-                            <div>
-                              <div className="text-2xl font-bold text-[#D4AF37]">{s.value}</div>
-                              <div className="text-xs text-[#FFF4ED]">{s.label}</div>
-                            </div>
-                          </div>
-                        </Float>
-                      </motion.div>
-                    );
-                  })}
+  const Icon = s.icon;
+  return (
+    <motion.div
+      key={i}
+      initial={s.anim}
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      transition={{ delay: 0.3 + i * 0.12 }}
+      viewport={{ once: false }}
+      className={`absolute ${s.pos} bg-[#E66B26]/90 backdrop-blur-sm 
+      p-2 sm:p-3 rounded-lg border border-[#D4AF37]/30`}
+    >
+      <Float duration={4 + i * 0.6} yRange={5} delay={i * 0.4}>
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          
+          {/* ICON */}
+          <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#D4AF37]" />
+
+          {/* TEXT */}
+          <div>
+            <div className="text-sm sm:text-lg font-bold text-[#D4AF37]">
+              {s.value}
+            </div>
+            <div className="text-[10px] sm:text-xs text-[#FFF4ED]">
+              {s.label}
+            </div>
+          </div>
+
+        </div>
+      </Float>
+    </motion.div>
+  );
+})}
                 </div>
               </TiltCard>
             </Reveal>
@@ -931,7 +990,9 @@ function CTASection() {
           </Reveal>
 
           <Reveal from="bottom" delay={.35}>
-            <div className="flex flex-col sm:flex-row gap-2 justify-center flex-wrap">
+            <div className="flex flex-col sm:flex-row gap-3 
+                items-center sm:items-start 
+                justify-center">
               {[
                 { to:"/Contact",          label:"Get in Touch",      Icon:Rocket   },
                 { to:"/StackenzoPrograms",label:"Explore Programs",  Icon:BookOpen },

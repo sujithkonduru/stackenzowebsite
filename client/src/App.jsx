@@ -45,7 +45,7 @@ function App() {
     <Route path="/Contact" element={<Contact/>}/>
     <Route path="/Programs" element={<Programs/>}/>
     <Route path="/Programs/:id" element={<ProgramDetail/>}/>
-    <Route path="/Services" element={<Services/>}/>
+    <Route path="/Services/" element={<Services/>}/>
     <Route path="/StackenzoPrograms" element={<StackenzoPrograms/>}/>
     <Route path="/Portfolio" element={<Portfolio/>}/>
     <Route path="/Gallerypage" element={<GalleryPage/>}/>

@@ -99,13 +99,10 @@ function Navbar() {
       {/* Logo */}
       <Link to="/" onClick={closeAll} className="z-50 flex items-center gap-2">
         <img 
-          src="/images/Stackenzo small Logo.jpg.jpeg" 
+          src="/images/stackenzo logo image.jpeg" 
           alt="Stackenzo" 
           className="h-8 sm:h-10 md:h-12 w-auto hover:opacity-80 transition-opacity"
         />
-        <span className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-wide text-[#E66B26] transition-colors">
-          Stackenzo
-        </span>
       </Link>
 
       {/* Desktop Navigation */}

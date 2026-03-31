@@ -377,7 +377,7 @@ function RNDProjectDetail() {
   const heroRef = useRef(null);
   const { scrollYProgress: heroP } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY = useTransform(heroP, [0, 1], [0, -110]);
-  const heroO = useTransform(heroP, [0, .6], [1, 0]);
+  const heroO = useTransform(heroP, [0, .6], [1, 0.9]);
   const heroS = useTransform(heroP, [0, 1], [1, .84]);
   const bigY  = useTransform(heroP, [0, 1], [0, 180]);
   const mx = useMotionValue(0), my = useMotionValue(0);

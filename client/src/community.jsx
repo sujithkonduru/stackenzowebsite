@@ -8,7 +8,7 @@ import pic from "./image.png";
 import {
   Gamepad2, Star, Users, Trophy, Rocket, CheckCircle2,
   BookOpen, LineChart, Medal, Brain, Cpu, Globe,
-  MousePointerClick, ArrowLeft, Zap, Target, Award,
+  MousePointerClick, ArrowLeft,ArrowRight, Zap, Target, Award,
   ChevronRight, Sparkles,
 } from "lucide-react";
 
@@ -185,39 +185,85 @@ function CustomCursor() {
 
 function ScrollProgressBar() {
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+  const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+
   return (
-    <motion.div className="fixed top-0 left-0 right-0 h-[3px] origin-left z-[9997]"
-      style={{ scaleX, background: `linear-gradient(90deg,${C.veryDark},${C.mid},${C.gold},${C.dark},${C.gold})` }} />
+    <motion.div
+      className="fixed top-0 right-0 w-[4px] h-full origin-top z-[9997]"
+      style={{
+        scaleY,
+        background: "linear-gradient(to bottom,#0d1f0d,#1E301E,#D4AF37,#2E7D32,#D4AF37)"
+      }}
+    />
   );
 }
 
 function SectionNavDots() {
   const [active, setActive] = useState(0);
+
   useEffect(() => {
     const obs = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) { const i = NAV_SECTIONS.indexOf(e.target.id); if (i !== -1) setActive(i); } }),
-      { threshold: 0.35 }
+      entries =>
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const i = NAV_SECTIONS.indexOf(e.target.id);
+            if (i !== -1) setActive(i);
+          }
+        }),
+      { threshold: 0.3 }
     );
-    NAV_SECTIONS.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el); });
+
+    NAV_SECTIONS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+
     return () => obs.disconnect();
   }, []);
+
   return (
     <div className="fixed right-5 top-1/2 -translate-y-1/2 z-[900] flex-col gap-4 hidden md:flex">
       {NAV_SECTIONS.map((id, i) => (
-        <motion.button key={i} onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })}
-          className="relative flex items-center gap-2" title={NAV_LABELS[i]}>
-          <motion.span initial={{ opacity: 0, x: 8 }} animate={{ opacity: active === i ? 1 : 0, x: active === i ? 0 : 8 }}
-            className="absolute right-6 text-[11px] font-bold bg-[#0f0f0f]/80 backdrop-blur-sm px-2 py-1 rounded-md whitespace-nowrap pointer-events-none"
-            style={{ color: C.gold }}></motion.span>
-          <motion.div animate={{ scale: active === i ? 1.4 : 1, background: active === i ? C.gold : C.p(.4) }}
-            transition={{ type: "spring", stiffness: 300, damping: 22 }} className="w-2.5 h-2.5 rounded-full" />
-          {active === i && (
-            <motion.div layoutId="gs-nav-pulse" className="absolute inset-0 rounded-full"
-              style={{ scale: 2, border: `1.5px solid ${C.gold}`, opacity: .5 }}
-              animate={{ scale: [2, 2.8, 2], opacity: [.5, 0, .5] }} transition={{ duration: 1.8, repeat: Infinity }} />
-          )}
-        </motion.button>
+        <motion.button
+  key={i}
+  onClick={() =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+  }
+  className="relative flex items-center justify-center"
+  title={NAV_LABELS[i]}
+>
+  {/* 🔹 DOT */}
+  <motion.div
+    animate={{
+      scale: active === i ? 1.4 : 1,
+      background: active === i ? "#D4AF37" : "rgba(230,107,38,0.4)"
+    }}
+    transition={{ type: "spring", stiffness: 300, damping: 22 }}
+    className="w-2.5 h-2.5 rounded-full"
+  />
+
+  {/* 🔥 RING */}
+  {active === i && (
+    <motion.div
+      layoutId="pf-nav-pulse"
+      className="absolute inset-0 rounded-full"
+      style={{ border: "1.5px solid #D4AF37" }}
+      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
+      transition={{ duration: 1.5, repeat: Infinity }}
+    />
+  )}
+
+  {/* 🔥 ARROW (OUTSIDE LEFT) */}
+  {active === i && (
+    <motion.div
+      initial={{ opacity: 0, x: 10 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="absolute right-6" 
+    >
+      <ArrowRight className="w-4 h-4 text-black" />
+    </motion.div>
+  )}
+</motion.button>
       ))}
     </div>
   );
@@ -372,7 +418,7 @@ function Community() {
   const heroRef = useRef(null);
   const { scrollYProgress: heroP } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY = useTransform(heroP, [0, 1], [0, -100]);
-  const heroO = useTransform(heroP, [0, .6], [1, 0]);
+  const heroO = useTransform(heroP, [0, .6], [1, 0.9]);
   const heroS = useTransform(heroP, [0, 1], [1, .84]);
   const bigY  = useTransform(heroP, [0, 1], [0, 160]);
 
@@ -408,8 +454,8 @@ function Community() {
               Back
             </motion.button>
             <div className="flex items-center gap-2">
-              <img src="/images/Stackenzo small Logo.jpg.jpeg" alt="Stackenzo" className="h-7 w-7 rounded-xl object-contain" />
-              <span className="font-black tracking-wide" style={{ color: C.dark }}>Stackenzo</span>
+              <img src="/images/stackenzo logo image.jpeg" alt="Stackenzo" className="h-8 sm:h-10 md:h-12 w-auto hover:opacity-80 transition-opacity" />
+              
             </div>
           </div>
           <nav className="hidden md:flex gap-6 text-sm">
@@ -478,9 +524,9 @@ function Community() {
                   <Gamepad2 className="w-4 h-4" style={{ color:C.dark }} />
                 </motion.div>
               </Float>
-              <motion.span animate={{ opacity:[.7,1,.7] }} transition={{ duration:2,repeat:Infinity }}>✦</motion.span>
+              <motion.span animate={{ opacity:[.7,1,.7] }} transition={{ duration:2,repeat:Infinity }} className="text-[#D4AF37]">✦</motion.span>
               GSIN — Global Student Industry Network
-              <motion.span animate={{ opacity:[.7,1,.7] }} transition={{ duration:2,repeat:Infinity }}>✦</motion.span>
+              <motion.span animate={{ opacity:[.7,1,.7] }} transition={{ duration:2,repeat:Infinity }} className="text-[#D4AF37]">✦</motion.span>
             </span>
           </motion.div>
 
