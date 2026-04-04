@@ -20,7 +20,7 @@ import rndData from "./data/rndData.json";
    BRAND  (white-bg orange system — matches all other pages)
 ══════════════════════════════════════════════ */
 const C = {
-  dark:     "#E66B26",
+  dark:     "#F04A06",
   mid:      "#C5531A",
   gold:     "#D4AF37",
   light:    "#FFF4ED",
@@ -145,40 +145,7 @@ function TiltCard({ children, className = "", intensity = 8 }) {
   );
 }
 
-/* ══ CUSTOM CURSOR ══ */
-function CustomCursor() {
-  const outer = useRef(null), dot = useRef(null), trail = useRef(null);
-  const pos = useRef({ x: -300, y: -300 }), sm = useRef({ x: -300, y: -300 });
-  const [hov, setHov] = useState(false), [clk, setClk] = useState(false);
-  useEffect(() => {
-    const mv = e => { pos.current = { x: e.clientX, y: e.clientY }; };
-    const md = () => setClk(true), mu = () => setClk(false);
-    document.addEventListener("mousemove", mv); document.addEventListener("mousedown", md); document.addEventListener("mouseup", mu);
-    const att = () => { document.querySelectorAll("a,button,[data-hover]").forEach(el => { el.addEventListener("mouseenter", () => setHov(true)); el.addEventListener("mouseleave", () => setHov(false)); }); };
-    att(); const ob = new MutationObserver(att); ob.observe(document.body, { childList: true, subtree: true });
-    let id;
-    const loop = () => {
-      sm.current.x += (pos.current.x - sm.current.x) * .09; sm.current.y += (pos.current.y - sm.current.y) * .09;
-      const s = clk ? .65 : hov ? 2.1 : 1;
-      if (outer.current) outer.current.style.transform = `translate(${sm.current.x - 20}px,${sm.current.y - 20}px) scale(${s})`;
-      if (dot.current)   dot.current.style.transform   = `translate(${pos.current.x - 3}px,${pos.current.y - 3}px) scale(${clk ? 1.9 : 1})`;
-      if (trail.current) trail.current.style.transform = `translate(${sm.current.x - 30}px,${sm.current.y - 30}px) scale(${hov ? 1.6 : .5})`;
-      id = requestAnimationFrame(loop);
-    };
-    id = requestAnimationFrame(loop);
-    return () => { document.removeEventListener("mousemove", mv); document.removeEventListener("mousedown", md); document.removeEventListener("mouseup", mu); ob.disconnect(); cancelAnimationFrame(id); };
-  }, [hov, clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998]"
-        style={{ border: hov ? `1.5px solid ${C.gold}` : `1.5px solid ${C.p(.42)}`, background: hov ? C.p(.07) : "transparent", willChange: "transform", transition: "border-color .15s,background .15s" }} />
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-1.5 rounded-full pointer-events-none z-50"
-        style={{ background: hov ? C.gold : C.dark, willChange: "transform", transition: "background .1s" }} />
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{ background: "radial-gradient(circle,#D4AF37,transparent)", willChange: "transform" }} />
-    </>
-  );
-}
+
 
 /* ══ SCROLL PROGRESS BAR ══ */
 function ScrollProgressBar() {
@@ -393,7 +360,7 @@ function ResearchProjects() {
   return (
     /* ✅ WHITE background — was "#0a0605" dark */
     <div className="min-h-screen overflow-x-hidden bg-white" style={{ color: C.text }}>
-      <CustomCursor />
+     
       <ScrollProgressBar />
       <SectionNavDots />
       <Navbar />

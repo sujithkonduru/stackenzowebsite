@@ -19,7 +19,7 @@ import RoboticsEnrollmentModal from "./RoboticsEnrollmentModal";
 /* ══════════════════════════════════════════════
    BRAND COLOR MAP  (green → orange)
    ─────────────────────────────────────────────
-   #1E301E       →  #E66B26   dark/primary
+   #1E301E       →  #F04A06   dark/primary
    #2E7D32       →  #C5531A   mid/primary-dark
    #E8F5E9       →  #FFF4ED   light
    #C8E6C9       →  #FFD5B8   tint (noise/blobs)
@@ -31,7 +31,7 @@ import RoboticsEnrollmentModal from "./RoboticsEnrollmentModal";
    #D4AF37       →  #D4AF37   gold (unchanged)
 ══════════════════════════════════════════════ */
 const C = {
-  dark:     "#E66B26",
+  dark:     "#F04A06",
   mid:      "#C5531A",
   gold:     "#D4AF37",
   light:    "#FFF4ED",
@@ -172,42 +172,6 @@ function MagBtn({ children, className = "", onClick, type = "button", style = {}
   );
 }
 
-/* ══ CUSTOM CURSOR — orange ══ */
-function CustomCursor() {
-  const outer = useRef(null), dot = useRef(null), trail = useRef(null);
-  const pos = useRef({ x: -300, y: -300 }), sm = useRef({ x: -300, y: -300 });
-  const [hov, setHov] = useState(false), [clk, setClk] = useState(false);
-  useEffect(() => {
-    const mv = e => { pos.current = { x: e.clientX, y: e.clientY }; };
-    const md = () => setClk(true), mu = () => setClk(false);
-    document.addEventListener("mousemove", mv); document.addEventListener("mousedown", md); document.addEventListener("mouseup", mu);
-    const att = () => { document.querySelectorAll("a,button,[data-hover]").forEach(el => { el.addEventListener("mouseenter", () => setHov(true)); el.addEventListener("mouseleave", () => setHov(false)); }); };
-    att(); const ob = new MutationObserver(att); ob.observe(document.body, { childList: true, subtree: true });
-    let id;
-    const loop = () => {
-      sm.current.x += (pos.current.x - sm.current.x) * .09; sm.current.y += (pos.current.y - sm.current.y) * .09;
-      const s = clk ? .65 : hov ? 2.1 : 1;
-      if (outer.current) outer.current.style.transform = `translate(${sm.current.x - 20}px,${sm.current.y - 20}px) scale(${s})`;
-      if (dot.current)   dot.current.style.transform   = `translate(${pos.current.x - 3}px,${pos.current.y - 3}px) scale(${clk ? 1.9 : 1})`;
-      if (trail.current) trail.current.style.transform = `translate(${sm.current.x - 30}px,${sm.current.y - 30}px) scale(${hov ? 1.6 : .5})`;
-      id = requestAnimationFrame(loop);
-    };
-    id = requestAnimationFrame(loop);
-    return () => { document.removeEventListener("mousemove", mv); document.removeEventListener("mousedown", md); document.removeEventListener("mouseup", mu); ob.disconnect(); cancelAnimationFrame(id); };
-  }, [hov, clk]);
-  return (
-    <>
-      {/* border: was rgba(30,48,30,0.45) → rgba(230,107,38,0.45) */}
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998]"
-        style={{ border: hov ? `1.5px solid ${C.gold}` : `1.5px solid ${C.p(.45)}`, background: hov ? `${C.p(.07)}` : "transparent", willChange: "transform", transition: "border-color .15s, background .15s" }} />
-      {/* dot: was #1E301E → #E66B26 */}
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999]"
-        style={{ background: hov ? C.gold : C.dark, willChange: "transform", transition: "background .1s" }} />
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{ background: "radial-gradient(circle,#D4AF37,transparent)", willChange: "transform" }} />
-    </>
-  );
-}
 
 /* ══ SCROLL PROGRESS BAR — orange gradient ══ */
 function ScrollProgressBar() {
@@ -270,27 +234,7 @@ function SectionNavDots() {
     className="w-2.5 h-2.5 rounded-full"
   />
 
-  {/* 🔥 RING */}
-  {active === i && (
-    <motion.div
-      layoutId="pf-nav-pulse"
-      className="absolute inset-0 rounded-full"
-      style={{ border: "1.5px solid #D4AF37" }}
-      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
-      transition={{ duration: 1.5, repeat: Infinity }}
-    />
-  )}
-
-  {/* 🔥 ARROW (OUTSIDE LEFT) */}
-  {active === i && (
-    <motion.div
-      initial={{ opacity: 0, x: 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute right-6" 
-    >
-      <ArrowRight className="w-4 h-4 text-black" />
-    </motion.div>
-  )}
+ 
 </motion.button>
       ))}
     </div>
@@ -471,6 +415,9 @@ function Robotics() {
   /* hero parallax */
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+
   const heroY = useTransform(heroScroll, [0, 1], [0, -100]);
   const heroO = useTransform(heroScroll, [0, .6], [1, 0.9]);
   const heroS = useTransform(heroScroll, [0, 1], [1, .85]);
@@ -493,7 +440,7 @@ function Robotics() {
   return (
     <div className="bg-white text-[#1A1A1A] min-h-screen overflow-x-hidden">
       <Toaster position="top-center" />
-      <CustomCursor />
+     
       <ScrollProgressBar />
       <SectionNavDots />
       <Navbar />
@@ -524,8 +471,8 @@ function Robotics() {
         {/* floating orbs — orange tints (was C.dark/#1E301E and C.mid/#2E7D32) */}
         {[
           { t: "22%", l: "7%",  d: 12, c: `${C.gold}44` },
-          { t: "35%", r: "9%",  d: 8,  c: C.p(.32)      },
-          { b: "25%", l: "13%", d: 14, c: C.pd(.22)     },
+          { t: "35%", r: "9%",  d: 8,  c: `${C.p(.32)}35` },
+          { b: "25%", l: "13%", d: 14, c: `${C.pd(.22)}35` },
           { b: "35%", r: "16%", d: 10, c: `${C.gold}33` },
         ].map((o, i) => (
           <Float key={i} duration={4 + i * .6} delay={i * .4}
@@ -589,7 +536,7 @@ function Robotics() {
           <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .7, ease: EASE_EXPO }}
             className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto mb-10 px-2">
             {stats.map((s, i) => (
-              <Float key={i} duration={4 + i * .5} delay={i * .3}>
+              <motion.div key={i} duration={4 + i * .5} delay={i * .3}>
                 <GlowCard accent={C.gold}>
                   <motion.div whileHover={{ y: -5, boxShadow: `0 14px 32px ${C.p(.1)}` }}
                     className="bg-white border border-gray-200 rounded-xl p-3 sm:p-4 text-center cursor-default">
@@ -601,7 +548,7 @@ function Robotics() {
                     <div className="text-xs sm:text-sm" style={{ color: "rgba(26,26,26,0.6)" }}>{s.label}</div>
                   </motion.div>
                 </GlowCard>
-              </Float>
+              </motion.div>
             ))}
           </motion.div>
 
@@ -618,14 +565,21 @@ function Robotics() {
           </motion.div>
 
           {/* scroll cue — border: orange (was rgba(30,48,30,0.25)) */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
+         <motion.div
+  style={{ opacity: scrollOpacity }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 2.2 }}
             className="flex justify-center mt-12 cursor-pointer"
             onClick={() => document.getElementById("rb-intro")?.scrollIntoView({ behavior: "smooth" })}>
             <Float duration={2} yRange={10}>
-              <div className="w-5 h-8 rounded-full flex justify-center" style={{ border: `2px solid ${C.p(.28)}` }}>
-                <motion.div className="w-1 h-2 rounded-full mt-2" style={{ background: C.gold }}
-                  animate={{ y: [0, 10, 0], opacity: [1, .4, 1] }} transition={{ duration: 1.8, repeat: Infinity }} />
-              </div>
+              <div className="w-7 h-12 border-2 border-[#F04A06]/28 rounded-full flex justify-center">
+  <motion.div
+    className="w-1.5 h-3 bg-[#D4AF37] rounded-full mt-3"
+    animate={{ y: [0, 14, 0], opacity: [1, 0.4, 1] }}
+    transition={{ duration: 1.8, repeat: Infinity }}
+  />
+</div>
             </Float>
           </motion.div>
         </motion.div>
@@ -640,7 +594,7 @@ function Robotics() {
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <SLabel text="Our Program" />
           {/* gradient: orange (was from-[#1E301E] to-[#2E7D32]) */}
-          <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+          <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
            delay={.05}>
             Robotics the Way It Should Be
           </AHeading>
@@ -683,7 +637,7 @@ function Robotics() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Why Stackenzo" />
-            <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+            <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
               delay={.05}>
               Why Choose Our Robotics Program
             </AHeading>
@@ -725,7 +679,7 @@ function Robotics() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Student Outcomes" />
-            <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+            <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
             delay={.05}>
               What Students Gain
             </AHeading>
@@ -760,7 +714,7 @@ function Robotics() {
           <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-14">
             <div className="lg:w-1/2">
               <SLabel text="Hands-On Learning" />
-              <AHeading className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+              <AHeading className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
               delay={.05}>
                 Experience Hands-On Robotics
               </AHeading>
@@ -817,7 +771,7 @@ function Robotics() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Early Advantage" />
-            <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+            <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
             delay={.05}>
               Where Curiosity Builds Robots
             </AHeading>
@@ -895,7 +849,7 @@ function Robotics() {
             </Float>
           </Reveal>
           <SLabel text="Time Commitment" />
-          <AHeading className="text-2xl sm:text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+          <AHeading className="text-2xl sm:text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
           delay={.05}>
             Where learning feels like joy ✨
           </AHeading>
@@ -981,7 +935,7 @@ function Robotics() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-4">
             <SLabel text="Learning Journey" />
-            <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+            <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
             delay={.05}>
               4 Levels of Progression
             </AHeading>
@@ -1063,7 +1017,7 @@ function Robotics() {
         <div className="max-w-4xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Common Questions" />
-            <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+            <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
               delay={.05}>
               Frequently Asked Questions
             </AHeading>

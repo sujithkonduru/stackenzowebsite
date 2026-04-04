@@ -22,7 +22,7 @@ import "swiper/css/pagination";
 /* ══════════════════════════════════════════════
    BRAND COLOR MAP  (green → orange)
    ─────────────────────────────────────────────
-   #1E301E       →  #E66B26   dark/primary
+   #1E301E       →  #F04A06   dark/primary
    #2E7D32       →  #C5531A   mid/primary-dark
    #E8F5E9       →  #FFF4ED   light
    #C8E6C9       →  #FFD5B8   tint
@@ -33,7 +33,7 @@ import "swiper/css/pagination";
    #D4AF37       →  #D4AF37   gold (unchanged)
 ══════════════════════════════════════════════ */
 const C = {
-  dark:     "#E66B26",
+  dark:     "#F04A06",
   mid:      "#C5531A",
   gold:     "#D4AF37",
   light:    "#FFF4ED",
@@ -173,40 +173,7 @@ function MagBtn({ children, className = "", onClick, type = "button", disabled =
   );
 }
 
-/* ══ CUSTOM CURSOR — orange ══ */
-function CustomCursor() {
-  const outer = useRef(null), dot = useRef(null), trail = useRef(null);
-  const pos = useRef({ x: -300, y: -300 }), sm = useRef({ x: -300, y: -300 });
-  const [hov, setHov] = useState(false), [clk, setClk] = useState(false);
-  useEffect(() => {
-    const mv = e => { pos.current = { x: e.clientX, y: e.clientY }; };
-    const md = () => setClk(true), mu = () => setClk(false);
-    document.addEventListener("mousemove", mv); document.addEventListener("mousedown", md); document.addEventListener("mouseup", mu);
-    const att = () => { document.querySelectorAll("a,button,[data-hover]").forEach(el => { el.addEventListener("mouseenter", () => setHov(true)); el.addEventListener("mouseleave", () => setHov(false)); }); };
-    att(); const ob = new MutationObserver(att); ob.observe(document.body, { childList: true, subtree: true });
-    let id;
-    const loop = () => {
-      sm.current.x += (pos.current.x - sm.current.x) * .09; sm.current.y += (pos.current.y - sm.current.y) * .09;
-      const s = clk ? .65 : hov ? 2.1 : 1;
-      if (outer.current) outer.current.style.transform = `translate(${sm.current.x - 20}px,${sm.current.y - 20}px) scale(${s})`;
-      if (dot.current)   dot.current.style.transform   = `translate(${pos.current.x - 3}px,${pos.current.y - 3}px) scale(${clk ? 1.9 : 1})`;
-      if (trail.current) trail.current.style.transform = `translate(${sm.current.x - 30}px,${sm.current.y - 30}px) scale(${hov ? 1.6 : .5})`;
-      id = requestAnimationFrame(loop);
-    };
-    id = requestAnimationFrame(loop);
-    return () => { document.removeEventListener("mousemove", mv); document.removeEventListener("mousedown", md); document.removeEventListener("mouseup", mu); ob.disconnect(); cancelAnimationFrame(id); };
-  }, [hov, clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998]"
-        style={{ border: hov ? `1.5px solid ${C.gold}` : `1.5px solid ${C.p(.45)}`, background: hov ? `${C.p(.07)}` : "transparent", willChange: "transform", transition: "border-color .15s,background .15s" }} />
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999]"
-        style={{ background: hov ? C.gold : C.dark, willChange: "transform", transition: "background .1s" }} />
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{ background: "radial-gradient(circle,#D4AF37,transparent)", willChange: "transform" }} />
-    </>
-  );
-}
+
 
 /* ══ SCROLL PROGRESS BAR — orange gradient ══ */
 function ScrollProgressBar() {
@@ -269,27 +236,7 @@ function SectionNavDots() {
     className="w-2.5 h-2.5 rounded-full"
   />
 
-  {/* 🔥 RING */}
-  {active === i && (
-    <motion.div
-      layoutId="pf-nav-pulse"
-      className="absolute inset-0 rounded-full"
-      style={{ border: "1.5px solid #D4AF37" }}
-      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
-      transition={{ duration: 1.5, repeat: Infinity }}
-    />
-  )}
-
-  {/* 🔥 ARROW (OUTSIDE LEFT) */}
-  {active === i && (
-    <motion.div
-      initial={{ opacity: 0, x: 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute right-6" 
-    >
-      <ArrowRight className="w-4 h-4 text-black" />
-    </motion.div>
-  )}
+  
 </motion.button>
       ))}
     </div>
@@ -487,7 +434,7 @@ const useCases = [
   { industry: "Education",    icon: "🎓", image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=400&fit=crop", challenge: "Increase student enrollment and brand awareness", solution: "Social media campaigns, targeted advertising, and content marketing", results: ["50% increase in inquiries","30% higher enrollment rate","150% social media growth"] },
   { industry: "Real Estate",  icon: "🏠", image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=400&fit=crop", challenge: "Generate quality leads and showcase properties effectively", solution: "Facebook advertising, SEO, and virtual tour marketing", results: ["300% increase in leads","25% faster property sales","80% improvement in lead quality"] },
   { industry: "E-commerce",   icon: "🛒", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=400&fit=crop", challenge: "Reduce customer acquisition cost and increase sales", solution: "Google Shopping ads, email automation, and retargeting", results: ["45% reduction in CAC","120% increase in revenue","35% improvement in conversion rate"] },
-  { industry: "Technology",   icon: "💻", image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=400&fit=crop", challenge: "Establish thought leadership and generate B2B leads", solution: "LinkedIn marketing, content marketing, and webinar campaigns", results: ["200% increase in qualified leads","150% growth in brand mentions","60% improvement in sales cycle"] },
+  { industry: "Technology",   icon: "💻", image: "https://t4.ftcdn.net/jpg/02/82/75/31/360_F_282753146_V6ZHcruFiIauT4ecZyf9a2J066LD2K9N.jpg&fit=crop", challenge: "Establish thought leadership and generate B2B leads", solution: "LinkedIn marketing, content marketing, and webinar campaigns", results: ["200% increase in qualified leads","150% growth in brand mentions","60% improvement in sales cycle"] },
   { industry: "Hospitality",  icon: "🏨", image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=400&fit=crop", challenge: "Increase bookings and improve online reputation", solution: "Social media marketing, review management, and local SEO", results: ["70% increase in direct bookings","4.8/5 average rating","90% improvement in local visibility"] },
 ];
 
@@ -515,6 +462,10 @@ function DigitalMarketing() {
   /* hero parallax */
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+
+const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+
   const heroY = useTransform(heroScroll, [0, 1], [0, -100]);
   const heroO = useTransform(heroScroll, [0, .6], [1, 0.9]);
   const heroS = useTransform(heroScroll, [0, 1], [1, .85]);
@@ -535,7 +486,7 @@ function DigitalMarketing() {
 
   return (
     <div className="bg-white text-[#1A1A1A] min-h-screen overflow-x-hidden">
-      <CustomCursor />
+     
       <ScrollProgressBar />
       <SectionNavDots />
       <Navbar />
@@ -606,7 +557,7 @@ function DigitalMarketing() {
         <motion.div style={{ y: heroY, opacity: heroO, scale: heroS }} className="max-w-6xl mx-auto text-center relative z-10 w-full pt-20">
 
           {/* badge — orange (was rgba(30,48,30,0.12/0.28)) */}
-          <motion.div initial={{ scale: .7, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} transition={{ duration: .65, ease: EASE_BACK }} className="inline-block mb-8">
+          <motion.div initial={{ scale: .7, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} transition={{ duration: .65, ease: EASE_BACK }} className="inline-block mb-1">
             <span className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold backdrop-blur-sm shadow-lg"
               style={{ background: C.p(.12), border: `1px solid ${C.p(.28)}`, color: C.mid }}>
               <motion.span animate={{ opacity: [.7, 1, .7] }} transition={{ duration: 2, repeat: Infinity }} className="text-[#D4AF37]">✦</motion.span>
@@ -653,13 +604,21 @@ function DigitalMarketing() {
           </motion.div>
 
           {/* scroll cue — orange border (was rgba(30,48,30,0.25)) */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
+          <motion.div
+  style={{ opacity: scrollOpacity }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 2.2 }}
             className="flex justify-center cursor-pointer"
             onClick={() => document.getElementById("dm-stats")?.scrollIntoView({ behavior: "smooth" })}>
             <Float duration={2} yRange={10}>
-              <div className="w-5 h-8 rounded-full flex justify-center" style={{ border: `2px solid ${C.p(.28)}` }}>
-                <motion.div className="w-1 h-2 rounded-full mt-2" style={{ background: C.gold }}
-                  animate={{ y: [0, 10, 0], opacity: [1, .4, 1] }} transition={{ duration: 1.8, repeat: Infinity }} />
+              <div className="w-7 h-12 rounded-full flex justify-center" style={{ border: `2px solid ${C.p(.28)}` }}>
+                <motion.div
+    className="w-1.5 h-3 bg-[#D4AF37] rounded-full mt-3"
+    animate={{ y: [0, 14, 0], opacity: [1, 0.4, 1] }}
+    transition={{ duration: 1.8, repeat: Infinity }}
+  />
+
               </div>
             </Float>
           </motion.div>
@@ -681,7 +640,7 @@ function DigitalMarketing() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="Our Impact" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
               delay={.05}>
               Proven Results That Speak
             </AHeading>
@@ -722,7 +681,7 @@ function DigitalMarketing() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Who We Help" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
               style={{ backgroundImage: `linear-gradient(135deg,${C.dark},${C.mid})` }} delay={.05}>
               Tailored for Every Business
             </AHeading>
@@ -793,7 +752,7 @@ function DigitalMarketing() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="What We Do" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
               style={{ backgroundImage: `linear-gradient(135deg,${C.dark},${C.mid})` }} delay={.05}>
               Services We Offer
             </AHeading>
@@ -845,7 +804,7 @@ function DigitalMarketing() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Case Studies" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
               style={{ backgroundImage: `linear-gradient(135deg,${C.dark},${C.mid})` }} delay={.05}>
               Industry Success Stories
             </AHeading>
@@ -916,7 +875,7 @@ function DigitalMarketing() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Why Choose Us" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
               style={{ backgroundImage: `linear-gradient(135deg,${C.dark},${C.mid})` }} delay={.05}>
               What Makes Us Different
             </AHeading>
@@ -958,7 +917,7 @@ function DigitalMarketing() {
         <div className="max-w-4xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Common Questions" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]"
               style={{ backgroundImage: `linear-gradient(135deg,${C.dark},${C.mid})` }} delay={.05}>
               Frequently Asked Questions
             </AHeading>

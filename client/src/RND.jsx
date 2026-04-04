@@ -244,42 +244,7 @@ function Counter({ value }) {
   return <span ref={ref}>{d}{sfx}</span>;
 }
 
-/* ══════════════════════════════════════════════
-   CUSTOM CURSOR
-══════════════════════════════════════════════ */
-function CustomCursor() {
-  const outer=useRef(null), dot=useRef(null), trail=useRef(null);
-  const pos=useRef({x:-300,y:-300}), sm=useRef({x:-300,y:-300});
-  const [hov,setHov]=useState(false), [clk,setClk]=useState(false);
-  useEffect(()=>{
-    const mv=e=>{pos.current={x:e.clientX,y:e.clientY};};
-    const md=()=>setClk(true), mu=()=>setClk(false);
-    document.addEventListener("mousemove",mv); document.addEventListener("mousedown",md); document.addEventListener("mouseup",mu);
-    const att=()=>{ document.querySelectorAll("a,button,[data-hover]").forEach(el=>{ el.addEventListener("mouseenter",()=>setHov(true)); el.addEventListener("mouseleave",()=>setHov(false)); }); };
-    att(); const ob=new MutationObserver(att); ob.observe(document.body,{childList:true,subtree:true});
-    let id;
-    const loop=()=>{
-      sm.current.x+=(pos.current.x-sm.current.x)*.09; sm.current.y+=(pos.current.y-sm.current.y)*.09;
-      const s=clk?.65:hov?2.1:1;
-      if(outer.current) outer.current.style.transform=`translate(${sm.current.x-20}px,${sm.current.y-20}px) scale(${s})`;
-      if(dot.current)   dot.current.style.transform  =`translate(${pos.current.x-3}px,${pos.current.y-3}px) scale(${clk?1.9:1})`;
-      if(trail.current) trail.current.style.transform=`translate(${sm.current.x-30}px,${sm.current.y-30}px) scale(${hov?1.6:.5})`;
-      id=requestAnimationFrame(loop);
-    };
-    id=requestAnimationFrame(loop);
-    return()=>{ document.removeEventListener("mousemove",mv); document.removeEventListener("mousedown",md); document.removeEventListener("mouseup",mu); ob.disconnect(); cancelAnimationFrame(id); };
-  },[hov,clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998] transition-[border-color,background] duration-150"
-        style={{border:hov?"1.5px solid #D4AF37":"1.5px solid rgba(230,107,38,0.45)",background:hov?"rgba(212,175,55,0.07)":"transparent",willChange:"transform"}}/>
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999] transition-colors duration-100"
-        style={{background:hov?"#D4AF37":"#E66B26",willChange:"transform"}}/>
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{background:"radial-gradient(circle,#D4AF37,transparent)",willChange:"transform"}}/>
-    </>
-  );
-}
+
 
 /* ══════════════════════════════════════════════
    SCROLL PROGRESS BAR
@@ -346,27 +311,7 @@ function SectionNavDots() {
     className="w-2.5 h-2.5 rounded-full"
   />
 
-  {/* 🔥 RING */}
-  {active === i && (
-    <motion.div
-      layoutId="pf-nav-pulse"
-      className="absolute inset-0 rounded-full"
-      style={{ border: "1.5px solid #D4AF37" }}
-      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
-      transition={{ duration: 1.5, repeat: Infinity }}
-    />
-  )}
-
-  {/* 🔥 ARROW (OUTSIDE LEFT) */}
-  {active === i && (
-    <motion.div
-      initial={{ opacity: 0, x: 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute right-6" 
-    >
-      <ArrowRight className="w-4 h-4 text-black" />
-    </motion.div>
-  )}
+ 
 </motion.button>
       ))}
     </div>
@@ -531,6 +476,9 @@ function RND() {
   /* Hero parallax */
   const heroRef=useRef(null);
   const {scrollYProgress:heroP}=useScroll({target:heroRef,offset:["start start","end start"]});
+  const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+
   const heroY=useTransform(heroP,[0,1],[0,-110]);
   const heroO=useTransform(heroP,[0,.6],[1,0.9]);
   const heroS=useTransform(heroP,[0,1],[1,.84]);
@@ -546,7 +494,7 @@ function RND() {
 
   return (
     <div className="bg-white text-gray-900 min-h-screen overflow-x-hidden">
-      <CustomCursor/>
+     
       <ScrollProgressBar/>
       <SectionNavDots/>
       <Navbar/>
@@ -565,7 +513,7 @@ function RND() {
 
         {/* Dot grid */}
         <div className="absolute inset-0 z-[2] opacity-[.03]"
-          style={{backgroundImage:"radial-gradient(circle,#E66B26 1px,transparent 1px)",backgroundSize:"32px 32px"}}/>
+          style={{backgroundImage:"radial-gradient(circle,#F04A06 1px,transparent 1px)",backgroundSize:"32px 32px"}}/>
 
         {/* Blobs */}
         <motion.div style={{x:b1x,y:b1y}} className="absolute top-16 left-[5%] w-80 h-80 pointer-events-none z-[2]">
@@ -577,7 +525,7 @@ function RND() {
 
         {/* Floating orbs */}
         <Float className="absolute top-1/4 left-[7%] w-3 h-3 rounded-full bg-[#D4AF37]/25 z-[2]" duration={5} delay={0}/>
-        <Float className="absolute top-1/3 right-[9%] w-2 h-2 rounded-full bg-[#E66B26]/20 z-[2]" duration={4} delay={1}/>
+        <Float className="absolute top-1/3 right-[9%] w-2 h-2 rounded-full bg-[#F04A06]/20 z-[2]" duration={4} delay={1}/>
         <Float className="absolute bottom-1/3 left-[12%] w-3.5 h-3.5 rounded-full bg-[#C5531A]/18 z-[2]" duration={6} delay={2}/>
         <Float className="absolute bottom-1/4 right-[14%] w-2 h-2 rounded-full bg-[#D4AF37]/18 z-[2]" duration={5.5} delay={.5}/>
 
@@ -590,11 +538,11 @@ function RND() {
         <motion.div style={{y:heroY,opacity:heroO,scale:heroS}} className="max-w-6xl mx-auto text-center relative z-10">
           {/* Badge */}
           <motion.div initial={{scale:.7,opacity:0,y:20}} animate={{scale:1,opacity:1,y:0}} transition={{duration:.65,ease:EASE_BACK}}
-            className="inline-flex items-center gap-2 bg-white/88 backdrop-blur-sm border border-gray-200 rounded-full px-4 sm:px-6 py-2 sm:py-3 mb-6 shadow-sm">
+            className="inline-flex items-center gap-2 bg-white/88 backdrop-blur-sm border border-gray-200 rounded-full px-4 sm:px-6 py-2 sm:py-3 mb- shadow-sm">
             <motion.div animate={{rotate:[0,20,-20,0]}} transition={{duration:2.8,repeat:Infinity,ease:"easeInOut"}}>
               <Microscope className="w-4 h-4 sm:w-5 sm:h-5 text-[#D4AF37]"/>
             </motion.div>
-            <span className="text-sm sm:text-base text-[#E66B26] font-semibold">Research & Development Division</span>
+            <span className="text-sm sm:text-base text-[#F04A06] font-semibold">Research & Development Division</span>
             <motion.div animate={{opacity:[.5,1,.5]}} transition={{duration:2,repeat:Infinity}}>
               <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]/70"/>
             </motion.div>
@@ -605,7 +553,7 @@ function RND() {
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-5 leading-[1.06]">
             <span className="text-gray-900">Engineering Innovation</span>
             <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] via-[#C5531A] to-[#E66B26]">Through Applied Research</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] via-[#C5531A] to-[#F04A06]">Through Applied Research</span>
           </motion.h1>
 
           <motion.p initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:.5,ease:EASE_EXPO}}
@@ -617,29 +565,36 @@ function RND() {
           <motion.div initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{delay:.72,ease:EASE_EXPO}}
             className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-2 mb-12">
             <MagBtn onClick={()=>window.location.href="/Career"}
-              className="group relative w-full sm:w-auto px-5 sm:px-7 py-2.5 sm:py-3 bg-[#E66B26] text-white rounded-full text-xs sm:text-sm font-black overflow-hidden shadow-xl shadow-[#E66B26]/22">
+              className="group relative w-full sm:w-auto px-5 sm:px-7 py-2.5 sm:py-3 bg-[#F04A06] text-white rounded-full text-xs sm:text-sm font-black overflow-hidden shadow-xl shadow-[#F04A06]/22">
               <span className="relative z-10 flex items-center justify-center gap-2">
                 Apply for R&amp;D Program
                 <motion.span animate={{x:[0,4,0]}} transition={{duration:1.5,repeat:Infinity}}><ArrowRight className="w-4 h-4"/></motion.span>
               </span>
               <motion.div className="absolute inset-0 bg-[#C5531A] origin-left" initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.4}}/>
             </MagBtn>
-            <MagBtn onClick={()=>document.getElementById("rnd-projects")?.scrollIntoView({behavior:"smooth"})}
-              className="w-full sm:w-auto px-5 sm:px-7 py-2.5 sm:py-3 border-2 border-[#E66B26] text-[#E66B26] rounded-full text-xs sm:text-sm font-black hover:bg-[#E66B26] hover:text-white transition-all">
+            <button onClick={()=>document.getElementById("rnd-projects")?.scrollIntoView({behavior:"smooth"})}
+              className="w-full sm:w-auto px-5 sm:px-7 py-2.5 sm:py-3 border-2 border-[#F04A06] text-[#F04A06] rounded-full text-xs sm:text-sm font-black hover:bg-[#F04A06] hover:text-white transition-all">
               Explore Research Projects
-            </MagBtn>
+            </button>
           </motion.div>
 
           {/* Scroll cue */}
-          <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{delay:1.8}}
+          <motion.div
+  style={{ opacity: scrollOpacity }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 2.2 }}
             className="flex justify-center cursor-pointer"
             onClick={()=>document.getElementById("rnd-stats")?.scrollIntoView({behavior:"smooth"})}>
             <Float duration={2} yRange={10}>
-              <div className="flex flex-col items-center gap-1.5 text-gray-400 hover:text-[#E66B26] transition-colors">
+              <div className="flex flex-col items-center gap-1.5 text-gray-400 hover:text-[#F04A06] transition-colors">
                 <span className="text-[10px] sm:text-xs font-medium">Explore Research</span>
-                <div className="w-5 h-8 border-2 border-[#E66B26]/22 rounded-full flex justify-center">
-                  <motion.div className="w-1 h-2 bg-[#D4AF37] rounded-full mt-1.5"
-                    animate={{y:[0,10,0],opacity:[1,.4,1]}} transition={{duration:1.8,repeat:Infinity}}/>
+                <div className="w-7 h-12 border-2 border-[#F04A06]/22 rounded-full flex justify-center">
+                   <motion.div
+    className="w-1.5 h-3 bg-[#D4AF37] rounded-full mt-3"
+    animate={{ y: [0, 14, 0], opacity: [1, 0.4, 1] }}
+    transition={{ duration: 1.8, repeat: Infinity }}
+  />
                 </div>
               </div>
             </Float>
@@ -647,7 +602,7 @@ function RND() {
         </motion.div>
       </section>
 
-      <MarqueeStrip/>
+      
 
       {/* ═══ STATS ═══ */}
       <WaveDivider color="#D4AF37" toBg="#f9fafb"/>
@@ -667,7 +622,7 @@ function RND() {
                       </div>
                     </Float>
                     <div className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900 mb-1"><Counter value={stat.count}/></div>
-                    <div className="text-xs sm:text-sm font-black text-[#E66B26] mb-1">{stat.title}</div>
+                    <div className="text-xs sm:text-sm font-black text-[#F04A06] mb-1">{stat.title}</div>
                     <p className="text-[10px] sm:text-xs text-gray-500">{stat.desc}</p>
                   </motion.div>
                 </TiltCard>
@@ -683,13 +638,13 @@ function RND() {
         <NoiseCanvas color1="#FFD5B8" color2="#FFCBA4" opacity={0.2}/>
         <Spotlight color="rgba(230,107,38,0.04)" size={500}/>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[13vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+          <motion.span className="text-[13vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
             animate={{y:[0,-10,0]}} transition={{duration:10,repeat:Infinity,ease:"easeInOut"}}>DOMAINS</motion.span>
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="Research Domains"/>
-            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Research Domains
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -709,7 +664,7 @@ function RND() {
                         <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white"/>
                       </div>
                     </Float>
-                    <h3 className="text-sm sm:text-base font-black text-gray-900 mb-2 group-hover:text-[#E66B26] transition-colors">{d.title}</h3>
+                    <h3 className="text-sm sm:text-base font-black text-gray-900 mb-2 group-hover:text-[#F04A06] transition-colors">{d.title}</h3>
                     <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4 line-clamp-2">{d.desc}</p>
                     <div className="space-y-1">
                       {d.areas.slice(0,4).map((area,j)=>(
@@ -721,7 +676,7 @@ function RND() {
                         </div>
                       ))}
                     </div>
-                    <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#E66B26] rounded-b-xl"
+                    <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#F04A06] rounded-b-xl"
                       initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.35}}/>
                   </motion.div>
                 </TiltCard>
@@ -738,7 +693,7 @@ function RND() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-14">
             <Reveal from="left" className="lg:w-1/2">
-              <AHeading className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A] mb-4" delay={.05}>
+              <AHeading className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A] mb-4" delay={.05}>
                 Innovation Through Research
               </AHeading>
               <div className="w-16 h-[3px] bg-[#D4AF37] mb-5 rounded"/>
@@ -782,13 +737,13 @@ function RND() {
       <section className="py-16 sm:py-20 px-4 sm:px-6 relative overflow-hidden" style={{background:"#FFF4ED"}}>
         <NoiseCanvas color1="#FFD5B8" color2="#FFCBA4" opacity={0.18}/>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[13vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+          <motion.span className="text-[13vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
             animate={{y:[0,-10,0]}} transition={{duration:9,repeat:Infinity,ease:"easeInOut"}}>METHODOLOGY</motion.span>
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="How We Research"/>
-            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Research Methodology
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -821,7 +776,7 @@ function RND() {
                         </div>
                       ))}
                     </div>
-                    <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#E66B26] rounded-b-xl"
+                    <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#F04A06] rounded-b-xl"
                       initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.35}}/>
                   </motion.div>
                 </TiltCard>
@@ -838,7 +793,7 @@ function RND() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Our Research"/>
-            <AHeading className="text-3xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-3xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Research Projects
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -860,7 +815,7 @@ function RND() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3 sm:gap-4">
                           <Float duration={4+gIdx} yRange={7}>
-                            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#E66B26] rounded-lg flex items-center justify-center text-white font-black text-sm shadow-md">
+                            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#F04A06] rounded-lg flex items-center justify-center text-white font-black text-sm shadow-md">
                               {gIdx+1}
                             </div>
                           </Float>
@@ -875,7 +830,7 @@ function RND() {
                           </span>
                           <motion.div animate={{rotate:isExpanded?180:0}} transition={{duration:.3}}
                             className="w-8 h-8 rounded-full bg-[#FFF0D0] flex items-center justify-center border border-[#D4AF37]">
-                            <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-[#E66B26]"/>
+                            <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-[#F04A06]"/>
                           </motion.div>
                         </div>
                       </div>
@@ -890,19 +845,19 @@ function RND() {
                             <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-4" stagger={0.06} from="bottom">
                               {group.projects.map((project,pi)=>(
                                 <Link key={project.id} to={`/R_AND_D/${project.id}`}>
-                                  <GlowCard accent="#E66B26">
+                                  <GlowCard accent="#F04A06">
                                     <TiltCard intensity={6}>
                                       <motion.div whileHover={{y:-5,boxShadow:"0 18px 45px rgba(230,107,38,0.1)"}}
-                                        className="bg-white rounded-xl p-4 sm:p-5 border border-gray-200 hover:border-[#E66B26]/40 transition-all group/p shadow-sm h-full">
+                                        className="bg-white rounded-xl p-4 sm:p-5 border border-gray-200 hover:border-[#F04A06]/40 transition-all group/p shadow-sm h-full">
                                         <div className="flex items-center justify-between mb-3">
-                                          <span className="text-xs font-black text-[#E66B26] bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">{project.domain}</span>
+                                          <span className="text-xs font-black text-[#F04A06] bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">{project.domain}</span>
                                           <span className="text-xs text-gray-400">{project.timeline}</span>
                                         </div>
-                                        <h4 className="text-base font-black text-gray-900 mb-2 group-hover/p:text-[#E66B26] transition-colors">{project.title}</h4>
+                                        <h4 className="text-base font-black text-gray-900 mb-2 group-hover/p:text-[#F04A06] transition-colors">{project.title}</h4>
                                         <p className="text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed">{project.desc}</p>
                                         <div className="bg-gray-50 rounded-lg p-3 mb-3 border border-gray-100">
                                           <p className="text-xs text-gray-600 line-clamp-1">
-                                            <span className="text-[#E66B26] font-black">Impact: </span>{project.impact}
+                                            <span className="text-[#F04A06] font-black">Impact: </span>{project.impact}
                                           </p>
                                         </div>
                                         <div className="flex items-center justify-between">
@@ -910,7 +865,7 @@ function RND() {
                                             <Users className="w-3.5 h-3.5"/><span>{project.teamSize}</span>
                                           </div>
                                           <motion.span animate={{x:[0,3,0]}} transition={{duration:1.4,repeat:Infinity}}
-                                            className="text-xs text-[#E66B26] font-bold flex items-center gap-1">
+                                            className="text-xs text-[#F04A06] font-bold flex items-center gap-1">
                                             View Details <ChevronRight className="w-3 h-3"/>
                                           </motion.span>
                                         </div>
@@ -937,13 +892,13 @@ function RND() {
       <section id="rnd-eligibility" className="py-16 sm:py-20 px-4 sm:px-6 relative overflow-hidden" style={{background:"#FFF4ED"}}>
         <NoiseCanvas color1="#FFD5B8" color2="#FFCBA4" opacity={0.18}/>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[13vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+          <motion.span className="text-[13vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
             animate={{y:[0,-10,0]}} transition={{duration:8,repeat:Infinity,ease:"easeInOut"}}>APPLY</motion.span>
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="Who Can Apply"/>
-            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Who Can Apply
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -959,7 +914,7 @@ function RND() {
                     className="group bg-white p-5 sm:p-6 rounded-xl border border-gray-200 hover:border-[#D4AF37] relative overflow-hidden shadow-sm transition-all h-full">
                     <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-[0.04] transition-opacity duration-300`}/>
                     <Float duration={4+i*.5} delay={i*.3} yRange={7}>
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[#E66B26] flex items-center justify-center mb-4 shadow-md">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[#F04A06] flex items-center justify-center mb-4 shadow-md">
                         <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white"/>
                       </div>
                     </Float>
@@ -974,7 +929,7 @@ function RND() {
                         </div>
                       ))}
                     </div>
-                    <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#E66B26] rounded-b-xl"
+                    <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#F04A06] rounded-b-xl"
                       initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.35}}/>
                   </motion.div>
                 </TiltCard>
@@ -991,7 +946,7 @@ function RND() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="Mentorship"/>
-            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Mentorship & Collaboration
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -1025,7 +980,7 @@ function RND() {
               <GlowCard accent="#D4AF37">
                 <TiltCard intensity={7}>
                   <div className="bg-emerald-50 p-5 sm:p-6 rounded-xl border border-gray-200 hover:border-[#D4AF37] shadow-sm transition-all">
-                    <h3 className="text-sm sm:text-base font-black text-[#E66B26] mb-4">Collaboration Benefits</h3>
+                    <h3 className="text-sm sm:text-base font-black text-[#F04A06] mb-4">Collaboration Benefits</h3>
                     <StaggerContainer className="space-y-2.5" stagger={0.07} from="left">
                       {MENTORSHIP_ITEMS.map((item,i)=>(
                         <div key={i} className="flex items-center gap-2">
@@ -1051,7 +1006,7 @@ function RND() {
         <div className="max-w-4xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="FAQ"/>
-            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Frequently Asked Questions
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -1095,7 +1050,7 @@ function RND() {
         <div className="max-w-4xl mx-auto relative z-10">
           <Reveal from="bottom">
             <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-[#E66B26]/85"/>
+              <div className="absolute inset-0 bg-[#F04A06]/85"/>
               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=2072')] bg-cover bg-center mix-blend-overlay opacity-70"/>
               <div className="absolute inset-0"><ParticleCanvas count={12} color="rgba(212,175,55,0.09)"/></div>
               <Spotlight color="rgba(212,175,55,0.07)" size={360}/>
@@ -1122,7 +1077,7 @@ function RND() {
                 <Reveal from="bottom" delay={.32}>
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
                     <MagBtn onClick={()=>window.location.href="/Career"}
-                      className="group relative w-full sm:w-auto px-5 sm:px-7 py-2.5 sm:py-3 bg-[#E66B26] text-white rounded-full text-xs sm:text-sm font-black overflow-hidden shadow-xl">
+                      className="group relative w-full sm:w-auto px-5 sm:px-7 py-2.5 sm:py-3 bg-[#F04A06] text-white rounded-full text-xs sm:text-sm font-black overflow-hidden shadow-xl">
                       <span className="relative z-10 flex items-center justify-center gap-2">
                         Apply for R&amp;D Program
                         <motion.span animate={{x:[0,4,0]}} transition={{duration:1.5,repeat:Infinity}}><ArrowRight className="w-4 h-4"/></motion.span>
@@ -1130,7 +1085,7 @@ function RND() {
                       <motion.div className="absolute inset-0 bg-[#C5531A] origin-left" initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.4}}/>
                     </MagBtn>
                     <MagBtn onClick={()=>window.open("/research-projects","_blank")}
-                      className="group w-full sm:w-auto px-5 sm:px-7 py-2.5 sm:py-3 bg-transparent border-2 border-[#D4AF37] text-white rounded-full text-sm sm:text-base font-black hover:bg-white hover:text-[#E66B26] transition-all flex items-center justify-center gap-2">
+                      className="group w-full sm:w-auto px-5 sm:px-7 py-2.5 sm:py-3 bg-transparent border-2 border-[#D4AF37] text-white rounded-full text-sm sm:text-base font-black hover:bg-white hover:text-[#F04A06] transition-all flex items-center justify-center gap-2">
                       <BookOpen className="w-4 h-4 sm:w-5 sm:h-5"/>
                       Explore Research Projects
                     </MagBtn>

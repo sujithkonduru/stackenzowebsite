@@ -46,7 +46,7 @@ const SERVICES_DATA = [
     icon: Code,
     features: ["Web Application Development","Mobile App Development","API Development & Integration","Database Design & Management","Cloud Solutions & DevOps","Enterprise Software Solutions","UI/UX Design & Prototyping"],
     technologies: ["React","Node.js","Python","AWS","Docker","Kubernetes"],
-    link: "/WebServices", accent: "#E66B26",
+    link: "/WebServices", accent: "#F04A06",
     stats: { projects:"150+", clients:"50+", satisfaction:"98%" },
   },
   {
@@ -80,10 +80,10 @@ const PROCESS_STEPS = [
 ];
 
 const HERO_STATS = [
-  { value:"10+",  label:"Years Experience",   icon: Users,    color:"#E66B26" },
+  { value:"10+",  label:"Years Experience",   icon: Users,    color:"#F04A06" },
   { value:"500+", label:"Happy Clients",      icon: Briefcase,color:"#C5531A" },
   { value:"98%",  label:"Client Retention",   icon: Star,     color:"#D4AF37" },
-  { value:"24/7", label:"Support Available",  icon: Clock,    color:"#E66B26" },
+  { value:"24/7", label:"Support Available",  icon: Clock,    color:"#F04A06" },
 ];
 
 /* ══════════════════════════════════════════════
@@ -255,42 +255,7 @@ function Counter({ value }) {
   return <span ref={ref}>{display}</span>;
 }
 
-/* ══════════════════════════════════════════════
-   CUSTOM CURSOR
-══════════════════════════════════════════════ */
-function CustomCursor() {
-  const outer=useRef(null), dot=useRef(null), trail=useRef(null);
-  const pos=useRef({x:-300,y:-300}), sm=useRef({x:-300,y:-300});
-  const [hov,setHov]=useState(false), [clk,setClk]=useState(false);
-  useEffect(()=>{
-    const mv=e=>{pos.current={x:e.clientX,y:e.clientY};};
-    const md=()=>setClk(true), mu=()=>setClk(false);
-    document.addEventListener("mousemove",mv); document.addEventListener("mousedown",md); document.addEventListener("mouseup",mu);
-    const att=()=>{ document.querySelectorAll("a,button,[data-hover]").forEach(el=>{ el.addEventListener("mouseenter",()=>setHov(true)); el.addEventListener("mouseleave",()=>setHov(false)); }); };
-    att(); const ob=new MutationObserver(att); ob.observe(document.body,{childList:true,subtree:true});
-    let id;
-    const loop=()=>{
-      sm.current.x+=(pos.current.x-sm.current.x)*.09; sm.current.y+=(pos.current.y-sm.current.y)*.09;
-      const s=clk?.65:hov?2.1:1;
-      if(outer.current) outer.current.style.transform=`translate(${sm.current.x-20}px,${sm.current.y-20}px) scale(${s})`;
-      if(dot.current)   dot.current.style.transform  =`translate(${pos.current.x-3}px,${pos.current.y-3}px) scale(${clk?1.9:1})`;
-      if(trail.current) trail.current.style.transform=`translate(${sm.current.x-30}px,${sm.current.y-30}px) scale(${hov?1.6:.5})`;
-      id=requestAnimationFrame(loop);
-    };
-    id=requestAnimationFrame(loop);
-    return()=>{ document.removeEventListener("mousemove",mv); document.removeEventListener("mousedown",md); document.removeEventListener("mouseup",mu); ob.disconnect(); cancelAnimationFrame(id); };
-  },[hov,clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998] transition-[border-color,background] duration-150"
-        style={{border:hov?"1.5px solid #D4AF37":"1.5px solid rgba(230,107,38,0.45)",background:hov?"rgba(212,175,55,0.07)":"transparent",willChange:"transform"}}/>
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999] transition-colors duration-100"
-        style={{background:hov?"#D4AF37":"#E66B26",willChange:"transform"}}/>
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{background:"radial-gradient(circle,#D4AF37,transparent)",willChange:"transform"}}/>
-    </>
-  );
-}
+
 
 /* ══════════════════════════════════════════════
    SCROLL PROGRESS BAR
@@ -357,27 +322,7 @@ function SectionNavDots() {
     className="w-2.5 h-2.5 rounded-full"
   />
 
-  {/* 🔥 RING */}
-  {active === i && (
-    <motion.div
-      layoutId="pf-nav-pulse"
-      className="absolute inset-0 rounded-full"
-      style={{ border: "1.5px solid #D4AF37" }}
-      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
-      transition={{ duration: 1.5, repeat: Infinity }}
-    />
-  )}
-
-  {/* 🔥 ARROW (OUTSIDE LEFT) */}
-  {active === i && (
-    <motion.div
-      initial={{ opacity: 0, x: 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute right-6" 
-    >
-      <ArrowRight className="w-4 h-4 text-black" />
-    </motion.div>
-  )}
+ 
 </motion.button>
       ))}
     </div>
@@ -533,6 +478,9 @@ function MarqueeStrip({ dark=false, reverse=false }) {
 function HeroSection() {
   const secRef=useRef(null);
   const {scrollYProgress}=useScroll({target:secRef,offset:["start start","end start"]});
+  const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+
   const hY  =useTransform(scrollYProgress,[0,1],[0,-110]);
   const hO  =useTransform(scrollYProgress,[0,.6],[1,0.9]);
   const hS  =useTransform(scrollYProgress,[0,1],[1,.84]);
@@ -560,7 +508,7 @@ function HeroSection() {
 
       {/* Dot grid */}
       <div className="absolute inset-0 z-[2] opacity-[.03]"
-        style={{backgroundImage:"radial-gradient(circle,#E66B26 1px,transparent 1px)",backgroundSize:"32px 32px"}}/>
+        style={{backgroundImage:"radial-gradient(circle,#F04A06 1px,transparent 1px)",backgroundSize:"32px 32px"}}/>
 
       {/* Blobs */}
       <motion.div style={{x:b1x,y:b1y}} className="absolute top-10 left-[4%] w-[380px] h-[380px] pointer-events-none z-[2]">
@@ -572,7 +520,7 @@ function HeroSection() {
 
       {/* Floating orbs */}
       <Float className="absolute top-1/4 left-[7%] w-3 h-3 rounded-full bg-[#D4AF37]/28 z-[2]" duration={5} delay={0}/>
-      <Float className="absolute top-1/3 right-[9%] w-2 h-2 rounded-full bg-[#E66B26]/22 z-[2]" duration={4} delay={1}/>
+      <Float className="absolute top-1/3 right-[9%] w-2 h-2 rounded-full bg-[#F04A06]/22 z-[2]" duration={4} delay={1}/>
       <Float className="absolute bottom-1/3 left-[12%] w-4 h-4 rounded-full bg-[#C5531A]/18 z-[2]" duration={6} delay={2}/>
       <Float className="absolute bottom-1/4 right-[15%] w-2.5 h-2.5 rounded-full bg-[#D4AF37]/20 z-[2]" duration={5.5} delay={.5}/>
 
@@ -587,7 +535,7 @@ function HeroSection() {
               <motion.div animate={{rotate:[0,20,-20,0]}} transition={{duration:2.8,repeat:Infinity,ease:"easeInOut"}}>
                 <Sparkles className="w-4 h-4 text-[#D4AF37]"/>
               </motion.div>
-              <span className="text-sm font-semibold text-[#E66B26]">Premium Services</span>
+              <span className="text-sm font-semibold text-[#F04A06]">Premium Services</span>
             </motion.div>
 
             {/* H1 */}
@@ -595,7 +543,7 @@ function HeroSection() {
               className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-[1.05]">
               <span className="text-[#1A1A1A]">Transform Your</span>
               <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] via-[#C5531A] to-[#E66B26]">Business With Us</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] via-[#C5531A] to-[#F04A06]">Business With Us</span>
             </motion.h1>
 
             <motion.p initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:.45,ease:EASE_EXPO}}
@@ -607,7 +555,7 @@ function HeroSection() {
             <motion.div initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{delay:.6,ease:EASE_EXPO}}
               className="flex flex-wrap gap-4 mb-8">
               <Link to="/Contact">
-                <MagBtn className="group relative px-8 py-4 bg-[#E66B26] text-white rounded-xl font-bold overflow-hidden shadow-xl shadow-[#E66B26]/25">
+                <MagBtn className="group relative px-8 py-4 bg-[#F04A06] text-white rounded-xl font-bold overflow-hidden shadow-xl shadow-[#F04A06]/25">
                   <span className="relative z-10 flex items-center gap-2">
                     Get Started
                     <motion.span animate={{x:[0,4,0]}} transition={{duration:1.5,repeat:Infinity}}><ArrowRight className="w-5 h-5"/></motion.span>
@@ -616,21 +564,17 @@ function HeroSection() {
                 </MagBtn>
               </Link>
               <Link to="/About">
-                <MagBtn className="px-8 py-4 border-2 border-[#E66B26]/20 text-[#1A1A1A] rounded-xl font-bold hover:border-[#E66B26] hover:text-[#E66B26] transition-all flex items-center gap-2 bg-white shadow-sm">
+                <button className="px-8 py-4 border-2 border-[#F04A06]/20 text-[#1A1A1A] rounded-xl font-bold hover:border-[#F04A06] hover:text-[#F04A06] transition-all flex items-center gap-2 bg-white shadow-sm">
                   <Briefcase className="w-5 h-5"/>
                   Learn More
-                </MagBtn>
+                </button>
               </Link>
             </motion.div>
 
             {/* Trust */}
             <motion.div initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{delay:.78,ease:EASE_EXPO}}
               className="flex items-center gap-6">
-              <div className="flex -space-x-2">
-                {[1,2,3,4].map(i=>(
-                  <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gradient-to-br from-[#FFF4ED] to-[#FFD5B8] shadow-sm"/>
-                ))}
-              </div>
+              
               <div>
                 <div className="flex items-center gap-0.5 mb-0.5">
                   {[1,2,3,4,5].map(i=>(<Star key={i} className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]"/>))}
@@ -660,16 +604,24 @@ function HeroSection() {
         </div>
 
         {/* Scroll cue */}
-        <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{delay:1.8}}
+        <motion.div
+  style={{ opacity: scrollOpacity }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 2.2 }}
           className="flex justify-center mt-16 cursor-pointer"
           onClick={()=>document.getElementById("svc-services")?.scrollIntoView({behavior:"smooth"})}>
           <Float duration={2} yRange={10}>
-            <div className="flex flex-col items-center gap-1.5 text-gray-400 hover:text-[#E66B26] transition-colors">
+            <div className="flex flex-col items-center gap-1.5 text-gray-400 hover:text-[#F04A06] transition-colors">
               <span className="text-xs font-medium">Scroll to explore</span>
-              <div className="w-5 h-8 border-2 border-[#E66B26]/25 rounded-full flex justify-center">
-                <motion.div className="w-1 h-2 bg-[#D4AF37] rounded-full mt-1.5"
-                  animate={{y:[0,10,0],opacity:[1,.4,1]}} transition={{duration:1.8,repeat:Infinity}}/>
-              </div>
+              <div className="w-7 h-12 border-2 border-[#F04A06]/25 rounded-full flex justify-center">
+                 <motion.div
+    className="w-1.5 h-3 bg-[#D4AF37] rounded-full mt-3"
+    animate={{ y: [0, 14, 0], opacity: [1, 0.4, 1] }}
+    transition={{ duration: 1.8, repeat: Infinity }}
+  />
+</div>
+
             </div>
           </Float>
         </motion.div>
@@ -684,7 +636,7 @@ function HeroSection() {
 function ServicesShowcase() {
   return (
     <>
-      <MarqueeStrip/>
+      
       <WaveDivider color="#D4AF37" toBg="#FFF4ED"/>
       <section id="svc-services" className="py-24 px-4 sm:px-6 relative overflow-hidden" style={{background:"#FFF4ED"}}>
         <NoiseCanvas color1="#FFD5B8" color2="#FFCBA4" opacity={0.22}/>
@@ -692,19 +644,19 @@ function ServicesShowcase() {
 
         {/* Kinetic bg */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[15vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+          <motion.span className="text-[15vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
             animate={{y:[0,-10,0]}} transition={{duration:9,repeat:Infinity,ease:"easeInOut"}}>SOLUTIONS</motion.span>
         </div>
 
         {/* Floating bg orbs */}
         {[{l:"5%",t:"15%",s:80},{l:"88%",t:"60%",s:60},{l:"45%",t:"80%",s:70}].map((o,i)=>(
-          <Float key={i} duration={6+i} yRange={18} delay={i} className="absolute pointer-events-none rounded-full bg-[#E66B26]/[0.03]" style={{left:o.l,top:o.t,width:o.s,height:o.s}}/>
+          <Float key={i} duration={6+i} yRange={18} delay={i} className="absolute pointer-events-none rounded-full bg-[#F04A06]/[0.03]" style={{left:o.l,top:o.t,width:o.s,height:o.s}}/>
         ))}
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <SLabel text="Our Services"/>
-            <AHeading className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A] mt-1" delay={.05}>
+            <AHeading className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A] mt-1" delay={.05}>
               Our Services
             </AHeading>
             <Reveal from="bottom" delay={.25}>
@@ -722,24 +674,24 @@ function ServicesShowcase() {
                     <TiltCard intensity={8} className="h-full">
                       <Link to={svc.link}>
                         <motion.div whileHover={{y:-8,boxShadow:`0 32px 70px ${svc.accent}20`}}
-                          className="group relative bg-white rounded-3xl border border-gray-200 hover:border-[#E66B26] transition-all duration-500 overflow-hidden h-full shadow-sm">
+                          className="group relative bg-white rounded-3xl border border-gray-200 hover:border-[#F04A06] transition-all duration-500 overflow-hidden h-full shadow-sm">
 
                           {/* Top gradient accent */}
-                          <div className="h-1.5 w-full bg-gradient-to-r from-[#E66B26] to-[#C5531A] opacity-0 group-hover:opacity-100 transition-opacity duration-500"/>
+                          <div className="h-1.5 w-full bg-gradient-to-r from-[#F04A06] to-[#C5531A] opacity-0 group-hover:opacity-100 transition-opacity duration-500"/>
 
                           <div className="p-8">
                             {/* Icon */}
                             <Float duration={4+idx*.5} delay={idx*.3} yRange={8}>
                               <motion.div whileHover={{rotate:360,scale:1.1}} transition={{duration:.6}}
-                                className="w-20 h-20 rounded-2xl bg-gradient-to-r from-[#E66B26] to-[#C5531A] p-0.5 mb-6">
+                                className="w-20 h-20 rounded-2xl bg-gradient-to-r from-[#F04A06] to-[#C5531A] p-0.5 mb-6">
                                 <div className="w-full h-full rounded-2xl bg-white flex items-center justify-center">
-                                  <Icon className="w-8 h-8 text-[#E66B26]"/>
+                                  <Icon className="w-8 h-8 text-[#F04A06]"/>
                                 </div>
                               </motion.div>
                             </Float>
 
-                            <h3 className="text-2xl font-black text-[#1A1A1A] mb-1 group-hover:text-[#E66B26] transition-colors">{svc.title}</h3>
-                            <p className="text-[#E66B26] font-semibold mb-4 text-sm">{svc.subtitle}</p>
+                            <h3 className="text-2xl font-black text-[#1A1A1A] mb-1 group-hover:text-[#F04A06] transition-colors">{svc.title}</h3>
+                            <p className="text-[#F04A06] font-semibold mb-4 text-sm">{svc.subtitle}</p>
                             <p className="text-gray-500 mb-6 leading-relaxed text-sm">{svc.description}</p>
 
                             {/* Features */}
@@ -758,7 +710,7 @@ function ServicesShowcase() {
                             <StaggerContainer className="flex flex-wrap gap-2 mb-6" stagger={0.07} from="scale">
                               {svc.technologies.slice(0,3).map((t,i)=>(
                                 <motion.span key={i} whileHover={{scale:1.08}}
-                                  className="text-xs px-2.5 py-1 rounded-full bg-[#FFF4ED] text-[#E66B26] border border-[#D4AF37]/28 font-medium cursor-default">
+                                  className="text-xs px-2.5 py-1 rounded-full bg-[#FFF4ED] text-[#F04A06] border border-[#D4AF37]/28 font-medium cursor-default">
                                   {t}
                                 </motion.span>
                               ))}
@@ -781,10 +733,10 @@ function ServicesShowcase() {
 
                             {/* CTA row */}
                             <div className="flex items-center justify-between">
-                              <span className="text-[#E66B26] font-bold text-sm group-hover:text-[#C5531A] transition-colors">Explore Service</span>
+                              <span className="text-[#F04A06] font-bold text-sm group-hover:text-[#C5531A] transition-colors">Explore Service</span>
                               <motion.div animate={{x:[0,4,0]}} transition={{duration:1.5,repeat:Infinity}}
                                 className="w-8 h-8 rounded-full bg-[#FFF4ED] flex items-center justify-center border border-[#D4AF37]/28">
-                                <ExternalLink className="w-4 h-4 text-[#E66B26]"/>
+                                <ExternalLink className="w-4 h-4 text-[#F04A06]"/>
                               </motion.div>
                             </div>
                           </div>
@@ -818,18 +770,18 @@ function WhySection() {
     <section id="svc-why" className="py-24 px-4 sm:px-6 bg-white relative overflow-hidden">
       <Spotlight color="rgba(230,107,38,0.04)" size={500}/>
       <div className="absolute inset-0 opacity-[.028]"
-        style={{backgroundImage:"radial-gradient(circle,#E66B26 1px,transparent 1px)",backgroundSize:"28px 28px"}}/>
+        style={{backgroundImage:"radial-gradient(circle,#F04A06 1px,transparent 1px)",backgroundSize:"28px 28px"}}/>
 
       {/* Kinetic bg */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-        <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+        <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
           animate={{y:[0,-10,0]}} transition={{duration:10,repeat:Infinity,ease:"easeInOut"}}>ADVANTAGE</motion.span>
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
           <SLabel text="Why Choose Us"/>
-          <AHeading className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+          <AHeading className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
             The Stackenzo Advantage
           </AHeading>
           <Reveal from="bottom" delay={.25}>
@@ -844,16 +796,16 @@ function WhySection() {
               <TiltCard>
                 <motion.div whileHover={{scale:1.04,y:-8,boxShadow:"0 28px 60px rgba(0,0,0,0.09)"}}
                   className="group relative bg-white p-6 rounded-2xl border border-gray-200 hover:border-[#D4AF37] transition-all shadow-sm h-full">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#E66B26] to-[#C5531A] rounded-2xl opacity-0 group-hover:opacity-[0.04] transition-opacity duration-300"/>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#F04A06] to-[#C5531A] rounded-2xl opacity-0 group-hover:opacity-[0.04] transition-opacity duration-300"/>
                   <Float duration={4+i*.35} delay={i*.2} yRange={7}>
                     <div className="text-[#D4AF37] mb-4 p-3 bg-[#FFF4ED] rounded-xl inline-block border border-[#D4AF37]/28">
                       <Icon className="w-6 h-6"/>
                     </div>
                   </Float>
-                  <h3 className="text-lg font-black text-[#1A1A1A] mb-2 group-hover:text-[#E66B26] transition-colors">{b.title}</h3>
+                  <h3 className="text-lg font-black text-[#1A1A1A] mb-2 group-hover:text-[#F04A06] transition-colors">{b.title}</h3>
                   <p className="text-sm text-gray-500">{b.desc}</p>
                   {/* Hover bottom bar */}
-                  <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#E66B26] rounded-b-2xl"
+                  <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#F04A06] rounded-b-2xl"
                     initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.35}}/>
                 </motion.div>
               </TiltCard>
@@ -895,14 +847,14 @@ function ProcessSection() {
 
         {/* Kinetic bg */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+          <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
             animate={{y:[0,-10,0]}} transition={{duration:8,repeat:Infinity,ease:"easeInOut"}}>PROCESS</motion.span>
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <SLabel text="How We Work"/>
-            <AHeading className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Our Process
             </AHeading>
             <Reveal from="bottom" delay={.25}>
@@ -913,7 +865,7 @@ function ProcessSection() {
 
           <div className="grid md:grid-cols-4 gap-6 relative">
             {/* Connector line */}
-            <div className="absolute top-[3.25rem] left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-[#D4AF37]/20 via-[#E66B26]/20 to-[#D4AF37]/20 hidden md:block"/>
+            <div className="absolute top-[3.25rem] left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-[#D4AF37]/20 via-[#F04A06]/20 to-[#D4AF37]/20 hidden md:block"/>
 
             {PROCESS_STEPS.map((item,i)=>{
               const Icon=item.icon;
@@ -926,7 +878,7 @@ function ProcessSection() {
                         {/* Step number */}
                         <Float duration={4+i*.5} delay={i*.4} yRange={8}>
                           <div className="w-12 h-12 rounded-full bg-[#FFF4ED] flex items-center justify-center mx-auto mb-4 border border-[#D4AF37]/28 shadow-sm">
-                            <span className="text-xl font-black text-[#E66B26]">{item.step}</span>
+                            <span className="text-xl font-black text-[#F04A06]">{item.step}</span>
                           </div>
                         </Float>
                         <motion.div whileHover={{rotate:16,scale:1.18}} className="inline-block mb-4">
@@ -935,7 +887,7 @@ function ProcessSection() {
                         <h3 className="text-lg font-black text-[#1A1A1A] mb-2">{item.title}</h3>
                         <p className="text-sm text-gray-500">{item.desc}</p>
                         {/* Animated bottom accent */}
-                        <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#E66B26] rounded-b-2xl"
+                        <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#F04A06] rounded-b-2xl"
                           initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.35}}/>
                       </motion.div>
                     </TiltCard>
@@ -971,7 +923,7 @@ function CTASection() {
             </motion.div>
             <div className="absolute inset-0 opacity-[.08]"
               style={{backgroundImage:"radial-gradient(circle at 2px 2px,rgba(230,107,38,0.08) 1px,transparent 0)",backgroundSize:"40px 40px"}}/>
-            <ParticleCanvas count={14} color="rgba(230,107,38,0.07)"/>
+            <ParticleCanvas count={14} color="rgba(230,107,38,0.5)"/>
             <Spotlight color="rgba(212,175,55,0.06)" size={380}/>
 
             {/* Floating rings */}
@@ -987,12 +939,12 @@ function CTASection() {
                   <motion.div animate={{rotate:[0,20,-20,0]}} transition={{duration:2.8,repeat:Infinity}}>
                     <Sparkles className="w-4 h-4 text-[#D4AF37]"/>
                   </motion.div>
-                  <span className="text-sm text-[#E66B26] font-bold">Free Consultation Available</span>
+                  <span className="text-sm text-[#F04A06] font-bold">Free Consultation Available</span>
                 </div>
               </Reveal>
 
               <Reveal from="bottom" delay={.1}>
-                <h2 className="text-4xl md:text-5xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]">
+                <h2 className="text-4xl md:text-5xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]">
                   Ready to Transform Your Business?
                 </h2>
               </Reveal>
@@ -1006,7 +958,7 @@ function CTASection() {
               <Reveal from="bottom" delay={.32}>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
                   <Link to="/Contact">
-                    <MagBtn className="group relative px-8 py-4 bg-[#E66B26] text-white rounded-xl font-black overflow-hidden shadow-xl shadow-[#E66B26]/20">
+                    <MagBtn className="group relative px-8 py-4 bg-[#F04A06] text-white rounded-xl font-black overflow-hidden shadow-xl shadow-[#F04A06]/20">
                       <span className="relative z-10 flex items-center gap-2">
                         Get Free Consultation
                         <motion.span animate={{x:[0,4,0]}} transition={{duration:1.5,repeat:Infinity}}><ArrowRight className="w-5 h-5"/></motion.span>
@@ -1015,8 +967,8 @@ function CTASection() {
                     </MagBtn>
                   </Link>
                   <Link to="/portfolio">
-                    <motion.button whileHover={{scale:1.04,borderColor:"#E66B26",color:"#E66B26"}} whileTap={{scale:.96}}
-                      className="px-8 py-4 border-2 border-gray-200 bg-white text-[#1A1A1A] rounded-xl font-black hover:border-[#E66B26] hover:text-[#E66B26] transition-all flex items-center justify-center gap-2 shadow-sm">
+                    <motion.button whileHover={{scale:1.04,borderColor:"#F04A06",color:"#F04A06"}} whileTap={{scale:.96}}
+                      className="px-8 py-4 border-2 border-gray-200 bg-white text-[#1A1A1A] rounded-xl font-black hover:border-[#F04A06] hover:text-[#F04A06] transition-all flex items-center justify-center gap-2 shadow-sm">
                       <Layers className="w-5 h-5"/>
                       View Our Work
                     </motion.button>
@@ -1024,7 +976,7 @@ function CTASection() {
                 </div>
               </Reveal>
 
-              <Reveal from="bottom" delay={.44}>
+              <Reveal from="bottom" delay={.44} className="mt-5">
                 <StaggerContainer className="flex flex-wrap justify-center gap-6" stagger={0.1} from="bottom">
                   {[{icon:Shield,text:"ISO Certified"},{icon:Award,text:"Award Winning"},{icon:Users,text:"Expert Team"}].map((b,i)=>(
                     <motion.div key={i} whileHover={{scale:1.08,y:-3}} className="flex items-center gap-2 text-gray-500 cursor-default">
@@ -1050,7 +1002,7 @@ function CTASection() {
 function Services() {
   return (
     <div className="bg-white text-[#1A1A1A] min-h-screen overflow-x-hidden">
-      <CustomCursor/>
+     
       <ScrollProgressBar/>
       <SectionNavDots/>
       <Navbar/>

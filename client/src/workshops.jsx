@@ -28,7 +28,7 @@ const EASE_BACK = [0.34, 1.56, 0.64, 1];
 /* ══════════════════════════════════════════════
    BRAND  — updated to new orange palette
 ══════════════════════════════════════════════ */
-const C = { dark: "#E66B26", mid: "#C5531A", gold: "#D4AF37", light: "#FFF4ED", text: "#1A1A1A" };
+const C = { dark: "#F04A06", mid: "#C5531A", gold: "#D4AF37", light: "#FFF4ED", text: "#1A1A1A" };
 
 /* ══════════════════════════════════════════════
    NAV SECTIONS
@@ -179,52 +179,7 @@ function MagBtn({ children, className = "", onClick, type = "button" }) {
   );
 }
 
-/* ══════════════════════════════════════════════
-   CUSTOM CURSOR
-══════════════════════════════════════════════ */
-function CustomCursor() {
-  const outer = useRef(null), dot = useRef(null), trail = useRef(null);
-  const pos = useRef({ x: -300, y: -300 }), sm = useRef({ x: -300, y: -300 });
-  const [hov, setHov] = useState(false), [clk, setClk] = useState(false);
-  useEffect(() => {
-    const mv = e => { pos.current = { x: e.clientX, y: e.clientY }; };
-    const md = () => setClk(true), mu = () => setClk(false);
-    document.addEventListener("mousemove", mv);
-    document.addEventListener("mousedown", md);
-    document.addEventListener("mouseup", mu);
-    const att = () => {
-      document.querySelectorAll("a,button,[data-hover]").forEach(el => {
-        el.addEventListener("mouseenter", () => setHov(true));
-        el.addEventListener("mouseleave", () => setHov(false));
-      });
-    };
-    att();
-    const ob = new MutationObserver(att);
-    ob.observe(document.body, { childList: true, subtree: true });
-    let id;
-    const loop = () => {
-      sm.current.x += (pos.current.x - sm.current.x) * .09;
-      sm.current.y += (pos.current.y - sm.current.y) * .09;
-      const s = clk ? .65 : hov ? 2.1 : 1;
-      if (outer.current) outer.current.style.transform = `translate(${sm.current.x - 20}px,${sm.current.y - 20}px) scale(${s})`;
-      if (dot.current)   dot.current.style.transform   = `translate(${pos.current.x - 3}px,${pos.current.y - 3}px) scale(${clk ? 1.9 : 1})`;
-      if (trail.current) trail.current.style.transform = `translate(${sm.current.x - 30}px,${sm.current.y - 30}px) scale(${hov ? 1.6 : .5})`;
-      id = requestAnimationFrame(loop);
-    };
-    id = requestAnimationFrame(loop);
-    return () => { document.removeEventListener("mousemove", mv); document.removeEventListener("mousedown", md); document.removeEventListener("mouseup", mu); ob.disconnect(); cancelAnimationFrame(id); };
-  }, [hov, clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998] transition-[border-color,background] duration-150"
-        style={{ border: hov ? `1.5px solid ${C.gold}` : `1.5px solid rgba(230,107,38,0.45)`, background: hov ? "rgba(212,175,55,0.07)" : "transparent", willChange: "transform" }} />
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999] transition-colors duration-100"
-        style={{ background: hov ? C.gold : C.dark, willChange: "transform" }} />
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{ background: "radial-gradient(circle,#D4AF37,transparent)", willChange: "transform" }} />
-    </>
-  );
-}
+
 
 /* ══════════════════════════════════════════════
    SCROLL PROGRESS BAR
@@ -232,6 +187,8 @@ function CustomCursor() {
 function ScrollProgressBar() {
   const { scrollYProgress } = useScroll();
   const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+  const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
 
   return (
     <motion.div
@@ -291,27 +248,7 @@ function SectionNavDots() {
     className="w-2.5 h-2.5 rounded-full"
   />
 
-  {/* 🔥 RING */}
-  {active === i && (
-    <motion.div
-      layoutId="pf-nav-pulse"
-      className="absolute inset-0 rounded-full"
-      style={{ border: "1.5px solid #D4AF37" }}
-      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
-      transition={{ duration: 1.5, repeat: Infinity }}
-    />
-  )}
-
-  {/* 🔥 ARROW (OUTSIDE LEFT) */}
-  {active === i && (
-    <motion.div
-      initial={{ opacity: 0, x: 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute right-6" 
-    >
-      <ArrowRight className="w-4 h-4 text-black" />
-    </motion.div>
-  )}
+  
 </motion.button>
       ))}
     </div>
@@ -508,6 +445,9 @@ function Workshops() {
   /* hero parallax */
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+
   const heroY  = useTransform(heroScroll, [0, 1], [0, -100]);
   const heroO  = useTransform(heroScroll, [0, .6], [1, 0.9]);
   const heroS  = useTransform(heroScroll, [0, 1], [1, .85]);
@@ -534,7 +474,7 @@ function Workshops() {
   return (
     <div className="bg-white text-[#1A1A1A] min-h-screen overflow-x-hidden">
       <Toaster position="top-center" />
-      <CustomCursor />
+     
       <ScrollProgressBar />
       <SectionNavDots />
       <Navbar />
@@ -544,7 +484,7 @@ function Workshops() {
         <NoiseCanvas color1="#FFD5B8" color2="#FFF0E6" opacity={0.25} />
         <div className="absolute inset-0 z-[1]"><ParticleCanvas count={20} /></div>
 
-        <motion.div className="absolute inset-0 z-[2] opacity-25"
+        <motion.div className="absolute inset-0 z-[2] opacity-80"
           animate={{ background: ["radial-gradient(circle at 20% 30%,rgba(230,107,38,0.18) 0%,transparent 40%)","radial-gradient(circle at 80% 70%,rgba(230,107,38,0.18) 0%,transparent 40%)","radial-gradient(circle at 20% 30%,rgba(230,107,38,0.18) 0%,transparent 40%)"] }}
           transition={{ duration: 10, repeat: Infinity, ease: "linear" }} />
 
@@ -572,7 +512,7 @@ function Workshops() {
         </motion.div>
 
         {/* dot grid */}
-        <div className="absolute inset-0 z-[2] opacity-[.03] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle,#E66B26 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
+        <div className="absolute inset-0 z-[2] opacity-[.03] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle,#F04A06 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
 
         {/* content */}
         <motion.div style={{ y: heroY, opacity: heroO, scale: heroS }} className="max-w-6xl mx-auto text-center relative z-10 w-full">
@@ -594,12 +534,12 @@ function Workshops() {
             {viewMode === "workshops" ? (
               <>
                 <span style={{ color: C.text }}>Transform Your Future</span><br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]">with Technology-Driven Workshops</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]">with Technology-Driven Workshops</span>
               </>
             ) : (
               <>
                 <span style={{ color: C.text }}>Launch Your Career</span><br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]">with Professional Internships</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]">with Professional Internships</span>
               </>
             )}
           </motion.h1>
@@ -622,7 +562,7 @@ function Workshops() {
             ].map(({ mode, Icon, label }) => (
               <MagBtn key={mode} onClick={() => setViewMode(mode)}
                 className={`flex items-center gap-2 px-7 py-3 rounded-xl font-semibold transition-all duration-300 border shadow-sm ${
-                  viewMode === mode ? "text-black scale-105 shadow-md" : "bg-white border-gray-200 hover:border-[#E66B26] hover:bg-white "
+                  viewMode === mode ? "text-black scale-105 shadow-md" : "bg-white border-gray-200 hover:border-[#F04A06] hover:bg-white "
                 }`}
                 style={viewMode === mode ? { background: `linear-gradient(135deg,${C.dark},${C.mid})`, borderColor: C.dark } : { color: C.text }}>
                 <Icon className="w-4 h-4" />
@@ -641,7 +581,7 @@ function Workshops() {
           <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .8, ease: EASE_EXPO }}
             className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto px-2">
             {heroStats.map((s, i) => (
-              <Float key={i} duration={4 + i * .5} delay={i * .3}>
+              <motion.div key={i} duration={4 + i * .5} delay={i * .3}>
                 <GlowCard accent={C.gold}>
                   <motion.div whileHover={{ y: -5, boxShadow: "0 14px 32px rgba(0,0,0,0.08)" }}
                     className="bg-white border border-gray-200 rounded-xl p-3 sm:p-4 text-center cursor-default transition-all">
@@ -650,19 +590,26 @@ function Workshops() {
                     <div className="text-xs sm:text-sm" style={{ color: "rgba(26,26,26,0.6)" }}>{s.label}</div>
                   </motion.div>
                 </GlowCard>
-              </Float>
+              </motion.div>
             ))}
           </motion.div>
 
           {/* scroll cue */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
+         <motion.div
+  style={{ opacity: scrollOpacity }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 2.2 }}
             className="flex justify-center mt-12 cursor-pointer"
             onClick={() => document.getElementById("ws-intro")?.scrollIntoView({ behavior: "smooth" })}>
             <Float duration={2} yRange={10}>
-              <div className="w-5 h-8 rounded-full flex justify-center" style={{ border: `2px solid rgba(230,107,38,0.25)` }}>
-                <motion.div className="w-1 h-2 rounded-full mt-2" style={{ background: C.gold }}
-                  animate={{ y: [0, 10, 0], opacity: [1, .4, 1] }} transition={{ duration: 1.8, repeat: Infinity }} />
-              </div>
+              <div className="w-7 h-12 border-2 border-[#F04A06]/28 rounded-full flex justify-center">
+  <motion.div
+    className="w-1.5 h-3 bg-[#D4AF37] rounded-full mt-3"
+    animate={{ y: [0, 14, 0], opacity: [1, 0.4, 1] }}
+    transition={{ duration: 1.8, repeat: Infinity }}
+  />
+</div>
             </Float>
           </motion.div>
         </motion.div>
@@ -686,14 +633,14 @@ function Workshops() {
                   <form onSubmit={handleQuerySubmit} className="space-y-4">
                     <div className="grid sm:grid-cols-2 gap-4">
                       <input type="text" name="name" value={queryForm.name} onChange={handleQueryChange} placeholder="Your Name *" required
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:border-[#E66B26] focus:outline-none transition-colors" />
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:border-[#F04A06] focus:outline-none transition-colors" />
                       <input type="email" name="email" value={queryForm.email} onChange={handleQueryChange} placeholder="Your Email *" required
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:border-[#E66B26] focus:outline-none transition-colors" />
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:border-[#F04A06] focus:outline-none transition-colors" />
                     </div>
                     <input type="text" name="phone" value={queryForm.phone} onChange={handleQueryChange} placeholder="Phone Number"
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:border-[#E66B26] focus:outline-none transition-colors" />
+                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:border-[#F04A06] focus:outline-none transition-colors" />
                     <textarea name="message" value={queryForm.message} onChange={handleQueryChange} placeholder="Your Question *" required rows="3"
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:border-[#E66B26] focus:outline-none resize-none transition-colors" />
+                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:border-[#F04A06] focus:outline-none resize-none transition-colors" />
                     <div className="flex gap-3">
                       <MagBtn type="submit"
                         className="px-6 py-2.5 text-black rounded-lg font-semibold transition-all shadow-sm hover:shadow-md"
@@ -721,10 +668,10 @@ function Workshops() {
             {/* Intro */}
             <section id="ws-intro" className="py-16 sm:py-20 px-4 sm:px-6 bg-white relative overflow-hidden">
               <Spotlight color="rgba(230,107,38,0.04)" />
-              <div className="absolute inset-0 opacity-[.03]" style={{ backgroundImage: "radial-gradient(circle,#E66B26 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
+              <div className="absolute inset-0 opacity-[.03]" style={{ backgroundImage: "radial-gradient(circle,#F04A06 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
               <div className="max-w-4xl mx-auto text-center relative z-10">
                 <SLabel text="About Our Workshops" />
-                <AHeading className="text-3xl md:text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+                <AHeading className="text-3xl md:text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
                   Bridging Knowledge & Industry
                 </AHeading>
                 <Reveal from="bottom" delay={.1}>
@@ -748,7 +695,7 @@ function Workshops() {
             <section id="ws-approach" className="py-20 px-4 sm:px-6 relative overflow-hidden" style={{ background: C.light }}>
               <NoiseCanvas color1="#FFD5B8" color2="#FFCBA4" opacity={0.22} />
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-                <motion.span className="font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.02]"
+                <motion.span className="font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.02]"
                   style={{ fontSize: "15vw" }}
                   animate={{ y: [0, -10, 0] }} transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}>
                   APPROACH
@@ -757,7 +704,7 @@ function Workshops() {
               <div className="max-w-5xl mx-auto relative z-10">
                 <div className="text-center mb-14">
                   <SLabel text="How We Teach" />
-                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
                     Our Workshop Approach
                   </AHeading>
                   <Reveal from="bottom" delay={.15}>
@@ -815,7 +762,7 @@ function Workshops() {
             <section id="ws-grid" className="py-20 px-4 sm:px-6 relative overflow-hidden" style={{ background: C.light }}>
               <NoiseCanvas opacity={0.18} />
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-                <motion.span className="font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+                <motion.span className="font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
                   style={{ fontSize: "14vw" }}
                   animate={{ y: [0, -12, 0] }} transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}>
                   WORKSHOPS
@@ -824,7 +771,7 @@ function Workshops() {
               <div className="max-w-6xl mx-auto relative z-10">
                 <div className="text-center mb-14">
                   <SLabel text="Our Programs" />
-                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
                     Core Workshop Domains We Offer
                   </AHeading>
                 </div>
@@ -839,9 +786,9 @@ function Workshops() {
                       <GlowCard key={workshop.id} accent={C.gold}>
                         <TiltCard intensity={7}>
                           <motion.div whileHover={{ y: -8, boxShadow: "0 24px 55px rgba(0,0,0,0.10)" }}
-                            className="group bg-white rounded-xl sm:rounded-2xl border border-gray-200 hover:border-[#E66B26] transition-all overflow-hidden shadow-sm h-full">
+                            className="group bg-white rounded-xl sm:rounded-2xl border border-gray-200 hover:border-[#F04A06] transition-all overflow-hidden shadow-sm h-full">
                             <div className="p-4 sm:p-6">
-                              <h3 className="text-lg sm:text-xl font-bold mb-3 group-hover:text-[#E66B26] transition-colors" style={{ color: C.text }}>
+                              <h3 className="text-lg sm:text-xl font-bold mb-3 group-hover:text-[#F04A06] transition-colors" style={{ color: C.text }}>
                                 {workshop.title}
                               </h3>
                               <p className="text-xs sm:text-sm mb-4 line-clamp-2" style={{ color: "rgba(26,26,26,0.65)" }}>{workshop.description}</p>
@@ -897,7 +844,7 @@ function Workshops() {
               <div className="max-w-6xl mx-auto relative z-10">
                 <div className="text-center mb-14">
                   <SLabel text="Student Outcomes" />
-                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
                     What Students Gain
                   </AHeading>
                 </div>
@@ -929,7 +876,7 @@ function Workshops() {
               <div className="max-w-5xl mx-auto relative z-10">
                 <div className="text-center mb-14">
                   <SLabel text="Why Stackenzo" />
-                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
                     Why Choose Our Workshops
                   </AHeading>
                 </div>
@@ -953,7 +900,7 @@ function Workshops() {
             <WaveDivider color={C.gold} flip toBg="#3D1A0A" />
 
             {/* Philosophy Banner */}
-            <section className="py-20 px-4 sm:px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }}>
+            <section className="py-20 px-4 sm:px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)" }}>
               <Spotlight color="rgba(212,175,55,0.06)" />
               <div className="absolute inset-0"><ParticleCanvas count={14} color="rgba(212,175,55,0.07)" /></div>
               {[100, 180, 260].map((s, i) => (
@@ -999,7 +946,7 @@ function Workshops() {
             <section id="ws-intro" className="py-20 px-4 sm:px-6 relative overflow-hidden" style={{ background: `linear-gradient(135deg,${C.light},#fff)` }}>
               <NoiseCanvas opacity={0.18} />
               <Spotlight color="rgba(230,107,38,0.04)" />
-              <div className="absolute inset-0 opacity-[.03]" style={{ backgroundImage: "radial-gradient(circle,#E66B26 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
+              <div className="absolute inset-0 opacity-[.03]" style={{ backgroundImage: "radial-gradient(circle,#F04A06 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
               <div className="max-w-4xl mx-auto text-center relative z-10">
                 <Reveal from="scale">
                   <Float duration={4} yRange={10}>
@@ -1010,7 +957,7 @@ function Workshops() {
                   </Float>
                 </Reveal>
                 <SLabel text="Internship Program" />
-                <AHeading className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+                <AHeading className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
                   Internship Program at Stackenzo
                 </AHeading>
                 <Reveal from="bottom" delay={.1}>
@@ -1060,7 +1007,7 @@ function Workshops() {
             <section id="ws-grid" className="py-20 px-4 sm:px-6 relative overflow-hidden" style={{ background: C.light }}>
               <NoiseCanvas opacity={0.18} />
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-                <motion.span className="font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.02]"
+                <motion.span className="font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.02]"
                   style={{ fontSize: "14vw" }}
                   animate={{ y: [0, -12, 0] }} transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}>
                   INTERN
@@ -1069,7 +1016,7 @@ function Workshops() {
               <div className="max-w-6xl mx-auto relative z-10">
                 <div className="text-center mb-14">
                   <SLabel text="Available Roles" />
-                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
                     Available Internships
                   </AHeading>
                 </div>
@@ -1084,7 +1031,7 @@ function Workshops() {
                       <GlowCard key={internship.id} accent={C.gold}>
                         <TiltCard intensity={7}>
                           <motion.div whileHover={{ y: -8, boxShadow: "0 24px 55px rgba(0,0,0,0.10)" }}
-                            className="group bg-white rounded-xl sm:rounded-2xl border border-gray-200 hover:border-[#E66B26] transition-all overflow-hidden shadow-sm h-full">
+                            className="group bg-white rounded-xl sm:rounded-2xl border border-gray-200 hover:border-[#F04A06] transition-all overflow-hidden shadow-sm h-full">
                             <div className="p-4 sm:p-6">
                               <div className="flex items-center gap-3 mb-4">
                                 <Float duration={4} yRange={6}>
@@ -1094,7 +1041,7 @@ function Workshops() {
                                   </div>
                                 </Float>
                                 <div>
-                                  <h3 className="text-base sm:text-lg font-bold group-hover:text-[#E66B26] transition-colors" style={{ color: C.text }}>
+                                  <h3 className="text-base sm:text-lg font-bold group-hover:text-[#F04A06] transition-colors" style={{ color: C.text }}>
                                     {internship.title}
                                   </h3>
                                   <p className="text-xs sm:text-sm" style={{ color: "rgba(26,26,26,0.55)" }}>{internship.duration} • {internship.type}</p>
@@ -1157,7 +1104,7 @@ function Workshops() {
               <div className="max-w-6xl mx-auto relative z-10">
                 <div className="text-center mb-14">
                   <SLabel text="Intern Benefits" />
-                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
                     What Interns Gain at Stackenzo
                   </AHeading>
                 </div>
@@ -1189,7 +1136,7 @@ function Workshops() {
               <div className="max-w-5xl mx-auto relative z-10">
                 <div className="text-center mb-14">
                   <SLabel text="Why Stackenzo" />
-                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+                  <AHeading className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
                     Why Choose Stackenzo Internships
                   </AHeading>
                 </div>
@@ -1213,7 +1160,7 @@ function Workshops() {
             <WaveDivider color={C.gold} flip toBg="#3D1A0A" />
 
             {/* Internship Philosophy Banner */}
-            <section className="py-20 px-4 sm:px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }}>
+            <section className="py-20 px-4 sm:px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)/10" }}>
               <Spotlight color="rgba(212,175,55,0.06)" />
               <div className="absolute inset-0"><ParticleCanvas count={14} color="rgba(212,175,55,0.07)" /></div>
               {[100, 180, 260].map((s, i) => (
@@ -1374,7 +1321,7 @@ function Workshops() {
               </Float>
             </Reveal>
             <SLabel text="Contact Us" />
-            <AHeading className="text-3xl sm:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-3xl sm:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Have A Question?
             </AHeading>
             <Reveal from="bottom" delay={.15}>
@@ -1410,14 +1357,14 @@ function Workshops() {
                         <User className="w-4 h-4" style={{ color: C.gold }} /> Full Name *
                       </label>
                       <input type="text" name="name" value={queryForm.name} onChange={handleQueryChange} required placeholder="Enter your full name"
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl placeholder-gray-400 focus:border-[#E66B26] focus:outline-none transition-colors" style={{ color: C.text }} />
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl placeholder-gray-400 focus:border-[#F04A06] focus:outline-none transition-colors" style={{ color: C.text }} />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2 flex items-center gap-2" style={{ color: C.text }}>
                         <Mail className="w-4 h-4" style={{ color: C.gold }} /> Email Address *
                       </label>
                       <input type="email" name="email" value={queryForm.email} onChange={handleQueryChange} required placeholder="Enter your email"
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl placeholder-gray-400 focus:border-[#E66B26] focus:outline-none transition-colors" style={{ color: C.text }} />
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl placeholder-gray-400 focus:border-[#F04A06] focus:outline-none transition-colors" style={{ color: C.text }} />
                     </div>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
@@ -1426,14 +1373,14 @@ function Workshops() {
                         <Phone className="w-4 h-4" style={{ color: C.gold }} /> Phone Number
                       </label>
                       <input type="tel" name="phone" value={queryForm.phone} onChange={handleQueryChange} placeholder="Enter your phone number"
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl placeholder-gray-400 focus:border-[#E66B26] focus:outline-none transition-colors" style={{ color: C.text }} />
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl placeholder-gray-400 focus:border-[#F04A06] focus:outline-none transition-colors" style={{ color: C.text }} />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2 flex items-center gap-2" style={{ color: C.text }}>
                         <FileText className="w-4 h-4" style={{ color: C.gold }} /> Subject *
                       </label>
                       <input type="text" name="subject" value={queryForm.subject} onChange={handleQueryChange} required placeholder="Enter subject"
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl placeholder-gray-400 focus:border-[#E66B26] focus:outline-none transition-colors" style={{ color: C.text }} />
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl placeholder-gray-400 focus:border-[#F04A06] focus:outline-none transition-colors" style={{ color: C.text }} />
                     </div>
                   </div>
                   <div>
@@ -1441,14 +1388,14 @@ function Workshops() {
                       <MessageCircle className="w-4 h-4" style={{ color: C.gold }} /> Your Question / Message *
                     </label>
                     <textarea name="message" value={queryForm.message} onChange={handleQueryChange} required rows="4" placeholder="Type your question here…"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl placeholder-gray-400 focus:border-[#E66B26] focus:outline-none resize-none transition-colors" style={{ color: C.text }} />
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl placeholder-gray-400 focus:border-[#F04A06] focus:outline-none resize-none transition-colors" style={{ color: C.text }} />
                   </div>
                   <div className="p-4 rounded-xl border border-gray-200" style={{ background: C.light }}>
                     <label className="block text-sm font-medium mb-3" style={{ color: C.text }}>Preferred Contact Method</label>
                     <div className="flex flex-wrap gap-4">
                       {[{ val: "email", Icon: Mail, label: "Email" }, { val: "phone", Icon: Phone, label: "Phone" }, { val: "whatsapp", Icon: MessageCircle, label: "WhatsApp" }].map(o => (
                         <label key={o.val} className="flex items-center gap-2 cursor-pointer">
-                          <input type="radio" name="preferredContact" value={o.val} checked={queryForm.preferredContact === o.val} onChange={handleQueryChange} className="text-[#E66B26] focus:ring-[#D4AF37]" />
+                          <input type="radio" name="preferredContact" value={o.val} checked={queryForm.preferredContact === o.val} onChange={handleQueryChange} className="text-[#F04A06] focus:ring-[#D4AF37]" />
                           <o.Icon className="w-4 h-4" style={{ color: C.gold }} />
                           <span className="text-sm" style={{ color: C.text }}>{o.label}</span>
                         </label>

@@ -71,8 +71,8 @@ function FocusInput({ as: Tag = "input", focused, children, ...rest }) {
   return (
     <div className="relative">
       {children
-        ? <Tag className={inputCls} style={{ borderColor: focused ? "#E66B26" : "#e5e7eb", boxShadow: focused ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }} {...rest}>{children}</Tag>
-        : <Tag className={inputCls} style={{ borderColor: focused ? "#E66B26" : "#e5e7eb", boxShadow: focused ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }} {...rest} />
+        ? <Tag className={inputCls} style={{ borderColor: focused ? "#F04A06" : "#e5e7eb", boxShadow: focused ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }} {...rest}>{children}</Tag>
+        : <Tag className={inputCls} style={{ borderColor: focused ? "#F04A06" : "#e5e7eb", boxShadow: focused ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }} {...rest} />
       }
       <AnimatePresence>
         {focused && (
@@ -94,7 +94,7 @@ function Field({ label, icon: Icon, required, children }) {
       <div>
         <label className="block text-xs sm:text-sm font-semibold mb-1.5 flex items-center gap-1.5"
           style={{ color: "#1A1A1A" }}>
-          {Icon && <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#E66B26" }} />}
+          {Icon && <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#F04A06" }} />}
           {label}
           {required && <span style={{ color: "#D4AF37" }}>*</span>}
         </label>
@@ -167,7 +167,7 @@ function WorkshopRegistrationModal({ workshop, onClose }) {
           {/* ── Header ── */}
           <div className="sticky top-0 z-10 rounded-t-2xl sm:rounded-t-3xl overflow-hidden">
             <div className="relative px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between"
-              style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }}>
+              style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)" }}>
               <div className="absolute inset-0 opacity-[.07]"
                 style={{ backgroundImage: "radial-gradient(circle at 2px 2px,rgba(255,255,255,0.5) 1px,transparent 0)", backgroundSize: "22px 22px" }} />
               <Float className="absolute right-14 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/15 pointer-events-none" duration={5} yRange={6} />
@@ -190,7 +190,7 @@ function WorkshopRegistrationModal({ workshop, onClose }) {
               </motion.button>
             </div>
             <motion.div className="h-[3px] w-full origin-left"
-              style={{ background: "linear-gradient(90deg,#D4AF37,#E66B26,#D4AF37)" }}
+              style={{ background: "linear-gradient(90deg,#D4AF37,#F04A06,#D4AF37)" }}
               initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: .7, ease: EASE_EXPO, delay: .15 }} />
           </div>
 
@@ -200,11 +200,11 @@ function WorkshopRegistrationModal({ workshop, onClose }) {
               className="flex items-center gap-3 p-3 rounded-xl border border-[#D4AF37]/30 mb-1"
               style={{ background: "linear-gradient(to right,#FFF4ED,#fff)" }}>
               <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }}>
+                style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)" }}>
                 <BookOpen className="w-4 h-4 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-black text-[#E66B26] truncate">{workshop.title}</p>
+                <p className="text-xs font-black text-[#F04A06] truncate">{workshop.title}</p>
                 <p className="text-[10px] text-gray-400 mt-0.5">
                   {workshop.duration ? `${workshop.duration} · ` : ""}Workshop · Stackenzo
                 </p>
@@ -252,7 +252,7 @@ function WorkshopRegistrationModal({ workshop, onClose }) {
                       <select required value={formData.education}
                         onChange={ch("education")} onFocus={fo("education")} onBlur={bl}
                         className={inputCls}
-                        style={{ borderColor: focused === "education" ? "#E66B26" : "#e5e7eb", boxShadow: focused === "education" ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }}>
+                        style={{ borderColor: focused === "education" ? "#F04A06" : "#e5e7eb", boxShadow: focused === "education" ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }}>
                         <option value="">Select level…</option>
                         <option value="undergraduate">Undergraduate</option>
                         <option value="graduate">Graduate</option>
@@ -276,7 +276,7 @@ function WorkshopRegistrationModal({ workshop, onClose }) {
                         onChange={ch("message")} onFocus={fo("message")} onBlur={bl}
                         rows="3" placeholder="Any questions or additional info…"
                         className={inputCls + " resize-none"}
-                        style={{ borderColor: focused === "message" ? "#E66B26" : "#e5e7eb", boxShadow: focused === "message" ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }} />
+                        style={{ borderColor: focused === "message" ? "#F04A06" : "#e5e7eb", boxShadow: focused === "message" ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }} />
                       <AnimatePresence>
                         {focused === "message" && (
                           <motion.div className="absolute inset-0 rounded-xl pointer-events-none"
@@ -297,7 +297,7 @@ function WorkshopRegistrationModal({ workshop, onClose }) {
                       <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: .5 }}>
                         <CheckCircle className="w-5 h-5 text-[#D4AF37]" />
                       </motion.div>
-                      <p className="text-sm font-semibold" style={{ color: "#E66B26" }}>
+                      <p className="text-sm font-semibold" style={{ color: "#F04A06" }}>
                         Registered successfully! See you at the workshop.
                       </p>
                     </motion.div>
@@ -316,12 +316,12 @@ function WorkshopRegistrationModal({ workshop, onClose }) {
                 <SI>
                   <div className="flex gap-3 mt-5 pb-1">
                     <MagBtn type="button" onClick={onClose}
-                      className="flex-1 py-3 rounded-xl font-black text-sm border border-gray-200 text-[#1A1A1A] hover:border-[#E66B26] hover:text-[#E66B26] transition-all bg-white">
+                      className="flex-1 py-3 rounded-xl font-black text-sm border border-gray-200 text-[#1A1A1A] hover:border-[#F04A06] hover:text-[#F04A06] transition-all bg-white">
                       Cancel
                     </MagBtn>
                     <MagBtn type="submit" disabled={loading}
                       className="flex-1 relative overflow-hidden py-3 rounded-xl font-black text-sm text-black shadow-md hover:shadow-lg disabled:opacity-55 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                      style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }}>
+                      style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)" }}>
                       <span className="relative z-10 flex items-center gap-2">
                         {loading ? (
                           <>

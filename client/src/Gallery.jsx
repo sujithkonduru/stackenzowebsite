@@ -22,7 +22,7 @@ import image2 from "/images/robotics workshop.jpg";
 /* ─────────────────────────────────────────────
    CSS VARIABLE MAP
    :root {
-     --primary:       #E66B26;
+     --primary:       #F04A06;
      --primary-dark:  #C5531A;
      --primary-light: #FFF4ED;
      --accent:        #D4AF37;
@@ -31,7 +31,7 @@ import image2 from "/images/robotics workshop.jpg";
    }
 ───────────────────────────────────────────── */
 const P = {
-  primary:      "#E66B26",
+  primary:      "#F04A06",
   primaryDark:  "#C5531A",
   primaryLight: "#FFF4ED",
   accent:       "#D4AF37",

@@ -45,7 +45,7 @@ const VALUES = [
 
   { icon: <Award className="w-10 h-10" />,  title: "Excellence",     desc: "We strive for excellence in everything we do, from curriculum design to learner success and support.",            color: "from-yellow-400 to-orange-400"  },
 
-  { icon: <Zap className="w-10 h-10" />,    title: "Innovation",     desc: "We continuously innovate our teaching methods and programs to stay ahead of industry trends.",                   color: "from-[#E66B26] to-[#C5531A]"   },
+  { icon: <Zap className="w-10 h-10" />,    title: "Innovation",     desc: "We continuously innovate our teaching methods and programs to stay ahead of industry trends.",                   color: "from-[#F04A06] to-[#F04A06]"   },
 
   { icon: <Users className="w-10 h-10" />,  title: "Collaboration",  desc: "We believe strong collab between students, educators, and industry to drive innovation.",                color: "from-blue-400 to-purple-400"    },
 
@@ -181,52 +181,7 @@ function GlowCard({ children, className = "", accent = "#D4AF37" }) {
   );
 }
 
-/* ══════════════════════════════════════════════
-   CUSTOM CURSOR
-══════════════════════════════════════════════ */
-function CustomCursor() {
-  const outer = useRef(null), dot = useRef(null), trail = useRef(null);
-  const pos = useRef({ x:-300, y:-300 }), sm = useRef({ x:-300, y:-300 });
-  const [hov, setHov] = useState(false), [clk, setClk] = useState(false);
-  useEffect(() => {
-    const mv = e => { pos.current = { x:e.clientX, y:e.clientY }; };
-    const md = () => setClk(true), mu = () => setClk(false);
-    document.addEventListener("mousemove", mv);
-    document.addEventListener("mousedown", md);
-    document.addEventListener("mouseup", mu);
-    const att = () => {
-      document.querySelectorAll("a,button,[data-hover]").forEach(el => {
-        el.addEventListener("mouseenter", () => setHov(true));
-        el.addEventListener("mouseleave", () => setHov(false));
-      });
-    };
-    att();
-    const ob = new MutationObserver(att);
-    ob.observe(document.body, { childList:true, subtree:true });
-    let id;
-    const loop = () => {
-      sm.current.x += (pos.current.x - sm.current.x) * .09;
-      sm.current.y += (pos.current.y - sm.current.y) * .09;
-      const s = clk ? .65 : hov ? 2.1 : 1;
-      if (outer.current) outer.current.style.transform = `translate(${sm.current.x-20}px,${sm.current.y-20}px) scale(${s})`;
-      if (dot.current)   dot.current.style.transform   = `translate(${pos.current.x-3}px,${pos.current.y-3}px) scale(${clk?1.9:1})`;
-      if (trail.current) trail.current.style.transform = `translate(${sm.current.x-30}px,${sm.current.y-30}px) scale(${hov?1.6:.5})`;
-      id = requestAnimationFrame(loop);
-    };
-    id = requestAnimationFrame(loop);
-    return () => { document.removeEventListener("mousemove", mv); document.removeEventListener("mousedown", md); document.removeEventListener("mouseup", mu); ob.disconnect(); cancelAnimationFrame(id); };
-  }, [hov, clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998] transition-[border-color,background] duration-150"
-        style={{ border: hov?"1.5px solid #D4AF37":"1.5px solid rgba(230,107,38,0.45)", background: hov?"rgba(212,175,55,0.07)":"transparent", willChange:"transform" }} />
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999] transition-colors duration-100"
-        style={{ background: hov?"#D4AF37":"#E66B26", willChange:"transform" }} />
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{ background:"radial-gradient(circle,#D4AF37,transparent)", willChange:"transform" }} />
-    </>
-  );
-}
+
 
 /* ══════════════════════════════════════════════
    SCROLL PROGRESS BAR
@@ -293,27 +248,8 @@ function SectionNavDots() {
     className="w-2.5 h-2.5 rounded-full"
   />
 
-  {/* 🔥 RING */}
-  {active === i && (
-    <motion.div
-      layoutId="pf-nav-pulse"
-      className="absolute inset-0 rounded-full"
-      style={{ border: "1.5px solid #D4AF37" }}
-      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
-      transition={{ duration: 1.5, repeat: Infinity }}
-    />
-  )}
 
-  {/* 🔥 ARROW (OUTSIDE LEFT) */}
-  {active === i && (
-    <motion.div
-      initial={{ opacity: 0, x: 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute right-6" 
-    >
-      <ArrowRight className="w-4 h-4 text-black" />
-    </motion.div>
-  )}
+  
 </motion.button>
       ))}
     </div>
@@ -504,6 +440,8 @@ function AHeading({ children, className="", delay=0 }) {
 function HeroSection() {
   const secRef = useRef(null);
   const { scrollYProgress } = useScroll({ target:secRef, offset:["start start","end start"] });
+  const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
   const hY   = useTransform(scrollYProgress,[0,1],[0,-110]);
   const hO   = useTransform(scrollYProgress,[0,.6],[1,0.9]);
   const hS   = useTransform(scrollYProgress,[0,1],[1,.84]);
@@ -523,7 +461,7 @@ function HeroSection() {
         <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
           alt="Team" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-white via-white/90 to-white" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#E66B26]/40 via-transparent to-[#E66B26]/40 mix-blend-overlay" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#F04A06]/40 via-transparent to-[#F04A06]/40 mix-blend-overlay" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(255,255,255,0.7)_100%)]" />
       </motion.div>
 
@@ -549,8 +487,8 @@ function HeroSection() {
 
       {/* Floating decorative orbs */}
       <Float className="absolute top-1/4 left-[8%] w-3 h-3 rounded-full bg-[#D4AF37]/30 z-[2]" duration={5} delay={0} />
-      <Float className="absolute top-1/3 right-[10%] w-2 h-2 rounded-full bg-[#E66B26]/25 z-[2]" duration={4} delay={1} />
-      <Float className="absolute bottom-1/4 left-[15%] w-4 h-4 rounded-full bg-[#C5531A]/20 z-[2]" duration={6} delay={2} />
+      <Float className="absolute top-1/3 right-[10%] w-2 h-2 rounded-full bg-[#F04A06]/25 z-[2]" duration={4} delay={1} />
+      <Float className="absolute bottom-1/4 left-[15%] w-4 h-4 rounded-full bg-[#F04A06]/20 z-[2]" duration={6} delay={2} />
       <Float className="absolute bottom-1/3 right-[18%] w-2.5 h-2.5 rounded-full bg-[#D4AF37]/25 z-[2]" duration={5.5} delay={.5} />
 
       {/* Animated bg gradient */}
@@ -559,14 +497,14 @@ function HeroSection() {
         transition={{ duration:10, repeat:Infinity, ease:"linear" }} />
 
       {/* Main content */}
-      <motion.div style={{y:hY,opacity:hO,scale:hS}} className="max-w-6xl mx-auto text-center relative z-10">
+      <motion.div style={{y:hY,opacity:hO,scale:hS}} className="max-w-6xl mx-auto pb-24 text-center relative z-10">
 
         {/* Badge */}
         <motion.div initial={{scale:.7,opacity:0,y:20}} animate={{scale:1,opacity:1,y:0}} transition={{duration:.65,ease:EASE_BACK}}
           className="inline-block mb-8">
-          <span className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#E66B26]/20 to-[#C5531A]/20 text-[#E66B26] rounded-full text-sm font-semibold border border-[#E66B26]/30 backdrop-blur-sm shadow-lg shadow-[#E66B26]/10">
+          <span className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#F04A06]/20 to-[#F04A06]/20 text-[#F04A06] rounded-full text-sm font-semibold border border-[#F04A06]/30 backdrop-blur-sm shadow-lg shadow-[#F04A06]/10">
             <motion.span animate={{opacity:[.7,1,.7]}} transition={{duration:2,repeat:Infinity}} className="text-[#D4AF37]">✦</motion.span>
-            Empowering the Next Generation of Innovators — Established 2025
+            Empowering the Next Generation of Innovators
             <motion.span animate={{opacity:[.7,1,.7]}} transition={{duration:2,repeat:Infinity}} className="text-[#D4AF37]">✦</motion.span>
           </span>
         </motion.div>
@@ -575,7 +513,7 @@ function HeroSection() {
         <motion.h1 initial={{opacity:0,y:24}} animate={{opacity:1,y:0}} transition={{delay:.3,duration:.75,ease:EASE_EXPO}}
           className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6">
           <span className="text-[#1A1A1A]">About</span>{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] via-[#C5531A] to-[#E66B26]">Stackenzo</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] via-[#F04A06] to-[#F04A06]">Stackenzo</span>
         </motion.h1>
 
         {/* Sub */}
@@ -587,29 +525,37 @@ function HeroSection() {
         {/* Stat pills */}
         <motion.div initial={{opacity:0,y:28}} animate={{opacity:1,y:0}} transition={{delay:.7,ease:EASE_EXPO}}
           className="flex flex-wrap justify-center gap-6 mt-4">
-          {[{label:"Students Empowered",value:"1200+",icon:"🎓"},{label:"Projects Delivered",value:"150+",icon:"🚀"},{label:"Expert Mentors",value:"25+",icon:"👨‍🏫"}].map((s,i)=>(
-            <Float key={i} duration={4+i*.5} delay={i*.3}>
-              <motion.div whileHover={{scale:1.07,y:-5,boxShadow:"0 14px 32px rgba(0,0,0,0.08)"}}
-                className="bg-white/85 backdrop-blur-md border border-gray-200 rounded-xl px-6 py-4 min-w-[160px] text-center shadow-sm cursor-default">
-                <div className="text-3xl mb-2">{s.icon}</div>
-                <div className="text-2xl font-black text-[#E66B26]">{s.value}</div>
-                <div className="text-sm text-[#1A1A1A] font-medium">{s.label}</div>
-              </motion.div>
-            </Float>
+          {[{label:"Students Empowered",value:"1200+",icon:"🎓"},{label:"Projects Delivered",value:"150+",icon:"🚀"},{label:"Expert Mentors",value:"25+",icon:"👨‍🏫"},{label:"Satisfied Clients",value:"20+",icon:"👥"}].map((s,i)=>(
+            <motion.div
+  key={i}
+  whileHover={{ scale: 1.07, y: -5, boxShadow: "0 14px 32px rgba(0,0,0,0.08)" }}
+  className="bg-white/85 backdrop-blur-md border border-gray-200 rounded-xl px-6 py-4 min-w-[160px] text-center shadow-sm cursor-default"
+>
+  <div className="text-3xl mb-2">{s.icon}</div>
+  <div className="text-2xl font-black text-[#F04A06]">{s.value}</div>
+  <div className="text-sm text-[#1A1A1A] font-medium">{s.label}</div>
+</motion.div>
           ))}
         </motion.div>
 
         {/* Scroll cue */}
-        <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{delay:1.8}}
-          className="flex justify-center mt-12 cursor-pointer"
-          onClick={()=>document.getElementById("about-story")?.scrollIntoView({behavior:"smooth"})}>
-          <Float duration={2} yRange={10}>
-            <div className="w-5 h-8 border-2 border-[#E66B26]/28 rounded-full flex justify-center">
-              <motion.div className="w-1 h-2 bg-[#D4AF37] rounded-full mt-2"
-                animate={{y:[0,10,0],opacity:[1,.4,1]}} transition={{duration:1.8,repeat:Infinity}} />
-            </div>
-          </Float>
-        </motion.div>
+             <motion.div
+         style={{ opacity: scrollOpacity }}
+         initial={{ opacity: 0 }}
+         animate={{ opacity: 1 }}
+         transition={{ delay: 2.2 }}
+               className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 cursor-pointer"
+               onClick={() => document.getElementById("services-section")?.scrollIntoView({ behavior:"smooth" })}>
+               <Float duration={2} yRange={10}>
+                 <div className="w-7 h-12 border-2 border-[#F04A06]/28 rounded-full flex justify-center">
+         <motion.div
+           className="w-1.5 h-3 bg-[#D4AF37] rounded-full mt-3"
+           animate={{ y: [0, 14, 0], opacity: [1, 0.4, 1] }}
+           transition={{ duration: 1.8, repeat: Infinity }}
+         />
+       </div>
+               </Float>
+             </motion.div>
       </motion.div>
     </section>
   );
@@ -628,14 +574,14 @@ function StorySection() {
         {[{l:"5%",t:"10%",s:120},{l:"85%",t:"60%",s:90},{l:"50%",t:"80%",s:70}].map((o,i)=>(
           <Float key={i} duration={6+i} yRange={18} delay={i} className="absolute pointer-events-none"
             style={{left:o.l,top:o.t}}>
-            <div className="rounded-full bg-[#E66B26]/[0.04]" style={{width:o.s,height:o.s}} />
+            <div className="rounded-full bg-[#F04A06]/[0.04]" style={{width:o.s,height:o.s}} />
           </Float>
         ))}
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Our Story" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06]" delay={.05}>
               How We Started
             </AHeading>
           </div>
@@ -646,7 +592,7 @@ function StorySection() {
               <Reveal from="left">
                 <p className="text-lg text-[#1A1A1A] leading-relaxed">
                   Founded with a vision to bridge the gap between academic learning and industry excellence
-                  <span className="text-[#E66B26] font-semibold mx-1">Stackenzo</span>
+                  <span className="text-[#F04A06] font-semibold mx-1">Stackenzo</span>
                   is a technology-driven organization focused on three core pillars: advanced IT services, innovative R&D, and transformative EdTech solutions.
                 </p>
               </Reveal>
@@ -658,16 +604,16 @@ function StorySection() {
                 </h3>
                 <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-4" stagger={0.1} from="bottom">
                   {PILLARS.map((item, i) => (
-                    <GlowCard key={i} accent="#E66B26">
+                    <GlowCard key={i} accent="#F04A06">
                       <TiltCard>
                         <motion.div whileHover={{y:-5,scale:1.02,boxShadow:"0 20px 50px rgba(0,0,0,0.08)"}}
                           className="group relative bg-white p-6 rounded-xl border border-orange-200 overflow-hidden h-full">
                           <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
                           <div className="relative z-10">
                             <Float duration={4+i*.5} delay={i*.3}>
-                              <div className="text-[#E66B26] mb-3">{item.icon}</div>
+                              <div className="text-[#F04A06] mb-3">{item.icon}</div>
                             </Float>
-                            <h3 className="text-lg font-bold text-[#1A1A1A] mb-2 group-hover:text-[#E66B26] transition-colors">{item.title}</h3>
+                            <h3 className="text-lg font-bold text-[#1A1A1A] mb-2 group-hover:text-[#F04A06] transition-colors">{item.title}</h3>
                             <p className="text-sm text-[#1A1A1A]">{item.desc}</p>
                           </div>
                         </motion.div>
@@ -690,40 +636,11 @@ function StorySection() {
                     src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop"
                     alt="Team collaboration" className="w-full h-auto object-cover"
                     whileHover={{scale:1.04}} transition={{duration:.65}} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#E66B26] via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#F04A06] via-transparent to-transparent" />
 
                   {IMAGE_STATS.map((s, i) => {
   const Icon = s.icon;
-  return (
-    <motion.div
-      key={i}
-      initial={s.anim}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
-      transition={{ delay: 0.3 + i * 0.12 }}
-      viewport={{ once: false }}
-      className={`absolute ${s.pos} bg-[#E66B26]/90 backdrop-blur-sm 
-      p-2 sm:p-3 rounded-lg border border-[#D4AF37]/30`}
-    >
-      <Float duration={4 + i * 0.6} yRange={5} delay={i * 0.4}>
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          
-          {/* ICON */}
-          <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#D4AF37]" />
-
-          {/* TEXT */}
-          <div>
-            <div className="text-sm sm:text-lg font-bold text-[#D4AF37]">
-              {s.value}
-            </div>
-            <div className="text-[10px] sm:text-xs text-[#FFF4ED]">
-              {s.label}
-            </div>
-          </div>
-
-        </div>
-      </Float>
-    </motion.div>
-  );
+  
 })}
                 </div>
               </TiltCard>
@@ -751,13 +668,13 @@ function MissionSection() {
   return (
     <section id="about-mission" className="py-24 px-4 sm:px-6 bg-white relative overflow-hidden">
       <Spotlight color="rgba(230,107,38,0.05)" size={550} />
-      <div className="absolute inset-0 opacity-[.03]" style={{backgroundImage:"radial-gradient(circle,#E66B26 1px,transparent 1px)",backgroundSize:"28px 28px"}} />
-      <div className="absolute top-0 left-0 w-64 h-64 bg-[#E66B26] rounded-full filter blur-3xl opacity-[.06]" />
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-[#C5531A] rounded-full filter blur-3xl opacity-[.06]" />
+      <div className="absolute inset-0 opacity-[.03]" style={{backgroundImage:"radial-gradient(circle,#F04A06 1px,transparent 1px)",backgroundSize:"28px 28px"}} />
+      <div className="absolute top-0 left-0 w-64 h-64 bg-[#F04A06] rounded-full filter blur-3xl opacity-[.06]" />
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-[#F04A06] rounded-full filter blur-3xl opacity-[.06]" />
 
       {/* Kinetic bg text */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-        <motion.span className="text-[16vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+        <motion.span className="text-[16vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
           animate={{y:[0,-10,0]}} transition={{duration:9,repeat:Infinity,ease:"easeInOut"}}>
           MISSION
         </motion.span>
@@ -766,7 +683,7 @@ function MissionSection() {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
           <SLabel text="Mission & Vision" />
-          <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+          <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06]" delay={.05}>
             Our Mission & Vision
           </AHeading>
         </div>
@@ -774,11 +691,11 @@ function MissionSection() {
         <div className="grid md:grid-cols-2 gap-8">
           {/* Mission */}
           <Reveal from="left">
-            <GlowCard accent="#E66B26" className="h-full">
+            <GlowCard accent="#F04A06" className="h-full">
               <TiltCard intensity={8}>
                 <motion.div whileHover={{y:-6,boxShadow:"0 30px 70px rgba(0,0,0,0.10)"}}
                   className="group relative bg-gradient-to-br from-[#FFF4ED] to-white p-8 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 h-full">
-                  <motion.div className="absolute inset-0 bg-gradient-to-r from-[#E66B26]/10 to-[#C5531A]/10"
+                  <motion.div className="absolute inset-0 bg-gradient-to-r from-[#F04A06]/10 to-[#F04A06]/10"
                     animate={{opacity:[.3,.6,.3]}} transition={{duration:3,repeat:Infinity,ease:"easeInOut"}} />
                   <div className="relative z-10">
                     <Float duration={4} yRange={8}>
@@ -786,18 +703,9 @@ function MissionSection() {
                     </Float>
                     <h3 className="text-3xl font-bold mb-5 text-[#1A1A1A]">Our Mission</h3>
                     <p className="text-[#1A1A1A] leading-relaxed text-lg mb-6">
-                     Our mission is to design, develop, and deliver intelligent technology solutions that solve real-world challenges with precision, scalability, and long-term impact—across IT services, R&D, and EdTech.
+                    Our mission is to design, develop, and deliver intelligent technology solutions that solve real-world challenges with precision, scalability, and long-term impact—across IT services, R&D, and EdTech. We build scalable, secure, and future-ready digital solutions while bridging academic knowledge with real-world implementation, empowering startups, institutions, and enterprises through innovation, automating complex processes to enhance productivity, strengthening a research-driven engineering culture, and promoting continuous learning and technological excellence.
                     </p>
-                    <StaggerContainer className="space-y-3" stagger={0.08} from="left">
-                      {MISSION_ITEMS.map((item, i) => (
-                        <div key={i} className="flex items-start gap-3">
-                          <motion.div animate={{scale:[1,1.4,1]}} transition={{duration:2.2,repeat:Infinity,delay:i*.22}}>
-                            <Star className="w-5 h-5 text-[#D4AF37] flex-shrink-0 mt-1" />
-                          </motion.div>
-                          <span className="text-[#1A1A1A]">{item}</span>
-                        </div>
-                      ))}
-                    </StaggerContainer>
+                    
                   </div>
                 </motion.div>
               </TiltCard>
@@ -810,7 +718,7 @@ function MissionSection() {
               <TiltCard intensity={8}>
                 <motion.div whileHover={{y:-6,boxShadow:"0 30px 70px rgba(0,0,0,0.10)"}}
                   className="group relative bg-gradient-to-br from-[#FFF4ED] to-white p-8 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 h-full">
-                  <motion.div className="absolute inset-0 bg-gradient-to-r from-[#E66B26]/10 to-[#C5531A]/10"
+                  <motion.div className="absolute inset-0 bg-gradient-to-r from-[#F04A06]/10 to-[#F04A06]/10"
                     animate={{opacity:[.3,.6,.3]}} transition={{duration:3,repeat:Infinity,ease:"easeInOut",delay:1.5}} />
                   <div className="relative z-10">
                     <Float duration={4.5} yRange={8}>
@@ -847,14 +755,14 @@ function ValuesSection() {
         <NoiseCanvas color1="#FFD5B8" color2="#FFCBA4" opacity={0.22} />
         {/* Big floating bg text */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[15vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.02]"
+          <motion.span className="text-[15vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.02]"
             animate={{y:[0,-12,0]}} transition={{duration:10,repeat:Infinity,ease:"easeInOut"}}>VALUES</motion.span>
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <SLabel text="Core Values" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06]" delay={.05}>
               Our Core Values
             </AHeading>
             <Reveal from="bottom" delay={.25}>
@@ -874,7 +782,7 @@ function ValuesSection() {
                         {v.icon}
                       </motion.div>
                     </Float>
-                    <h3 className="text-2xl font-bold mb-3 text-[#1A1A1A] group-hover:text-[#E66B26] transition-colors">{v.title}</h3>
+                    <h3 className="text-2xl font-bold mb-3 text-[#1A1A1A] group-hover:text-[#F04A06] transition-colors">{v.title}</h3>
                     <p className="text-[#1A1A1A]">{v.desc}</p>
                     <motion.div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#D4AF37] to-[#D4AF37]"
                       initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.3}} />
@@ -910,7 +818,7 @@ function StatsSection() {
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-14">
           <SLabel text="Our Impact" />
-          <AHeading className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+          <AHeading className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06]" delay={.05}>
             Our Impact in Numbers
           </AHeading>
         </div>
@@ -925,12 +833,12 @@ function StatsSection() {
                     className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 hover:border-[#D4AF37] transition-all duration-300 text-center h-full">
                     <Float duration={4+i*.5} delay={i*.3}>
                       <motion.div whileHover={{rotate:18,scale:1.18}} className="inline-flex justify-center mb-3">
-                        <div className="bg-[#E66B26] p-3 rounded-xl shadow-lg shadow-[#E66B26]/20">
+                        <div className="bg-[#F04A06] p-3 rounded-xl shadow-lg shadow-[#F04A06]/20">
                           <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                         </div>
                       </motion.div>
                     </Float>
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-black text-[#E66B26] mb-1">
+                    <div className="text-2xl sm:text-3xl md:text-4xl font-black text-[#F04A06] mb-1">
                       <Counter value={s.number} />
                     </div>
                     <div className="text-xs sm:text-sm text-[#1A1A1A] font-medium">{s.label}</div>
@@ -955,17 +863,17 @@ function CTASection() {
 
   return (
     <>
-      <WaveDivider color="#C5531A" toBg="#3D1A0A" />
+      <WaveDivider color="#F04A06" toBg="#3D1A0A" />
       <section ref={ref} className="py-28 px-4 sm:px-6 relative overflow-hidden">
         <motion.div className="absolute inset-0" style={{y:bgY}}>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#E66B26] to-[#C5531A]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#F04A06] to-[#F04A06]" />
         </motion.div>
         <Spotlight color="rgba(212,175,55,0.06)" />
-        <div className="absolute inset-0"><ParticleCanvas count={18} color="rgba(212,175,55,0.08)" /></div>
+        <div className="absolute inset-0"><ParticleCanvas count={18} color="rgba(212,175,55,5)" /></div>
         {/* Floating rings */}
         {[100,180,270].map((s,i)=>(
           <Float key={i} duration={6+i*2} yRange={12} delay={i}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-full border border-[#D4AF37]/10"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-full border border-[#D4AF37]/20"
             style={{width:s,height:s}} />
         ))}
 
@@ -1023,7 +931,7 @@ function CTASection() {
 function About() {
   return (
     <div className="bg-white text-[#1A1A1A] min-h-screen overflow-x-hidden">
-      <CustomCursor />
+     
       <ScrollProgressBar />
       <SectionNavDots />
       <Navbar />
