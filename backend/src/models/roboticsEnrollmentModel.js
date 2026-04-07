@@ -8,13 +8,14 @@ const RoboticsEnrollmentModel = {
       school, age, previousExperience, message 
     } = enrollmentData;
     
-    const [result] = await pool.query(
+    const [rows] = await pool.query(
       `INSERT INTO robotics_enrollments 
        (student_name, parent_name, email, phone, student_class, school, age, previous_experience, message)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+       RETURNING id`,
       [studentName, parentName, email, phone, studentClass, school, age, previousExperience, message]
     );
-    return result.insertId;
+    return rows[0].id;
   },
 
   // Get all enrollments
@@ -28,7 +29,7 @@ const RoboticsEnrollmentModel = {
   // Get enrollment by ID
   getById: async (id) => {
     const [rows] = await pool.query(
-      'SELECT * FROM robotics_enrollments WHERE id = ?',
+      'SELECT * FROM robotics_enrollments WHERE id = $1',
       [id]
     );
     return rows[0];
@@ -37,16 +38,16 @@ const RoboticsEnrollmentModel = {
   // Update enrollment status
   updateStatus: async (id, status) => {
     const [result] = await pool.query(
-      'UPDATE robotics_enrollments SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+      'UPDATE robotics_enrollments SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
       [status, id]
     );
-    return result.affectedRows > 0;
+    return result.rowCount > 0;
   },
 
   // Delete enrollment
   delete: async (id) => {
-    const [result] = await pool.query('DELETE FROM robotics_enrollments WHERE id = ?', [id]);
-    return result.affectedRows > 0;
+    const [result] = await pool.query('DELETE FROM robotics_enrollments WHERE id = $1', [id]);
+    return result.rowCount > 0;
   }
 };
 

@@ -5,12 +5,12 @@ class QueryModel {
   static async create(queryData) {
     const { name, email, phone, subject, category, message } = queryData;
     console.log('📝 Inserting query into database:', { name, email, subject, category });
-    const [result] = await pool.query(
-      'INSERT INTO queries (name, email, phone, subject, category, message) VALUES (?, ?, ?, ?, ?, ?)',
+    const [rows] = await pool.query(
+      'INSERT INTO queries (name, email, phone, subject, category, message) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
       [name, email, phone, subject, category, message]
     );
-    console.log('✅ Query inserted successfully, ID:', result.insertId);
-    return result.insertId;
+    console.log('✅ Query inserted successfully, ID:', rows[0].id);
+    return rows[0].id;
   }
 
   // Get all queries
@@ -42,7 +42,7 @@ class QueryModel {
   // Get by ID
   static async getById(id) {
     const [rows] = await pool.query(
-      'SELECT * FROM queries WHERE id = ?',
+      'SELECT * FROM queries WHERE id = $1',
       [id]
     );
     return rows[0];
@@ -51,19 +51,19 @@ class QueryModel {
   // Update status
   static async updateStatus(id, status) {
     const [result] = await pool.query(
-      'UPDATE queries SET status = ? WHERE id = ?',
+      'UPDATE queries SET status = $1 WHERE id = $2',
       [status, id]
     );
-    return result.affectedRows > 0;
+    return result.rowCount > 0;
   }
 
   // Delete
   static async delete(id) {
     const [result] = await pool.query(
-      'DELETE FROM queries WHERE id = ?',
+      'DELETE FROM queries WHERE id = $1',
       [id]
     );
-    return result.affectedRows > 0;
+    return result.rowCount > 0;
   }
 }
 

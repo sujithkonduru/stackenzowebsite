@@ -64,9 +64,31 @@ app.get("*", (req, res) => {
 });
 
 // Error handling
+const { initDatabase } = require('./backend/src/config/initDatabase');
+const { testConnection } = require('./backend/src/config/database');
 const { errorHandler, notFound } = require('./backend/src/middleware/errorHandler');
-app.use(notFound);
-app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+// Initialize database first
+const startServer = async () => {
+  try {
+    console.log('🔄 Initializing database...');
+    await initDatabase();
+    console.log('✅ Database initialized');
+    
+    const connected = await testConnection();
+    if (!connected) {
+      throw new Error('Database connection failed');
+    }
+    
+    app.use(notFound);
+    app.use(errorHandler);
+
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+  } catch (error) {
+    console.error('❌ Failed to start server:', error.message);
+    process.exit(1);
+  }
+};
+
+startServer();

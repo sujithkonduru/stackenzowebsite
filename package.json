@@ -8,6 +8,7 @@
     "dev": "nodemon server.js",
     "init-db": "node backend/src/config/initDatabase.js",
     "build": "npm install  --prefix client && npm run build --prefix client",
+    "lint": "npm run lint --prefix client",
     "clean": "rm -rf dist"
   },
   "keywords": [
@@ -15,7 +16,7 @@
     "api",
     "nodejs",
     "express",
-    "mysql"
+    "postgres"
   ],
   "author": "Stackenzo",
   "license": "MIT",
@@ -29,6 +30,7 @@
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
     "mysql2": "^3.6.5",
+    "pg": "^8.12.0",
     "nodemailer": "^6.9.7",
     "react-countup": "^6.5.3",
     "react-parallax-tilt": "^1.7.319",

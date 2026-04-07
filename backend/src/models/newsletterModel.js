@@ -4,16 +4,16 @@ class NewsletterModel {
   // Subscribe
   static async subscribe(email) {
     try {
-      const [result] = await pool.query(
-        'INSERT INTO newsletter_subscribers (email) VALUES (?)',
+      const [rows] = await pool.query(
+        'INSERT INTO newsletter_subscribers (email) VALUES ($1) RETURNING id',
         [email]
       );
-      return result.insertId;
+      return rows[0].id;
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
         // Reactivate if already exists
         await pool.query(
-          'UPDATE newsletter_subscribers SET is_active = true, unsubscribed_at = NULL WHERE email = ?',
+          'UPDATE newsletter_subscribers SET is_active = true, unsubscribed_at = NULL WHERE email = $1',
           [email]
         );
         return true;
@@ -25,10 +25,10 @@ class NewsletterModel {
   // Unsubscribe
   static async unsubscribe(email) {
     const [result] = await pool.query(
-      'UPDATE newsletter_subscribers SET is_active = false, unsubscribed_at = NOW() WHERE email = ?',
+      'UPDATE newsletter_subscribers SET is_active = false, unsubscribed_at = NOW() WHERE email = $1',
       [email]
     );
-    return result.affectedRows > 0;
+    return result.rowCount > 0;
   }
 
   // Get all subscribers

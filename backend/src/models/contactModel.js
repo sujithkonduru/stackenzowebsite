@@ -4,59 +4,46 @@ class ContactModel {
   // Create new contact submission
   static async create(contactData) {
     const { name, email, phone, subject, message } = contactData;
-    const [result] = await pool.query(
-      'INSERT INTO contact_submissions (name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)',
+    const result = await pool.query(
+      'INSERT INTO contact_submissions (name, email, phone, subject, message) VALUES ($1, $2, $3, $4, $5) RETURNING id',
       [name, email, phone, subject, message]
     );
-    return result.insertId;
+    return result.rows[0].id;
   }
 
   // Get all contact submissions
   static async getAll(filters = {}) {
-    let query = 'SELECT * FROM contact_submissions WHERE 1=1';
-    const params = [];
-
-    if (filters.status) {
-      query += ' AND status = ?';
-      params.push(filters.status);
-    }
-
-    query += ' ORDER BY created_at DESC';
-
-    if (filters.limit) {
-      query += ' LIMIT ?';
-      params.push(parseInt(filters.limit));
-    }
-
-    const [rows] = await pool.query(query, params);
-    return rows;
+    const query = 'SELECT * FROM contact_submissions ORDER BY created_at DESC';
+    const result = await pool.query(query);
+    return result.rows;
   }
+
 
   // Get by ID
   static async getById(id) {
-    const [rows] = await pool.query(
-      'SELECT * FROM contact_submissions WHERE id = ?',
+    const result = await pool.query(
+      'SELECT * FROM contact_submissions WHERE id = $1',
       [id]
     );
-    return rows[0];
+    return result.rows[0] || null;
   }
 
   // Update status
   static async updateStatus(id, status) {
-    const [result] = await pool.query(
-      'UPDATE contact_submissions SET status = ? WHERE id = ?',
+    const result = await pool.query(
+      'UPDATE contact_submissions SET status = $1, updated_at = NOW() WHERE id = $2',
       [status, id]
     );
-    return result.affectedRows > 0;
+    return result.rowCount > 0;
   }
 
   // Delete
   static async delete(id) {
-    const [result] = await pool.query(
-      'DELETE FROM contact_submissions WHERE id = ?',
+    const result = await pool.query(
+      'DELETE FROM contact_submissions WHERE id = $1',
       [id]
     );
-    return result.affectedRows > 0;
+    return result.rowCount > 0;
   }
 }
 
