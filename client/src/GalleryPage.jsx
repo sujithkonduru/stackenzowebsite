@@ -33,10 +33,10 @@ function FilterButton({ label, active, onClick }) {
       className={`
         relative px-5 py-2 rounded-full text-sm font-semibold
         transition-all duration-300 ease-in-out
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E66B26] focus-visible:ring-offset-2
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F04A06] focus-visible:ring-offset-2
         ${
           active
-            ? "bg-[#E66B26] text-white shadow-lg shadow-[#E66B26]/30 scale-105"
+            ? "bg-[#F04A06] text-white shadow-lg shadow-[#F04A06]/30 scale-105"
             : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800"
         }
       `}
@@ -44,7 +44,7 @@ function FilterButton({ label, active, onClick }) {
       {active && (
         <motion.span
           layoutId="activeFilterPill"
-          className="absolute inset-0 rounded-full bg-[#E66B26] -z-10"
+          className="absolute inset-0 rounded-full bg-[#F04A06] -z-10"
           transition={{ type: "spring", stiffness: 380, damping: 30 }}
         />
       )}
@@ -83,7 +83,7 @@ function GalleryCard({ item }) {
       </div>
 
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#E66B26]/80 via-transparent to-transparent
+      <div className="absolute inset-0 bg-gradient-to-t from-[#F04A06]/80 via-transparent to-transparent
                       opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
       {/* Info (slides up on hover) */}
@@ -96,7 +96,7 @@ function GalleryCard({ item }) {
 
       {/* Category badge */}
       <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm
-                       text-[#E66B26] text-xs font-semibold px-3 py-1 rounded-full
+                       text-[#F04A06] text-xs font-semibold px-3 py-1 rounded-full
                        shadow-sm border border-orange-100
                        opacity-0 group-hover:opacity-100
                        transition-opacity duration-300">
@@ -125,7 +125,7 @@ function GalleryPage() {
           className="absolute inset-0 opacity-[0.06] pointer-events-none"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 1px 1px, #E66B26 1px, transparent 0)",
+              "radial-gradient(circle at 1px 1px, #F04A06 1px, transparent 0)",
             backgroundSize: "48px 48px",
           }}
         />
@@ -137,10 +137,10 @@ function GalleryPage() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-center mb-10"
+            className="text-center pt-10 pb-16 px-4 sm:px-6"
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-3
-                           bg-gradient-to-r from-[#E66B26] to-[#C5531A]
+                           bg-gradient-to-r from-[#F04A06] to-[#F04A06]
                            text-transparent bg-clip-text">
               Our Gallery
             </h1>
@@ -199,7 +199,7 @@ function GalleryPage() {
                 <h3 className="text-2xl font-bold text-[#1A1A1A] mb-2">No Images Found</h3>
                 <p className="text-gray-500">
                   No images available for&nbsp;
-                  <span className="text-[#E66B26] font-semibold">{activeCategory}</span>.
+                  <span className="text-[#F04A06] font-semibold">{activeCategory}</span>.
                 </p>
               </motion.div>
             )}

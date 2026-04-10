@@ -49,7 +49,7 @@ const PROJECTS = [
     technologies: ["React", "Python", "PostgreSQL", "Docker", "Kubernetes"],
     features: ["Patient management", "Telemedicine", "Analytics dashboard", "HIPAA compliant"],
     metrics: { clinics: "200+", patients: "100K+", uptime: "99.9%" },
-    gradient: "from-[#E66B26] to-[#C5531A]",
+    gradient: "from-[#F04A06] to-[#C5531A]",
     status: "Live",
   },
   {
@@ -263,42 +263,7 @@ function Counter({ value }) {
   return <span ref={ref}>{d}{sfx}</span>;
 }
 
-/* ══════════════════════════════════════════════
-   CUSTOM CURSOR
-══════════════════════════════════════════════ */
-function CustomCursor() {
-  const outer = useRef(null), dot = useRef(null), trail = useRef(null);
-  const pos = useRef({ x: -300, y: -300 }), sm = useRef({ x: -300, y: -300 });
-  const [hov, setHov] = useState(false), [clk, setClk] = useState(false);
-  useEffect(() => {
-    const mv = e => { pos.current = { x: e.clientX, y: e.clientY }; };
-    const md = () => setClk(true), mu = () => setClk(false);
-    document.addEventListener("mousemove", mv); document.addEventListener("mousedown", md); document.addEventListener("mouseup", mu);
-    const att = () => { document.querySelectorAll("a,button,[data-hover]").forEach(el => { el.addEventListener("mouseenter", () => setHov(true)); el.addEventListener("mouseleave", () => setHov(false)); }); };
-    att(); const ob = new MutationObserver(att); ob.observe(document.body, { childList: true, subtree: true });
-    let id;
-    const loop = () => {
-      sm.current.x += (pos.current.x - sm.current.x) * .09; sm.current.y += (pos.current.y - sm.current.y) * .09;
-      const s = clk ? .65 : hov ? 2.1 : 1;
-      if (outer.current) outer.current.style.transform = `translate(${sm.current.x - 20}px,${sm.current.y - 20}px) scale(${s})`;
-      if (dot.current) dot.current.style.transform = `translate(${pos.current.x - 3}px,${pos.current.y - 3}px) scale(${clk ? 1.9 : 1})`;
-      if (trail.current) trail.current.style.transform = `translate(${sm.current.x - 30}px,${sm.current.y - 30}px) scale(${hov ? 1.6 : .5})`;
-      id = requestAnimationFrame(loop);
-    };
-    id = requestAnimationFrame(loop);
-    return () => { document.removeEventListener("mousemove", mv); document.removeEventListener("mousedown", md); document.removeEventListener("mouseup", mu); ob.disconnect(); cancelAnimationFrame(id); };
-  }, [hov, clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998] transition-[border-color,background] duration-150"
-        style={{ border: hov ? "1.5px solid #D4AF37" : "1.5px solid rgba(230,107,38,0.45)", background: hov ? "rgba(212,175,55,0.07)" : "transparent", willChange: "transform" }} />
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999] transition-colors duration-100"
-        style={{ background: hov ? "#D4AF37" : "#E66B26", willChange: "transform" }} />
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{ background: "radial-gradient(circle,#D4AF37,transparent)", willChange: "transform" }} />
-    </>
-  );
-}
+
 
 /* ══════════════════════════════════════════════
    SCROLL PROGRESS BAR
@@ -365,27 +330,7 @@ function SectionNavDots() {
     className="w-2.5 h-2.5 rounded-full"
   />
 
-  {/* 🔥 RING */}
-  {active === i && (
-    <motion.div
-      layoutId="pf-nav-pulse"
-      className="absolute inset-0 rounded-full"
-      style={{ border: "1.5px solid #D4AF37" }}
-      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
-      transition={{ duration: 1.5, repeat: Infinity }}
-    />
-  )}
 
-  {/* 🔥 ARROW (OUTSIDE LEFT) */}
-  {active === i && (
-    <motion.div
-      initial={{ opacity: 0, x: 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute right-6" 
-    >
-      <ArrowRight className="w-4 h-4 text-black" />
-    </motion.div>
-  )}
 </motion.button>
       ))}
     </div>
@@ -539,6 +484,9 @@ function Portfolio() {
   /* Hero parallax */
   const heroRef = useRef(null);
   const { scrollYProgress: heroP } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+
   const heroY = useTransform(heroP, [0, 1], [0, -110]);
   const heroO = useTransform(heroP, [0, .6], [1, 0.9]);
   const heroS = useTransform(heroP, [0, 1], [1, .84]);
@@ -554,7 +502,7 @@ function Portfolio() {
 
   return (
     <div className="bg-white text-[#1A1A1A] min-h-screen overflow-x-hidden">
-      <CustomCursor />
+      
       <ScrollProgressBar />
       <SectionNavDots />
       <Navbar />
@@ -580,7 +528,7 @@ function Portfolio() {
 
         {/* floating orbs */}
         <Float className="absolute top-1/4 left-[7%] w-3 h-3 rounded-full bg-[#D4AF37]/28 z-[2]" duration={5} delay={0} />
-        <Float className="absolute top-1/3 right-[9%] w-2 h-2 rounded-full bg-[#E66B26]/22 z-[2]" duration={4} delay={1} />
+        <Float className="absolute top-1/3 right-[9%] w-2 h-2 rounded-full bg-[#F04A06]/22 z-[2]" duration={4} delay={1} />
         <Float className="absolute bottom-1/3 left-[12%] w-4 h-4 rounded-full bg-[#C5531A]/18 z-[2]" duration={6} delay={2} />
         <Float className="absolute bottom-1/4 right-[15%] w-2.5 h-2.5 rounded-full bg-[#D4AF37]/20 z-[2]" duration={5.5} delay={.5} />
 
@@ -592,7 +540,7 @@ function Portfolio() {
 
         {/* dot grid */}
         <div className="absolute inset-0 z-[2] opacity-[.03]"
-          style={{ backgroundImage: "radial-gradient(circle,#E66B26 1px,transparent 1px)", backgroundSize: "32px 32px" }} />
+          style={{ backgroundImage: "radial-gradient(circle,#F04A06 1px,transparent 1px)", backgroundSize: "32px 32px" }} />
 
         <motion.div style={{ y: heroY, opacity: heroO, scale: heroS }}
           className="max-w-6xl mx-auto text-center relative z-10 w-full">
@@ -603,7 +551,7 @@ function Portfolio() {
             <motion.div animate={{ rotate: [0, 20, -20, 0] }} transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}>
               <Sparkles className="w-4 h-4 text-[#D4AF37]" />
             </motion.div>
-            <span className="text-sm font-semibold text-[#E66B26]">Our Portfolio</span>
+            <span className="text-sm font-semibold text-[#F04A06]">Our Portfolio</span>
           </motion.div>
 
           {/* H1 */}
@@ -611,7 +559,7 @@ function Portfolio() {
             className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-[1.05]">
             <span className="text-[#1A1A1A]">Showcasing</span>
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]">Excellence</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]">Excellence</span>
           </motion.h1>
 
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .46, ease: EASE_EXPO }}
@@ -623,31 +571,38 @@ function Portfolio() {
           <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .65, ease: EASE_EXPO }}
             className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto px-2 mb-10">
             {STATS.map((s, i) => (
-              <Float key={i} duration={4 + i * .5} delay={i * .3}>
+              <motion.div key={i} duration={4 + i * .5} delay={i * .3}>
                 <GlowCard accent="#D4AF37">
                   <TiltCard>
                     <motion.div whileHover={{ y: -6, boxShadow: "0 16px 40px rgba(0,0,0,0.08)" }}
                       className="bg-white border border-gray-200 rounded-xl p-3 sm:p-4 text-center hover:border-[#D4AF37] transition-all shadow-sm cursor-default">
-                      <s.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#E66B26] mx-auto mb-1.5" />
+                      <s.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#F04A06] mx-auto mb-1.5" />
                       <div className="text-lg sm:text-2xl font-black text-[#1A1A1A]"><Counter value={s.value} /></div>
                       <div className="text-[10px] sm:text-xs text-gray-400">{s.label}</div>
                     </motion.div>
                   </TiltCard>
                 </GlowCard>
-              </Float>
+              </motion.div>
             ))}
           </motion.div>
 
           {/* scroll cue */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
-            className="flex justify-center cursor-pointer"
+          <motion.div
+  style={{ opacity: scrollOpacity }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 2.2 }}
             onClick={() => document.getElementById("pf-projects")?.scrollIntoView({ behavior: "smooth" })}>
             <Float duration={2} yRange={10}>
-              <div className="flex flex-col items-center gap-1.5 text-gray-400 hover:text-[#E66B26] transition-colors">
+              <div className="flex flex-col items-center gap-1.5 text-gray-400 hover:text-[#F04A06] transition-colors">
                 <span className="text-xs font-medium">View Projects</span>
-                <div className="w-5 h-8 border-2 border-[#E66B26]/22 rounded-full flex justify-center">
-                  <motion.div className="w-1 h-2 bg-[#D4AF37] rounded-full mt-1.5"
-                    animate={{ y: [0, 10, 0], opacity: [1, .4, 1] }} transition={{ duration: 1.8, repeat: Infinity }} />
+                <div className="w-7 h-12 border-2 border-[#F04A06]/22 rounded-full flex justify-center">
+                   <motion.div
+    className="w-1.5 h-3 bg-[#D4AF37] rounded-full mt-3"
+    animate={{ y: [0, 14, 0], opacity: [1, 0.4, 1] }}
+    transition={{ duration: 1.8, repeat: Infinity }}
+  />
+
                 </div>
               </div>
             </Float>
@@ -665,14 +620,14 @@ function Portfolio() {
 
         {/* kinetic bg */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+          <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
             animate={{ y: [0, -10, 0] }} transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}>PROJECTS</motion.span>
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Our Work" />
-            <AHeading className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A] mt-1" delay={.05}>
+            <AHeading className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A] mt-1" delay={.05}>
               Featured Projects
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -696,12 +651,12 @@ function Portfolio() {
                         <motion.div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12"
                           animate={{ x: ["-100%", "200%"] }} transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3, ease: "easeInOut" }} />
                         <div className="absolute top-4 right-4">
-                          <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-[#E66B26] text-xs rounded-full border border-[#D4AF37]/50 font-semibold shadow-sm">
+                          <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-[#F04A06] text-xs rounded-full border border-[#D4AF37]/50 font-semibold shadow-sm">
                             {project.status}
                           </span>
                         </div>
                         <div className="absolute bottom-4 left-4 right-4">
-                          <span className="inline-block px-2.5 py-1 bg-white/90 backdrop-blur-sm text-[#E66B26] text-xs rounded-full border border-[#D4AF37]/50 mb-2 font-medium">
+                          <span className="inline-block px-2.5 py-1 bg-white/90 backdrop-blur-sm text-[#F04A06] text-xs rounded-full border border-[#D4AF37]/50 mb-2 font-medium">
                             {project.category}
                           </span>
                           <h3 className="text-lg sm:text-xl font-black text-white drop-shadow-lg">{project.title}</h3>
@@ -714,11 +669,11 @@ function Portfolio() {
 
                         {/* technologies */}
                         <div className="mb-5">
-                          <h4 className="text-xs font-black text-[#E66B26] mb-2.5 uppercase tracking-wider">Technologies</h4>
+                          <h4 className="text-xs font-black text-[#F04A06] mb-2.5 uppercase tracking-wider">Technologies</h4>
                           <div className="flex flex-wrap gap-2">
                             {project.technologies.map((tech, i) => (
                               <motion.span key={i} whileHover={{ scale: 1.07 }}
-                                className="px-2.5 py-1 bg-[#FFF4ED] text-[#E66B26] text-xs rounded-full border border-[#D4AF37]/30 font-medium cursor-default">
+                                className="px-2.5 py-1 bg-[#FFF4ED] text-[#F04A06] text-xs rounded-full border border-[#D4AF37]/30 font-medium cursor-default">
                                 {tech}
                               </motion.span>
                             ))}
@@ -727,7 +682,7 @@ function Portfolio() {
 
                         {/* features */}
                         <div className="mb-5">
-                          <h4 className="text-xs font-black text-[#E66B26] mb-2.5 uppercase tracking-wider">Key Features</h4>
+                          <h4 className="text-xs font-black text-[#F04A06] mb-2.5 uppercase tracking-wider">Key Features</h4>
                           <div className="grid grid-cols-2 gap-1.5">
                             {project.features.map((feature, i) => (
                               <div key={i} className="flex items-center gap-1.5">
@@ -768,18 +723,18 @@ function Portfolio() {
       <section id="pf-testimonials" className="py-20 px-4 sm:px-6 bg-white relative overflow-hidden">
         <Spotlight color="rgba(230,107,38,0.04)" />
         <div className="absolute inset-0 opacity-[.028]"
-          style={{ backgroundImage: "radial-gradient(circle,#E66B26 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
+          style={{ backgroundImage: "radial-gradient(circle,#F04A06 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
 
         {/* kinetic bg */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[13vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+          <motion.span className="text-[13vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
             animate={{ y: [0, -10, 0] }} transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}>REVIEWS</motion.span>
         </div>
 
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Client Stories" />
-            <AHeading className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Client Testimonials
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -805,7 +760,7 @@ function Portfolio() {
                     <div className="flex items-center gap-3 mt-auto">
                       <Float duration={4 + i * .4} yRange={5}>
                         <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-sm shadow-md"
-                          style={{ background: `linear-gradient(135deg,#E66B26,#C5531A)` }}>
+                          style={{ background: `linear-gradient(135deg,#F04A06,#C5531A)` }}>
                           {t.initials}
                         </div>
                       </Float>
@@ -832,7 +787,7 @@ function Portfolio() {
           <Reveal from="bottom">
             <div className="relative overflow-hidden rounded-3xl shadow-2xl">
               {/* BG */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#E66B26] to-[#C5531A]" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#F04A06] to-[#C5531A]" />
               <div className="absolute inset-0 opacity-[.06]"
                 style={{ backgroundImage: "radial-gradient(circle at 2px 2px,rgba(255,255,255,0.3) 1px,transparent 0)", backgroundSize: "38px 38px" }} />
               <ParticleCanvas count={12} color="rgba(212,175,55,0.09)" />
@@ -870,7 +825,7 @@ function Portfolio() {
                 <Reveal from="bottom" delay={.32}>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
                     <Link to="/Contact">
-                      <MagBtn className="group relative px-8 py-4 bg-white text-[#E66B26] rounded-xl font-black overflow-hidden shadow-xl">
+                      <MagBtn className="group relative px-8 py-4 bg-white text-[#F04A06] rounded-xl font-black overflow-hidden shadow-xl">
                         <span className="relative z-10 flex items-center gap-2">
                           Start Your Project
                           <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Infinity }}><ArrowRight className="w-5 h-5" /></motion.span>
@@ -880,7 +835,7 @@ function Portfolio() {
                     </Link>
                     <Link to="/Services">
                       <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: .96 }}
-                        className="px-8 py-4 border-2 border-white text-white rounded-xl font-black hover:bg-white hover:text-[#E66B26] transition-all flex items-center justify-center gap-2 shadow-sm">
+                        className="px-8 py-4 border-2 border-white text-white rounded-xl font-black hover:bg-white hover:text-[#F04A06] transition-all flex items-center justify-center gap-2 shadow-sm">
                         <Target className="w-5 h-5" />
                         Explore Services
                       </motion.button>

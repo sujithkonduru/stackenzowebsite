@@ -11,6 +11,7 @@ import {
   Phone, MessageSquare, ArrowRight, Filter, Search,
   X, Menu, Layers, Code, Palette, BarChart, Headphones,
   Sparkles,
+  Upload,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import Navbar from "./Navbar";
@@ -143,58 +144,7 @@ function GlowCard({ children, className = "", accent = "#D4AF37" }) {
   );
 }
 
-/* ══════════════════════════════════════════════
-   CUSTOM CURSOR
-══════════════════════════════════════════════ */
-function CustomCursor() {
-  const outer = useRef(null), dot = useRef(null), trail = useRef(null);
-  const pos = useRef({ x:-300, y:-300 }), sm = useRef({ x:-300, y:-300 });
-  const [hov, setHov] = useState(false), [clk, setClk] = useState(false);
-  useEffect(() => {
-    const mv = e => { pos.current = { x:e.clientX, y:e.clientY }; };
-    const md = () => setClk(true), mu = () => setClk(false);
-    document.addEventListener("mousemove", mv);
-    document.addEventListener("mousedown", md);
-    document.addEventListener("mouseup", mu);
-    const att = () => {
-      document.querySelectorAll("a,button,[data-hover]").forEach(el => {
-        el.addEventListener("mouseenter", () => setHov(true));
-        el.addEventListener("mouseleave", () => setHov(false));
-      });
-    };
-    att();
-    const ob = new MutationObserver(att);
-    ob.observe(document.body, { childList:true, subtree:true });
-    let id;
-    const loop = () => {
-      sm.current.x += (pos.current.x - sm.current.x) * .09;
-      sm.current.y += (pos.current.y - sm.current.y) * .09;
-      const s = clk ? .65 : hov ? 2.1 : 1;
-      if (outer.current) outer.current.style.transform = `translate(${sm.current.x-20}px,${sm.current.y-20}px) scale(${s})`;
-      if (dot.current)   dot.current.style.transform   = `translate(${pos.current.x-3}px,${pos.current.y-3}px) scale(${clk?1.9:1})`;
-      if (trail.current) trail.current.style.transform = `translate(${sm.current.x-30}px,${sm.current.y-30}px) scale(${hov?1.6:.5})`;
-      id = requestAnimationFrame(loop);
-    };
-    id = requestAnimationFrame(loop);
-    return () => {
-      document.removeEventListener("mousemove", mv);
-      document.removeEventListener("mousedown", md);
-      document.removeEventListener("mouseup", mu);
-      ob.disconnect();
-      cancelAnimationFrame(id);
-    };
-  }, [hov, clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998] transition-[border-color,background] duration-150"
-        style={{ border: hov?"1.5px solid #D4AF37":"1.5px solid rgba(230,107,38,0.45)", background: hov?"rgba(212,175,55,0.07)":"transparent", willChange:"transform" }} />
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999] transition-colors duration-100"
-        style={{ background: hov?"#D4AF37":"#E66B26", willChange:"transform" }} />
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{ background:"radial-gradient(circle,#D4AF37,transparent)", willChange:"transform" }} />
-    </>
-  );
-}
+
 
 /* ══════════════════════════════════════════════
    SCROLL PROGRESS BAR
@@ -260,27 +210,7 @@ function SectionNavDots() {
     className="w-2.5 h-2.5 rounded-full"
   />
 
-  {/* 🔥 RING */}
-  {active === i && (
-    <motion.div
-      layoutId="pf-nav-pulse"
-      className="absolute inset-0 rounded-full"
-      style={{ border: "1.5px solid #D4AF37" }}
-      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
-      transition={{ duration: 1.5, repeat: Infinity }}
-    />
-  )}
-
-  {/* 🔥 ARROW (OUTSIDE LEFT) */}
-  {active === i && (
-    <motion.div
-      initial={{ opacity: 0, x: 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute right-6" 
-    >
-      <ArrowRight className="w-4 h-4 text-black" />
-    </motion.div>
-  )}
+ 
 </motion.button>
       ))}
     </div>
@@ -471,6 +401,8 @@ function AHeading({ children, className="", delay=0 }) {
 function HeroSection({ jobCount, onScrollToOpenings }) {
   const secRef = useRef(null);
   const { scrollYProgress } = useScroll({ target:secRef, offset:["start start","end start"] });
+  const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
   const hY   = useTransform(scrollYProgress,[0,1],[0,-110]);
   const hO   = useTransform(scrollYProgress,[0,.6],[1,0.9]);
   const hS   = useTransform(scrollYProgress,[0,1],[1,.84]);
@@ -489,7 +421,7 @@ function HeroSection({ jobCount, onScrollToOpenings }) {
         <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
           alt="Team collaboration" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-white via-white/90 to-white" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#E66B26]/40 via-transparent to-[#E66B26]/40 mix-blend-overlay" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#F04A06]/40 via-transparent to-[#F04A06]/40 mix-blend-overlay" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(255,255,255,0.7)_100%)]" />
       </motion.div>
 
@@ -509,8 +441,8 @@ function HeroSection({ jobCount, onScrollToOpenings }) {
       </motion.div>
 
       <Float className="absolute top-1/4 left-[8%] w-3 h-3 rounded-full bg-[#D4AF37]/30 z-[2]" duration={5} delay={0} />
-      <Float className="absolute top-1/3 right-[10%] w-2 h-2 rounded-full bg-[#E66B26]/25 z-[2]" duration={4} delay={1} />
-      <Float className="absolute bottom-1/4 left-[15%] w-4 h-4 rounded-full bg-[#C5531A]/20 z-[2]" duration={6} delay={2} />
+      <Float className="absolute top-1/3 right-[10%] w-2 h-2 rounded-full bg-[#F04A06]/25 z-[2]" duration={4} delay={1} />
+      <Float className="absolute bottom-1/4 left-[15%] w-4 h-4 rounded-full bg-[#F04A06]/20 z-[2]" duration={6} delay={2} />
       <Float className="absolute bottom-1/3 right-[18%] w-2.5 h-2.5 rounded-full bg-[#D4AF37]/25 z-[2]" duration={5.5} delay={.5} />
 
       <motion.div className="absolute inset-0 z-[2] opacity-30"
@@ -521,7 +453,7 @@ function HeroSection({ jobCount, onScrollToOpenings }) {
 
         <motion.div initial={{scale:.7,opacity:0,y:20}} animate={{scale:1,opacity:1,y:0}} transition={{duration:.65,ease:EASE_BACK}}
           className="inline-block mb-8">
-          <span className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#E66B26]/20 to-[#C5531A]/20 text-[#E66B26] rounded-full text-sm font-semibold border border-[#E66B26]/30 backdrop-blur-sm shadow-lg shadow-[#E66B26]/10">
+          <span className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#F04A06]/20 to-[#C5531A]/20 text-[#F04A06] rounded-full text-sm font-semibold border border-[#F04A06]/30 backdrop-blur-sm shadow-lg shadow-[#F04A06]/10">
             <motion.span animate={{opacity:[.7,1,.7]}} transition={{duration:2,repeat:Infinity}} className="text-[#D4AF37]">✦</motion.span>
             Join Our Mission — Shape the Future with Stackenzo
             <motion.span animate={{opacity:[.7,1,.7]}} transition={{duration:2,repeat:Infinity}} className="text-[#D4AF37]">✦</motion.span>
@@ -530,7 +462,7 @@ function HeroSection({ jobCount, onScrollToOpenings }) {
 
         <motion.h1 initial={{opacity:0,y:24}} animate={{opacity:1,y:0}} transition={{delay:.3,duration:.75,ease:EASE_EXPO}}
           className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] via-[#C5531A] to-[#E66B26]">Shape the Future</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] via-[#C5531A] to-[#F04A06]">Shape the Future</span>
           <br />
           <span className="text-[#1A1A1A]">with Stackenzo</span>
         </motion.h1>
@@ -547,21 +479,21 @@ function HeroSection({ jobCount, onScrollToOpenings }) {
             {label:"Team Members",   value:"50+",  icon:"👥"},
             {label:"Countries",      value:"5+",   icon:"🌍"},
           ].map((s,i)=>(
-            <Float key={i} duration={4+i*.5} delay={i*.3}>
+            <motion.div key={i} duration={4+i*.5} delay={i*.3}>
               <motion.div whileHover={{scale:1.07,y:-5,boxShadow:"0 14px 32px rgba(0,0,0,0.08)"}}
                 className="bg-white/85 backdrop-blur-md border border-gray-200 rounded-xl px-6 py-4 min-w-[160px] text-center shadow-sm cursor-default">
                 <div className="text-3xl mb-2">{s.icon}</div>
-                <div className="text-2xl font-black text-[#E66B26]">{s.value}</div>
+                <div className="text-2xl font-black text-[#F04A06]">{s.value}</div>
                 <div className="text-sm text-[#1A1A1A] font-medium">{s.label}</div>
               </motion.div>
-            </Float>
+            </motion.div>
           ))}
         </motion.div>
 
         <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:.9,ease:EASE_EXPO}}
           className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
           <MagBtn onClick={onScrollToOpenings}
-            className="group px-8 py-4 bg-gradient-to-r from-[#E66B26] to-[#C5531A] text-white rounded-full font-semibold shadow-lg shadow-[#E66B26]/25 hover:shadow-xl hover:shadow-[#E66B26]/35 transition-shadow flex items-center gap-2">
+            className="group px-8 py-4 bg-gradient-to-r from-[#F04A06] to-[#C5531A] text-white rounded-full font-semibold shadow-lg shadow-[#F04A06]/25 hover:shadow-xl hover:shadow-[#F04A06]/35 transition-shadow flex items-center gap-2">
             View Open Positions
             <motion.div animate={{x:[0,4,0]}} transition={{duration:1.5,repeat:Infinity}}>
               <ArrowRight className="w-5 h-5" />
@@ -569,21 +501,28 @@ function HeroSection({ jobCount, onScrollToOpenings }) {
           </MagBtn>
           <Link to="/about">
             <motion.button whileHover={{scale:1.05,backgroundColor:"rgba(230,107,38,0.07)"}} whileTap={{scale:.96}}
-              className="group px-8 py-4 border-2 border-[#E66B26] text-[#E66B26] rounded-full font-semibold flex items-center gap-2 transition-all">
+              className="group px-8 py-4 border-2 border-[#F04A06] text-[#F04A06] rounded-full font-semibold flex items-center gap-2 transition-all">
               <Play className="w-5 h-5" />
               Watch Our Story
             </motion.button>
           </Link>
         </motion.div>
 
-        <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{delay:1.8}}
-          className="flex justify-center mt-12 cursor-pointer"
+       <motion.div
+  style={{ opacity: scrollOpacity }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 2.2 }}
+          className="flex justify-center mt-12 pb-1 cursor-pointer"
           onClick={()=>document.getElementById("career-values")?.scrollIntoView({behavior:"smooth"})}>
           <Float duration={2} yRange={10}>
-            <div className="w-5 h-8 border-2 border-[#E66B26]/28 rounded-full flex justify-center">
-              <motion.div className="w-1 h-2 bg-[#D4AF37] rounded-full mt-2"
-                animate={{y:[0,10,0],opacity:[1,.4,1]}} transition={{duration:1.8,repeat:Infinity}} />
-            </div>
+            <div className="w-7 h-12 border-2 border-[#F04A06]/28 rounded-full flex justify-center">
+  <motion.div
+    className="w-1.5 h-3 bg-[#D4AF37] rounded-full mt-3"
+    animate={{ y: [0, 14, 0], opacity: [1, 0.4, 1] }}
+    transition={{ duration: 1.8, repeat: Infinity }}
+  />
+</div>
           </Float>
         </motion.div>
       </motion.div>
@@ -597,7 +536,7 @@ function HeroSection({ jobCount, onScrollToOpenings }) {
 const VALUES_DATA = [
  { icon: Heart,  title: "Integrity",      desc: "We maintain the highest standards of integrity and transparency in all our operations.",                         color: "from-red-400 to-pink-400"       },
  { icon: Award,  title: "Excellence",     desc: "We strive for excellence in everything we do, from curriculum design to learner success and support.",            color: "from-yellow-400 to-orange-400"  },
- { icon: Zap,    title: "Innovation",     desc: "We continuously innovate our teaching methods and programs to stay ahead of industry trends.",                   color: "from-[#E66B26] to-[#C5531A]"   },
+ { icon: Zap,    title: "Innovation",     desc: "We continuously innovate our teaching methods and programs to stay ahead of industry trends.",                   color: "from-[#F04A06] to-[#F04A06]"   },
  { icon: Users,  title: "Collaboration",  desc: "We believe in strong collaboration between students, educators, and industry to drive innovation.",                color: "from-blue-400 to-purple-400"    },
  { icon: Globe,  title: "Accessibility",  desc: "We make quality education accessible to students from all backgrounds and locations.",                            color: "from-orange-400 to-red-400"     },
  { icon: Target, title: "Impact",         desc: "We focus on creating meaningful impact in the lives of our students and the community.",                          color: "from-purple-400 to-indigo-400"  },
@@ -612,19 +551,19 @@ function ValuesSection() {
         {[{l:"5%",t:"10%",s:120},{l:"85%",t:"60%",s:90},{l:"50%",t:"80%",s:70}].map((o,i)=>(
           <Float key={i} duration={6+i} yRange={18} delay={i} className="absolute pointer-events-none"
             style={{left:o.l,top:o.t}}>
-            <div className="rounded-full bg-[#E66B26]/[0.04]" style={{width:o.s,height:o.s}} />
+            <div className="rounded-full bg-[#F04A06]/[0.04]" style={{width:o.s,height:o.s}} />
           </Float>
         ))}
 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[16vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.02]"
+          <motion.span className="text-[16vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.02]"
             animate={{y:[0,-12,0]}} transition={{duration:10,repeat:Infinity,ease:"easeInOut"}}>VALUES</motion.span>
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <SLabel text="Who We Are" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06]" delay={.05}>
               Our Values
             </AHeading>
             <Reveal from="bottom" delay={.25}>
@@ -638,15 +577,15 @@ function ValuesSection() {
                 <TiltCard>
                   <motion.div whileHover={{y:-10,scale:1.02,boxShadow:"0 28px 65px rgba(0,0,0,0.10)"}}
                     className="group relative bg-white p-8 rounded-2xl border border-gray-200 text-center overflow-hidden h-full">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#E66B26]/5 to-[#C5531A]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#F04A06]/5 to-[#F04A06]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <Float duration={4+i*.4} delay={i*.3}>
                       <div className="w-16 h-16 rounded-full bg-[#FFF4ED] border border-[#D4AF37]/30 flex items-center justify-center mx-auto mb-4">
-                        <v.icon className="w-8 h-8 text-[#E66B26]" />
+                        <v.icon className="w-8 h-8 text-[#F04A06]" />
                       </div>
                     </Float>
-                    <h3 className="text-xl font-bold mb-3 text-[#1A1A1A] group-hover:text-[#E66B26] transition-colors">{v.title}</h3>
+                    <h3 className="text-xl font-bold mb-3 text-[#1A1A1A] group-hover:text-[#F04A06] transition-colors">{v.title}</h3>
                     <p className="text-sm text-[#1A1A1A]">{v.desc}</p>
-                    <motion.div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#D4AF37] to-[#C5531A]"
+                    <motion.div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#D4AF37] to-[#F04A06]"
                       initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.3}} />
                   </motion.div>
                 </TiltCard>
@@ -674,19 +613,19 @@ const BENEFITS_DATA = [
 
   { icon: Gift,       title: "Perks & Benefits",      desc: "Competitive salary and bonus structure.",              gradient: "from-purple-500 to-indigo-500"   },
 
-  { icon: Zap,        title: "Innovation Time",       desc: "20% time dedicated to passion projects and R&D.",      gradient: "from-[#E66B26] to-[#C5531A]"    },
+  { icon: Zap,        title: "Innovation Time",       desc: "20% time dedicated to passion projects and R&D.",      gradient: "from-[#F04A06] to-[#F04A06]"    },
 ];
 
 function BenefitsSection() {
   return (
     <section id="career-benefits" className="py-24 px-4 sm:px-6 bg-white relative overflow-hidden">
       <Spotlight color="rgba(230,107,38,0.05)" size={550} />
-      <div className="absolute inset-0 opacity-[.03]" style={{backgroundImage:"radial-gradient(circle,#E66B26 1px,transparent 1px)",backgroundSize:"28px 28px"}} />
-      <div className="absolute top-0 left-0 w-64 h-64 bg-[#E66B26] rounded-full filter blur-3xl opacity-[.06]" />
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-[#C5531A] rounded-full filter blur-3xl opacity-[.06]" />
+      <div className="absolute inset-0 opacity-[.03]" style={{backgroundImage:"radial-gradient(circle,#F04A06 1px,transparent 1px)",backgroundSize:"28px 28px"}} />
+      <div className="absolute top-0 left-0 w-64 h-64 bg-[#F04A06] rounded-full filter blur-3xl opacity-[.06]" />
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-[#F04A06] rounded-full filter blur-3xl opacity-[.06]" />
 
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-        <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+        <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
           animate={{y:[0,-10,0]}} transition={{duration:9,repeat:Infinity,ease:"easeInOut"}}>
           BENEFITS
         </motion.span>
@@ -695,7 +634,7 @@ function BenefitsSection() {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
           <SLabel text="Why Join Us" />
-          <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+          <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06]" delay={.05}>
             Benefits & Perks
           </AHeading>
           <Reveal from="bottom" delay={.25}>
@@ -705,7 +644,7 @@ function BenefitsSection() {
 
         <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" stagger={0.1} from="bottom">
           {BENEFITS_DATA.map((b, i) => (
-            <GlowCard key={i} accent="#E66B26">
+            <GlowCard key={i} accent="#F04A06">
               <TiltCard>
                 <motion.div whileHover={{y:-8,scale:1.02,boxShadow:"0 24px 55px rgba(0,0,0,0.10)"}}
                   className="group relative bg-white p-6 rounded-2xl border border-gray-200 hover:border-[#D4AF37] transition-all overflow-hidden h-full">
@@ -719,11 +658,11 @@ function BenefitsSection() {
                       </div>
                     </Float>
                     <div>
-                      <h3 className="text-lg font-bold text-[#1A1A1A] mb-1 group-hover:text-[#E66B26] transition-colors">{b.title}</h3>
+                      <h3 className="text-lg font-bold text-[#1A1A1A] mb-1 group-hover:text-[#F04A06] transition-colors">{b.title}</h3>
                       <p className="text-sm text-[#1A1A1A]">{b.desc}</p>
                     </div>
                   </div>
-                  <motion.div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#D4AF37] to-[#C5531A]"
+                  <motion.div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#D4AF37] to-[#F04A06]"
                     initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.3}} />
                 </motion.div>
               </TiltCard>
@@ -767,14 +706,14 @@ function OpeningsSection({ jobOpenings, loading, onApply }) {
         <NoiseCanvas color1="#FFD5B8" color2="#FFCBA4" opacity={0.22} />
 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.02]"
+          <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.02]"
             animate={{y:[0,-12,0]}} transition={{duration:11,repeat:Infinity,ease:"easeInOut"}}>OPENINGS</motion.span>
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="Join Us" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06]" delay={.05}>
               Open Positions
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -788,7 +727,7 @@ function OpeningsSection({ jobOpenings, loading, onApply }) {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1A1A1A]" />
                 <input type="text" placeholder="Search positions…" value={searchTerm}
                   onChange={e=>setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-xl text-[#1A1A1A] placeholder-[#1A1A1A]/60 focus:border-[#E66B26] focus:outline-none shadow-sm transition-colors" />
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-xl text-[#1A1A1A] placeholder-[#1A1A1A]/60 focus:border-[#F04A06] focus:outline-none shadow-sm transition-colors" />
               </div>
               <button onClick={()=>setShowFilters(!showFilters)}
                 className="lg:hidden flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-xl text-[#1A1A1A] shadow-sm">
@@ -801,7 +740,7 @@ function OpeningsSection({ jobOpenings, loading, onApply }) {
                   <div key={f.label} className="flex flex-col">
                     <label className="text-sm text-[#1A1A1A] mb-1">{f.label}</label>
                     <select value={f.val} onChange={e=>f.set(e.target.value)}
-                      className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-[#1A1A1A] focus:border-[#E66B26] focus:outline-none shadow-sm">
+                      className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-[#1A1A1A] focus:border-[#F04A06] focus:outline-none shadow-sm">
                       {f.opts.map(o=><option key={o} value={o}>{o}</option>)}
                     </select>
                   </div>
@@ -829,7 +768,7 @@ function OpeningsSection({ jobOpenings, loading, onApply }) {
 
           <Reveal from="bottom" delay={.1}>
             <p className="mb-6 text-sm text-[#1A1A1A]">
-              Showing <span className="font-bold text-[#E66B26]">{filtered.length}</span> {filtered.length===1?"position":"positions"}
+              Showing <span className="font-bold text-[#F04A06]">{filtered.length}</span> {filtered.length===1?"position":"positions"}
             </p>
           </Reveal>
 
@@ -839,14 +778,14 @@ function OpeningsSection({ jobOpenings, loading, onApply }) {
                 <TiltCard intensity={6}>
                   <motion.div whileHover={{y:-6,boxShadow:"0 24px 55px rgba(0,0,0,0.10)"}}
                     className="group relative bg-white p-6 rounded-2xl border border-gray-200 hover:border-[#D4AF37] transition-all h-full overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#E66B26]/5 to-[#C5531A]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#F04A06]/5 to-[#F04A06]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="relative z-10">
                       <div className="flex justify-between items-start mb-4">
                         <div>
-                          <h3 className="text-xl font-bold text-[#1A1A1A] mb-2 group-hover:text-[#E66B26] transition-colors">{job.title}</h3>
+                          <h3 className="text-xl font-bold text-[#1A1A1A] mb-2 group-hover:text-[#F04A06] transition-colors">{job.title}</h3>
                           <div className="flex flex-wrap gap-2">
-                            <span className="px-3 py-1 bg-[#FFF4ED] text-[#E66B26] rounded-full text-xs border border-[#D4AF37]/30">{job.department}</span>
-                            <span className="px-3 py-1 bg-[#FFF4ED] text-[#E66B26] rounded-full text-xs border border-[#D4AF37]/30">{job.type}</span>
+                            <span className="px-3 py-1 bg-[#FFF4ED] text-[#F04A06] rounded-full text-xs border border-[#D4AF37]/30">{job.department}</span>
+                            <span className="px-3 py-1 bg-[#FFF4ED] text-[#F04A06] rounded-full text-xs border border-[#D4AF37]/30">{job.type}</span>
                           </div>
                         </div>
                       </div>
@@ -865,7 +804,7 @@ function OpeningsSection({ jobOpenings, loading, onApply }) {
                         )}
                       </div>
                       <motion.button onClick={()=>onApply(job.title)} whileHover={{scale:1.02}} whileTap={{scale:.98}}
-                        className="w-full py-3 bg-gradient-to-r from-[#E66B26] to-[#C5531A] text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-[#E66B26]/25 transition-all flex items-center justify-center gap-2 group/btn">
+                        className="w-full py-3 bg-gradient-to-r from-[#F04A06] to-[#F04A06] text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-[#F04A06]/25 transition-all flex items-center justify-center gap-2 group/btn">
                         Apply Now
                         <motion.div animate={{x:[0,4,0]}} transition={{duration:1.5,repeat:Infinity}}>
                           <ArrowRight className="w-4 h-4" />
@@ -909,7 +848,7 @@ function NoOpeningsSection({ onSendResume }) {
                   <motion.div animate={{rotate:[0,10,-10,0],scale:[1,1.1,1]}} transition={{duration:3,repeat:Infinity}}>
                     <Sparkles className="w-16 h-16 text-[#D4AF37] mx-auto mb-6" />
                   </motion.div>
-                  <AHeading className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+                  <AHeading className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06]" delay={.05}>
                     No Openings Available
                   </AHeading>
                   <Reveal from="bottom" delay={.15}>
@@ -921,12 +860,12 @@ function NoOpeningsSection({ onSendResume }) {
                   <Reveal from="bottom" delay={.25}>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                       <MagBtn onClick={onSendResume}
-                        className="px-8 py-3 bg-gradient-to-r from-[#E66B26] to-[#C5531A] text-white rounded-xl font-semibold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-shadow">
-                        <Download className="w-5 h-5" /> Send Your Resume
+                        className="px-8 py-3 bg-gradient-to-r from-[#F04A06] to-[#F04A06] text-white rounded-xl font-semibold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-shadow">
+                        <Upload className="w-5 h-5" /> Send Your Resume
                       </MagBtn>
                       <Link to="/contact">
                         <motion.button whileHover={{scale:1.05}} whileTap={{scale:.95}}
-                          className="px-8 py-3 border border-gray-300 text-[#1A1A1A] rounded-xl font-semibold hover:border-[#E66B26] hover:text-[#E66B26] transition-all">
+                          className="px-8 py-3 border border-gray-300 text-[#1A1A1A] rounded-xl font-semibold hover:border-[#F04A06] hover:text-[#F04A06] transition-all">
                           Contact Us
                         </motion.button>
                       </Link>
@@ -956,12 +895,12 @@ function TeamSection() {
   return (
     <section id="career-team" className="py-24 px-4 sm:px-6 bg-white relative overflow-hidden">
       <Spotlight color="rgba(230,107,38,0.045)" size={500} />
-      <div className="absolute inset-0 opacity-[.03]" style={{backgroundImage:"radial-gradient(circle,#E66B26 1px,transparent 1px)",backgroundSize:"28px 28px"}} />
+      <div className="absolute inset-0 opacity-[.03]" style={{backgroundImage:"radial-gradient(circle,#F04A06 1px,transparent 1px)",backgroundSize:"28px 28px"}} />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
           <SLabel text="Our People" />
-          <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+          <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06]" delay={.05}>
             What Our Team Says
           </AHeading>
           <Reveal from="bottom" delay={.2}>
@@ -975,17 +914,17 @@ function TeamSection() {
               <TiltCard intensity={8}>
                 <motion.div whileHover={{y:-8,boxShadow:"0 24px 55px rgba(0,0,0,0.10)"}}
                   className="group relative bg-white p-6 rounded-2xl border border-gray-200 h-full overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#E66B26]/5 to-[#C5531A]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#F04A06]/5 to-[#F04A06]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="relative z-10">
                     <div className="flex items-center gap-4 mb-4">
                       <Float duration={4+i*.5} delay={i*.3}>
                         <div className="w-12 h-12 rounded-full bg-[#FFF4ED] border border-[#D4AF37]/30 flex items-center justify-center">
-                          <t.icon className="w-6 h-6 text-[#E66B26]" />
+                          <t.icon className="w-6 h-6 text-[#F04A06]" />
                         </div>
                       </Float>
                       <div>
-                        <h4 className="font-bold text-[#1A1A1A] group-hover:text-[#E66B26] transition-colors">{t.name}</h4>
-                        <p className="text-sm text-[#E66B26]">{t.role}</p>
+                        <h4 className="font-bold text-[#1A1A1A] group-hover:text-[#F04A06] transition-colors">{t.name}</h4>
+                        <p className="text-sm text-[#F04A06]">{t.role}</p>
                       </div>
                     </div>
                     <p className="text-[#1A1A1A] text-sm italic">"{t.quote}"</p>
@@ -1017,13 +956,13 @@ function CTASection({ hasOpenings, onBrowse, onSendResume }) {
 
   return (
     <>
-      <WaveDivider color="#C5531A" toBg="#3D1A0A" />
+      <WaveDivider color="#F04A06" toBg="#3D1A0A" />
       <section ref={ref} className="py-28 px-4 sm:px-6 relative overflow-hidden">
         <motion.div className="absolute inset-0" style={{y:bgY}}>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#E66B26] to-[#C5531A]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#F04A06] to-[#F04A06]/90" />
         </motion.div>
         <Spotlight color="rgba(212,175,55,0.06)" />
-        <div className="absolute inset-0"><ParticleCanvas count={18} color="rgba(212,175,55,0.08)" /></div>
+        <div className="absolute inset-0"><ParticleCanvas count={18} color="rgba(212,175,55,5)" /></div>
         {[100,180,270].map((s,i)=>(
           <Float key={i} duration={6+i*2} yRange={12} delay={i}
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-full border border-[#D4AF37]/10"
@@ -1053,7 +992,7 @@ function CTASection({ hasOpenings, onBrowse, onSendResume }) {
           <Reveal from="bottom" delay={.35}>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
               <MagBtn onClick={hasOpenings ? onBrowse : onSendResume}
-                className="px-8 py-4 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#E66B26] transition-all flex items-center justify-center gap-2">
+                className="px-8 py-4 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#F04A06] transition-all flex items-center justify-center gap-2">
                 {hasOpenings ? "Browse Openings" : "Send Resume"}
                 <motion.div animate={{x:[0,4,0]}} transition={{duration:1.5,repeat:Infinity}}>
                   <ArrowRight className="w-5 h-5" />
@@ -1105,7 +1044,7 @@ function Career() {
 
   return (
     <div className="bg-white text-[#1A1A1A] min-h-screen overflow-x-hidden">
-      <CustomCursor />
+      
       <ScrollProgressBar />
       <SectionNavDots />
       <Navbar />

@@ -95,12 +95,12 @@ const WHY = [
   { icon: TrendingUp, title: "Proven Results",    desc: "Track record of successful projects & satisfied clients" },
 ];
 const PROGRAMS = [
-  { title:"R & D Projects",         desc:"Research-driven engineering projects for real-world challenges.",  img:"https://eu-images.contentstack.com/v3/assets/blt7a82e963f79cc4ec/blte9ba4bb5c8fc7e51/64b54806962d8e60ca1b576d/RD.jpg",                                                      link:"/R_AND_D",          icon:CpuIcon,    accent:"#4CAF50" },
-  { title:"IT Services",            desc:"End-to-end software development and scalable digital platforms.",  img:"https://ktla.com/wp-content/uploads/sites/4/2017/08/nasa.jpg",                                                                                                           link:"/WebServices",      icon:Code2,      accent:"#2196F3" },
-  { title:"Robotics Education",     desc:"Hands-on robotics programs promoting innovation.",                 img:"https://tse3.mm.bing.net/th/id/OIP.95DU085B5v2VMvLso-nfzAAAAA",                                                                                                          link:"/Robotics",         icon:Bot,        accent:"#9C27B0" },
-  { title:"Workshops & Internships",desc:"Industry-oriented programs bridging learning with practice.",      img:"https://st2.depositphotos.com/3591429/8629/i/950/depositphotos_86293450-stock-photo-workshop-training-development-concept.jpg",                                           link:"/WorkShops",        icon:Users,      accent:"#FF9800" },
-  { title:"Digital Marketing",      desc:"Comprehensive SEO, branding and performance marketing.",           img:"https://www.simplilearn.com/ice9/free_resources_article_thumb/What_is_digital_marketing.jpg",                                                                              link:"/DigitalMarketing", icon:TrendingUp, accent:"#E91E63" },
-  { title:"GSIN Platform",          desc:"Gamified innovation ecosystem for collaboration and growth.",      img:"https://img.freepik.com/free-vector/teamwork-concept-landing-page_52683-20158.jpg",                                                                                        link:"/Community",        icon:Globe,      accent:"#00BCD4" },
+  { title:"R & D Projects",         desc:"Research-driven engineering projects for real-world challenges.",  img:"https://eu-images.contentstack.com/v3/assets/blt7a82e963f79cc4ec/blte9ba4bb5c8fc7e51/64b54806962d8e60ca1b576d/RD.jpg",              link:"/R_AND_D",          icon:CpuIcon,    accent:"#4CAF50" },
+  { title:"IT Services",            desc:"End-to-end software development and scalable digital platforms.",  img:"/images/it services.jpg",                                                                                                           link:"/WebServices",      icon:Code2,      accent:"#2196F3" },
+  { title:"Robotics Education",     desc:"Hands-on robotics programs promoting innovation.",                 img:"https://tse3.mm.bing.net/th/id/OIP.95DU085B5v2VMvLso-nfzAAAAA",                                                                     link:"/Robotics",         icon:Bot,        accent:"#9C27B0" },
+  { title:"Workshops & Internships",desc:"Industry-oriented programs bridging learning with practice.",      img:"/images/workshop&internship.jpg",            link:"/WorkShops",        icon:Users,      accent:"#FF9800" },
+  { title:"Digital Marketing",      desc:"Comprehensive SEO, branding and performance marketing.",           img:"/images/digital marketing.jpg",                                                                                                     link:"/DigitalMarketing", icon:TrendingUp, accent:"#00BCD4" },
+  { title:"GSIN Platform",          desc:"Gamified innovation ecosystem for collaboration and growth.",      img:"/images/gsin.jpg",                                                                                                                  link:"/Community",        icon:Globe,      accent:"#4CAF50" },
 ];
 const MARQUEE_ITEMS = ["Research & Development","IT Solutions","EdTech Innovation","Robotics","Digital Marketing","GSIN Platform","AI & Machine Learning","Cloud Solutions","IoT Integration","Smart Manufacturing"];
 const NAV_SECTIONS  = ["hero","services-section","programs","about","testimonials-section"];
@@ -264,19 +264,19 @@ function GlowCard({ children, className = "", accent = "#D4AF37", dark = false }
 ════════════════════════════════════════════════════════════ */
 function PageLoader({ onDone }) {
   const [prog, setProg] = useState(0);
-  const [phase, setPhase] = useState("loading"); // "loading" | "done"
+  const [phase, setPhase] = useState("loading");
 
   useEffect(() => {
     let v = 0;
     const id = setInterval(() => {
-      v += Math.random() * 16 + 5;
+      v += Math.random() * 6 + 2;
       if (v >= 100) {
         v = 100; clearInterval(id);
         setPhase("done");
         setTimeout(onDone, 600);
       }
       setProg(Math.min(v, 100));
-    }, 55);
+    }, 80);
     return () => clearInterval(id);
   }, []);
 
@@ -286,27 +286,54 @@ function PageLoader({ onDone }) {
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#1A0800] overflow-hidden"
     >
       {/* Animated grid bg */}
-      <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: "linear-gradient(#E66B26 1px,transparent 1px),linear-gradient(90deg,#E66B26 1px,transparent 1px)", backgroundSize: "40px 40px" }} />
-      {/* Radial glow */}
-      <motion.div className="absolute w-[600px] h-[600px] rounded-full"
-        style={{ background: "radial-gradient(circle,rgba(230,107,38,0.6),transparent)" }}
-        animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 3, repeat: Infinity }} />
+      <div
+        className="absolute inset-0 opacity-[0.06]"
+        style={{
+          backgroundImage: "linear-gradient(#F04A06 1px,transparent 1px),linear-gradient(90deg,#F04A06 1px,transparent 1px)",
+          backgroundSize: "40px 40px",
+        }}
+      />
+
+      {/* Full-screen radial glow — grows with progress */}
+      <motion.div
+        className="absolute inset-0"
+        style={{
+          background: "radial-gradient(circle at center, rgba(230,107,38,0.55) 0%, rgba(180,60,10,0.25) 40%, transparent 70%)",
+        }}
+        animate={{
+          scale: 0.3 + (prog / 100) * 2.4,
+          opacity: 0.4 + (prog / 100) * 0.6,
+        }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      />
+
+      {/* Secondary pulse ring — always animating */}
+      <motion.div
+        className="absolute w-[300px] h-[300px] rounded-full"
+        style={{ background: "radial-gradient(circle, rgba(240,74,6,0.35), transparent 70%)" }}
+        animate={{ scale: [1, 1.6, 1], opacity: [0.5, 0.15, 0.5] }}
+        transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+      />
 
       {/* Logo */}
-      <motion.div initial={{ scale: 0.5, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: EASE_BACK }} className="flex items-center gap-3 mb-10 relative z-10">
-       <motion.div
-  initial={{ scale: 0.8 }}
-  animate={{ scale: 1 }}
-  transition={{ duration: 0.5 }}
-  className="w-14 h-14 flex items-center justify-center"
->
-  <img 
-    src="/images/Stackenzo small Logo.jpeg" 
-          alt="Stackenzo"  
-    className="w-10 h-10 object-contain"
-  />
-</motion.div>
+      <motion.div
+        initial={{ scale: 0.5, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: EASE_BACK }}
+        className="flex items-center gap-3 mb-10 relative z-10"
+      >
+        <motion.div
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-14 h-14 flex items-center justify-center"
+        >
+          <img
+            src="/images/Stackenzo small Logo.jpeg"
+            alt="Stackenzo"
+            className="w-10 h-10 object-contain"
+          />
+        </motion.div>
         <div>
           <span className="text-3xl font-black text-white tracking-tight block">Stackenzo</span>
           <span className="text-xs text-white/50 tracking-[.2em] uppercase">Learn Build Inspire</span>
@@ -316,13 +343,19 @@ function PageLoader({ onDone }) {
       {/* Progress */}
       <div className="relative z-10 w-64">
         <div className="h-[2px] bg-white/8 rounded-full overflow-hidden mb-3">
-          <motion.div className="h-full rounded-full"
-            style={{ background: "linear-gradient(90deg,#E66B26,#D4AF37,#C5531A)" }}
-            animate={{ width: `${prog}%` }} transition={{ duration: 0.12 }} />
+          <motion.div
+            className="h-full rounded-full"
+            style={{ background: "linear-gradient(90deg,#F04A06,#D4AF37,#F04A06)" }}
+            animate={{ width: `${prog}%` }}
+            transition={{ duration: 0.18 }}
+          />
         </div>
         <div className="flex justify-between items-center">
-          <motion.p className="text-xs text-white/30 tracking-[.18em] uppercase"
-            animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 1.4, repeat: Infinity }}>
+          <motion.p
+            className="text-xs text-white/30 tracking-[.18em] uppercase"
+            animate={{ opacity: [0.3, 0.7, 0.3] }}
+            transition={{ duration: 1.4, repeat: Infinity }}
+          >
             {phase === "done" ? "Ready" : "Loading"}
           </motion.p>
           <span className="text-xs text-[#D4AF37] font-bold">{Math.round(prog)}%</span>
@@ -332,54 +365,7 @@ function PageLoader({ onDone }) {
   );
 }
 
-/* ════════════════════════════════════════════════════════════
-   CUSTOM CURSOR  (3-layer)
-════════════════════════════════════════════════════════════ */
-function CustomCursor() {
-  const outer = useRef(null), dot = useRef(null), trail = useRef(null);
-  const pos = useRef({ x: -300, y: -300 }), sm = useRef({ x: -300, y: -300 });
-  const [hov, setHov] = useState(false), [clk, setClk] = useState(false);
 
-  useEffect(() => {
-    const mv = e => { pos.current = { x: e.clientX, y: e.clientY }; };
-    const md = () => setClk(true), mu = () => setClk(false);
-    document.addEventListener("mousemove", mv);
-    document.addEventListener("mousedown", md);
-    document.addEventListener("mouseup", mu);
-    const att = () => {
-      document.querySelectorAll("a,button,[data-hover]").forEach(el => {
-        el.addEventListener("mouseenter", () => setHov(true));
-        el.addEventListener("mouseleave", () => setHov(false));
-      });
-    };
-    att();
-    const ob = new MutationObserver(att);
-    ob.observe(document.body, { childList: true, subtree: true });
-    let id;
-    const loop = () => {
-      sm.current.x += (pos.current.x - sm.current.x) * 0.09;
-      sm.current.y += (pos.current.y - sm.current.y) * 0.09;
-      const s = clk ? 0.65 : hov ? 2.1 : 1;
-      if (outer.current) outer.current.style.transform = `translate(${sm.current.x-20}px,${sm.current.y-20}px) scale(${s})`;
-      if (dot.current)   dot.current.style.transform   = `translate(${pos.current.x-3}px,${pos.current.y-3}px) scale(${clk?1.9:1})`;
-      if (trail.current) trail.current.style.transform = `translate(${sm.current.x-30}px,${sm.current.y-30}px) scale(${hov?1.6:0.5})`;
-      id = requestAnimationFrame(loop);
-    };
-    id = requestAnimationFrame(loop);
-    return () => { document.removeEventListener("mousemove", mv); document.removeEventListener("mousedown", md); document.removeEventListener("mouseup", mu); ob.disconnect(); cancelAnimationFrame(id); };
-  }, [hov, clk]);
-
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998] transition-[border-color,background] duration-150"
-        style={{ border: hov ? "1.5px solid #D4AF37" : "1.5px solid rgba(230,107,38,0.45)", background: hov ? "rgba(212,175,55,0.07)" : "transparent", willChange: "transform" }} />
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999] transition-colors duration-100"
-        style={{ background: hov ? "#D4AF37" : "#E66B26", willChange: "transform" }} />
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[0.09]"
-        style={{ background: "radial-gradient(circle,#D4AF37,transparent)", willChange: "transform" }} />
-    </>
-  );
-}
 
 /* ════════════════════════════════════════════════════════════
    SCROLL PROGRESS BAR
@@ -436,27 +422,7 @@ function SectionNavDots() {
     className="w-2.5 h-2.5 rounded-full"
   />
 
-  {/* 🔥 PULSE */}
-  {active === i && (
-    <motion.div
-      layoutId="nav-pulse"
-      className="absolute inset-0 rounded-full"
-      style={{ border: "1.5px solid #D4AF37" }}
-      animate={{ scale: [2, 2.8, 2], opacity: [0.5, 0, 0.5] }}
-      transition={{ duration: 1.8, repeat: Infinity }}
-    />
-  )}
-
-  {/* 🔥 ARROW OUTSIDE */}
-  {active === i && (
-    <motion.div
-      initial={{ opacity: 0, x: 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute right-6"
-    >
-      <ArrowRight className="w-4 h-4 text-black" />
-    </motion.div>
-  )}
+ 
 </motion.button>
       ))}
     </div>
@@ -683,29 +649,7 @@ function AHeading({ children, className = "", delay = 0 }) {
   );
 }
 
-/* ════════════════════════════════════════════════════════════
-   MARQUEE STRIP
-════════════════════════════════════════════════════════════ */
-function MarqueeStrip({ dark = false, reverse = false }) {
-  const [paused, setPaused] = useState(false);
-  const items = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
-  return (
-    <div className={`py-4 overflow-hidden border-y ${dark ? "border-white/8 bg-white/[0.03]" : "border-black/5 bg-[#F7F4EF]"}`}
-      onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
-      <motion.div className="flex gap-10 whitespace-nowrap"
-        animate={paused ? {} : { x: reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
-        transition={{ repeat: Infinity, duration: 28, ease: "linear" }}>
-        {items.map((item, i) => (
-          <span key={i} className={`flex items-center gap-3 text-sm font-semibold select-none ${dark ? "text-white/45" : "text-[#1A1A1A]/40"}`}>
-            <motion.span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] shrink-0"
-              animate={{ scale: [1, 1.4, 1] }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.1 }} />
-            {item}
-          </span>
-        ))}
-      </motion.div>
-    </div>
-  );
-}
+
 
 /* ════════════════════════════════════════════════════════════
    HERO SECTION
@@ -713,6 +657,8 @@ function MarqueeStrip({ dark = false, reverse = false }) {
 function HeroSection({ apiPrograms, loading }) {
   const secRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: secRef, offset: ["start start", "end start"] });
+  const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
   const hY   = useTransform(scrollYProgress, [0,1], [0,-110]);
   const hO   = useTransform(scrollYProgress, [0,.6], [1,0.9]);
   const hS   = useTransform(scrollYProgress, [0,1], [1,.83]);
@@ -752,7 +698,7 @@ function HeroSection({ apiPrograms, loading }) {
       </motion.div>
 
       {/* Dot grid */}
-      <div className="absolute inset-0 opacity-[.03]" style={{ backgroundImage: "radial-gradient(circle,#E66B26 1px,transparent 1px)", backgroundSize: "30px 30px" }} />
+      <div className="absolute inset-0 opacity-[.03]" style={{ backgroundImage: "radial-gradient(circle,#F04A06 1px,transparent 1px)", backgroundSize: "30px 30px" }} />
 
       {/* Blobs */}
       <motion.div style={{ x: b1x, y: b1y }} className="absolute top-10 left-[4%] w-[420px] h-[420px] pointer-events-none">
@@ -764,8 +710,8 @@ function HeroSection({ apiPrograms, loading }) {
 
       {/* Floating decorative orbs */}
       <Float className="absolute top-1/4 left-[8%] w-3 h-3 rounded-full bg-[#D4AF37]/30" duration={5} delay={0} />
-      <Float className="absolute top-1/3 right-[10%] w-2 h-2 rounded-full bg-[#E66B26]/25" duration={4} delay={1} />
-      <Float className="absolute bottom-1/4 left-[15%] w-4 h-4 rounded-full bg-[#C5531A]/20" duration={6} delay={2} />
+      <Float className="absolute top-1/3 right-[10%] w-2 h-2 rounded-full bg-[#F04A06]/25" duration={4} delay={1} />
+      <Float className="absolute bottom-1/4 left-[15%] w-4 h-4 rounded-full bg-[#F04A06]/20" duration={6} delay={2} />
       <Float className="absolute bottom-1/3 right-[18%] w-2.5 h-2.5 rounded-full bg-[#D4AF37]/25" duration={5.5} delay={0.5} />
 
       {/* Ticker */}
@@ -773,7 +719,7 @@ function HeroSection({ apiPrograms, loading }) {
         <div className="absolute top-16 left-0 right-0 z-10 overflow-hidden border-y border-black/[.055] bg-white/70 backdrop-blur-md py-2.5">
           <motion.div className="flex gap-14 whitespace-nowrap" animate={{ x: ["0%", "-50%"] }} transition={{ repeat: Infinity, duration: 44, ease: "linear" }}>
             {[...apiPrograms.slice(0,6), ...apiPrograms.slice(0,6)].map((p,i) => (
-              <Link key={i} to={`/Programs/${p.id}`} className="flex items-center gap-3 text-sm text-[#1A1A1A] hover:text-[#E66B26] transition-colors group">
+              <Link key={i} to={`/Programs/${p.id}`} className="flex items-center gap-3 text-sm text-[#1A1A1A] hover:text-[#F04A06] transition-colors group">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D4AF37] opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D4AF37]" />
@@ -788,13 +734,13 @@ function HeroSection({ apiPrograms, loading }) {
       )}
 
       {/* Main content */}
-      <motion.div style={{ y: hY, opacity: hO, scale: hS }} className="relative z-10 text-center px-6 max-w-6xl mx-auto mt-24">
+      <motion.div style={{ y: hY, opacity: hO, scale: hS }} className="relative z-10 text-center px-6 max-w-6xl mx-auto mt-24 pb-24">
         <motion.div initial={{ scale:.7, opacity:0, y:20 }} animate={{ scale:1, opacity:1, y:0 }} transition={{ duration:.65, ease: EASE_BACK }}
-          className="inline-flex items-center gap-2 border border-[#E66B26]/14 rounded-full px-5 py-2.5 mb-8 bg-white/80 backdrop-blur-sm shadow-sm">
+          className="inline-flex items-center gap-2 border border-[#F04A06]/14 rounded-full px-5 py-2.5 mb-8 bg-white/80 backdrop-blur-sm shadow-sm">
           <motion.div animate={{ rotate:[0,20,-20,0] }} transition={{ duration:2.8, repeat:Infinity, ease:"easeInOut" }}>
             <Sparkles className="w-4 h-4 text-[#D4AF37]" />
           </motion.div>
-          <span className="text-sm text-[#E66B26] font-bold tracking-wide">Innovation Through Technology</span>
+          <span className="text-sm text-[#F04A06] font-bold tracking-wide">Innovation Through Technology</span>
         </motion.div>
 
         <div className="flex items-center justify-center mb-6" style={{ minHeight: "clamp(110px,18vw,240px)" }}>
@@ -818,45 +764,40 @@ function HeroSection({ apiPrograms, loading }) {
         <motion.div initial={{ opacity:0, y:18 }} animate={{ opacity:1, y:0 }} transition={{ duration:.72, delay:.62 }}
           className="flex flex-col sm:flex-row gap-4 justify-center">
           <MagBtn onClick={() => document.getElementById("programs")?.scrollIntoView({ behavior:"smooth" })}
-            className="group relative px-9 py-4 bg-[#E66B26] text-white rounded-full font-bold text-sm overflow-hidden shadow-xl shadow-[#E66B26]/30">
+            className="group relative px-9 py-4 bg-[#F04A06] text-white rounded-full font-bold text-sm overflow-hidden shadow-xl shadow-[#F04A06]/30">
             <span className="relative z-10 flex items-center justify-center gap-2">
               Get Started
               <motion.span animate={{ x:[0,4,0] }} transition={{ duration:1.6, repeat:Infinity }}><ArrowRight className="w-4 h-4" /></motion.span>
             </span>
-            <motion.div className="absolute inset-0 bg-[#C5531A] rounded-full origin-center" initial={{ scale:0 }} whileHover={{ scale:3 }} transition={{ duration:.5 }} />
+            <motion.div className="absolute inset-0 bg-[#F04A06] rounded-full origin-center" initial={{ scale:0 }} whileHover={{ scale:3 }} transition={{ duration:.5 }} />
           </MagBtn>
-          <MagBtn onClick={() => document.getElementById("about")?.scrollIntoView({ behavior:"smooth" })}
-            className="px-9 py-4 border-2 border-[#E66B26] text-[#E66B26] rounded-full font-bold text-sm bg-white hover:bg-[#FFF4ED] transition-colors">
-            Learn More
-          </MagBtn>
+          <button
+  onClick={() => document.getElementById("about")?.scrollIntoView({ behavior:"smooth" })}
+  className="px-9 py-4 border-2 border-[#F04A06] text-[#F04A06] rounded-full font-bold text-sm bg-white hover:bg-[#FFF4ED] transition-colors"
+>
+  Learn More
+</button>
         </motion.div>
 
-        {/* Stats pills */}
-        <motion.div initial={{ opacity:0, y:28 }} animate={{ opacity:1, y:0 }} transition={{ duration:.82, delay:1.05 }}
-          className="flex flex-wrap justify-center gap-3 mt-12">
-          {[{n:"1200+",l:"Students"},{n:"150+",l:"Projects"},{n:"80+",l:"Workshops"},{n:"3000+",l:"Community"}].map((s,i) => (
-            <Float key={i} duration={4 + i * 0.5} delay={i * 0.3}>
-              <motion.div
-               
-                whileHover={{ y:-5, scale:1.07, boxShadow:"0 12px 30px rgba(0,0,0,0.08)" }}
-                className="flex items-center gap-2 bg-white/85 border border-gray-200/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-sm cursor-default">
-                <span className="font-black text-[#E66B26] text-sm">{s.n}</span>
-                <span className="text-xs text-gray-400">{s.l}</span>
-              </motion.div>
-            </Float>
-          ))}
-        </motion.div>
+       
       </motion.div>
 
       {/* Scroll cue */}
-      <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:2.2 }}
+      <motion.div
+  style={{ opacity: scrollOpacity }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 2.2 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 cursor-pointer"
         onClick={() => document.getElementById("services-section")?.scrollIntoView({ behavior:"smooth" })}>
         <Float duration={2} yRange={10}>
-          <div className="w-5 h-8 border-2 border-[#E66B26]/28 rounded-full flex justify-center">
-            <motion.div className="w-1 h-2 bg-[#D4AF37] rounded-full mt-2"
-              animate={{ y:[0,10,0], opacity:[1,.4,1] }} transition={{ duration:1.8, repeat:Infinity }} />
-          </div>
+          <div className="w-7 h-12 border-2 border-[#F04A06]/28 rounded-full flex justify-center">
+  <motion.div
+    className="w-1.5 h-3 bg-[#D4AF37] rounded-full mt-3"
+    animate={{ y: [0, 14, 0], opacity: [1, 0.4, 1] }}
+    transition={{ duration: 1.8, repeat: Infinity }}
+  />
+</div>
         </Float>
       </motion.div>
     </section>
@@ -864,94 +805,247 @@ function HeroSection({ apiPrograms, loading }) {
 }
 
 /* ════════════════════════════════════════════════════════════
-   SERVICES  (dark + spotlight)
+   OrbitalCard — place ABOVE ServicesSection
 ════════════════════════════════════════════════════════════ */
-function ServicesSection() {
-  const [active, setActive] = useState(0);
-  const [rotating, setRotating] = useState(true);
-  const rotRef = useRef(null);
+function OrbitalCard({ index, total, active, angleRef, svc, Icon, onClick }) {
+  const cardRef = useRef(null);
+  const RAD_LG  = 184;
+  const RAD_SM  = 130;
+
   useEffect(() => {
-    if (rotating) rotRef.current = setInterval(() => setActive(p => (p+1) % SERVICES.length), 4600);
-    return () => clearInterval(rotRef.current);
-  }, [rotating]);
+    let raf;
+    const update = () => {
+      if (!cardRef.current) return;
+      const rad   = window.innerWidth < 768 ? RAD_SM : RAD_LG;
+      const step  = 360 / total;
+      const ang   = ((index * step) - angleRef.current) * (Math.PI / 180);
+      const x     = Math.sin(ang) * rad;
+      const y     = -Math.cos(ang) * rad * 0.72;
+      const isA   = index === active;
+      const scale = isA ? 1.1 : 0.72;
+      cardRef.current.style.transform =
+        `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${scale})`;
+      cardRef.current.style.opacity = isA ? "1" : "0.75";
+      cardRef.current.style.zIndex  = isA ? "10" : "1";
+      raf = requestAnimationFrame(update);
+    };
+    raf = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(raf);
+  }, [active, index, total]);
 
   return (
-    <section id="services-section" data-dots-anchor className="py-28 px-4 sm:px-6 overflow-hidden relative" style={{ background: "#0f0f0f" }}>
-      <Spotlight color="rgba(212,175,55,0.06)" size={650} />
-      <div className="absolute inset-0 opacity-[.025]" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/asfalt-dark.png')" }} />
+    <div
+      ref={cardRef}
+      onClick={onClick}
+      style={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        width: 140,
+        cursor: "pointer",
+        transition: "opacity 0.5s ease, box-shadow 0.3s ease",
+        willChange: "transform",
+        borderColor: "rgba(0,0,0,0.08)",
+      }}
+      className="rounded-2xl p-4 border bg-white"
+      onMouseEnter={(e) =>
+        (e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.10)")
+      }
+      onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
+    >
+      <div
+        className="inline-flex p-2 rounded-xl mb-2"
+        style={{ background: `${svc.accent}1e` }}
+      >
+        <Icon className="w-4 h-4" style={{ color: svc.accent }} />
+      </div>
+      <h4 className="text-xs font-bold text-[#1A1A1A] mb-1">{svc.title}</h4>
+      <p className="text-[10px] text-gray-500">{svc.shortDesc}</p>
+    </div>
+  );
+}
 
-      {/* Floating particles */}
+/* ════════════════════════════════════════════════════════════
+   ServicesSection
+════════════════════════════════════════════════════════════ */
+function ServicesSection() {
+  const SPEED    = 0.006;
+  const INTERVAL = 12000;
+
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  const angleRef  = useRef(0);
+  const rafRef    = useRef(null);
+  const dwellRef  = useRef(0);
+  const lastTRef  = useRef(null);
+
+  useEffect(() => {
+    const tick = (timestamp) => {
+      if (lastTRef.current === null) lastTRef.current = timestamp;
+      const delta = timestamp - lastTRef.current;
+      lastTRef.current = timestamp;
+
+      if (!paused) {
+        angleRef.current += SPEED * delta;
+        if (angleRef.current >= 360) angleRef.current -= 360;
+
+        dwellRef.current += delta;
+        if (dwellRef.current >= INTERVAL) {
+          dwellRef.current = 0;
+          setActive((p) => (p + 1) % SERVICES.length);
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [paused]);
+
+  return (
+    <section
+      id="services-section"
+      data-dots-anchor
+      className="py-28 px-4 sm:px-6 overflow-hidden relative bg-gradient-to-b from-white to-[#FFF4ED]"
+    >
+      {/* LIGHT PARTICLES */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {Array.from({length:6}).map((_,i)=>(
-          <Float key={i} duration={5+i} delay={i*0.8} yRange={20}
-            className="absolute" style={{ left:`${10+i*16}%`, top:`${20+i*10}%` }}>
-            <div className="w-1 h-1 rounded-full bg-[#D4AF37]/20" />
+        {Array.from({ length: 6 }).map((_, i) => (
+          <Float
+            key={i}
+            duration={5 + i}
+            delay={i * 0.8}
+            yRange={15}
+            className="absolute"
+            style={{ left: `${10 + i * 16}%`, top: `${20 + i * 10}%` }}
+          >
+            <div className="w-1 h-1 rounded-full bg-[#F04A06]/20" />
           </Float>
         ))}
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
+        {/* HEADER */}
         <div className="text-center mb-16">
-          <SLabel text="What We Do" />
-          <AHeading className="text-[clamp(2.2rem,4.5vw,4rem)] font-black mt-2 text-white" delay={.05}>
+          <span className="text-lg sm:text-xl font-bold tracking-wide text-[#D4AF37]">
+            What We Do
+          </span>
+          <AHeading
+            className="text-[clamp(2.2rem,4.5vw,4rem)] font-black mt-2 text-[#F04A06]"
+            delay={0.05}
+          >
             Transforming Ideas into Reality
           </AHeading>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-14 items-center">
-          {/* Panel */}
+          {/* LEFT PANEL */}
           <Reveal from="left" className="w-full lg:w-[42%]">
             <AnimatePresence mode="wait">
-              <motion.div key={active}
-                initial={{ opacity:0, x:-45, filter:"blur(10px)" }}
-                animate={{ opacity:1, x:0,  filter:"blur(0px)"  }}
-                exit={{ opacity:0, x:45, filter:"blur(10px)" }}
-                transition={{ duration:.55, ease: EASE_EXPO }}
-                className="relative rounded-3xl p-8 border overflow-hidden"
-                style={{ borderColor:`${SERVICES[active].accent}28`, background:`linear-gradient(135deg,${SERVICES[active].accent}08,transparent)` }}
-                onMouseEnter={() => setRotating(false)} onMouseLeave={() => setRotating(true)}>
-                <div className="absolute -top-24 -right-24 w-56 h-56 rounded-full blur-[65px] pointer-events-none"
-                  style={{ background:`${SERVICES[active].accent}1a` }} />
+              <motion.div
+                key={active}
+                initial={{ opacity: 0, x: -45 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 45 }}
+                transition={{ duration: 0.55 }}
+                className="relative rounded-3xl p-8 border overflow-hidden bg-white"
+                style={{ borderColor: "rgba(0,0,0,0.08)" }}
+                onMouseEnter={() => setPaused(true)}
+                onMouseLeave={() => setPaused(false)}
+              >
                 <TiltCard className="relative">
-                  <motion.div className="inline-flex p-4 rounded-2xl mb-6"
-                    style={{ background:`${SERVICES[active].accent}22`, border:`1px solid ${SERVICES[active].accent}38` }}
-                    whileHover={{ rotate:8, scale:1.12 }}>
-                    {(()=>{ const I=SERVICES[active].icon; return <I className="w-8 h-8" style={{ color:SERVICES[active].accent }} />; })()}
+                  <motion.div
+                    className="inline-flex p-4 rounded-2xl mb-6"
+                    style={{
+                      background: `${SERVICES[active].accent}22`,
+                      border: `1px solid ${SERVICES[active].accent}38`,
+                    }}
+                    whileHover={{ rotate: 8, scale: 1.12 }}
+                  >
+                    {(() => {
+                      const I = SERVICES[active].icon;
+                      return (
+                        <I
+                          className="w-8 h-8"
+                          style={{ color: SERVICES[active].accent }}
+                        />
+                      );
+                    })()}
                   </motion.div>
-                  <h3 className="text-2xl lg:text-3xl font-black mb-4 text-white">{SERVICES[active].title}</h3>
-                  <p className="text-sm text-white/58 leading-relaxed mb-6">{SERVICES[active].fullDesc}</p>
-                  <StaggerContainer className="space-y-2.5 mb-7" stagger={0.08} from="left">
-                    {SERVICES[active].features.map((f,i) => (
+
+                  <h3 className="text-2xl lg:text-3xl font-black mb-4 text-[#1A1A1A]">
+                    {SERVICES[active].title}
+                  </h3>
+
+                  <p className="text-sm text-gray-600 leading-relaxed mb-6">
+                    {SERVICES[active].fullDesc}
+                  </p>
+
+                  <StaggerContainer
+                    className="space-y-2.5 mb-7"
+                    stagger={0.08}
+                    from="left"
+                  >
+                    {SERVICES[active].features.map((f, i) => (
                       <div key={i} className="flex items-center gap-3">
-                        <motion.div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background:SERVICES[active].accent }}
-                          animate={{ scale:[1,1.5,1] }} transition={{ duration:2, repeat:Infinity, delay:i*.3 }} />
-                        <span className="text-sm text-white/68">{f}</span>
+                        <div
+                          className="w-1.5 h-1.5 rounded-full"
+                          style={{ background: SERVICES[active].accent }}
+                        />
+                        <span className="text-sm text-gray-600">{f}</span>
                       </div>
                     ))}
                   </StaggerContainer>
+
                   <Link to={SERVICES[active].path}>
-  <motion.button
-    whileHover={{ x:5 }}
-    className="flex items-center gap-2 text-sm font-bold"
-    style={{ color: SERVICES[active].accent }}
-  >
-    Explore Service <ArrowRight className="w-4 h-4" />
-  </motion.button>
-</Link>
+                    <motion.button
+                      whileHover={{ x: 5 }}
+                      className="flex items-center gap-2 text-sm font-bold"
+                      style={{ color: SERVICES[active].accent }}
+                    >
+                      Explore Service <ArrowRight className="w-4 h-4" />
+                    </motion.button>
+                  </Link>
                 </TiltCard>
-                {/* Timer bar */}
-                <div className="mt-6 pt-5 border-t border-white/10">
-                  <div className="h-0.5 bg-white/10 rounded-full overflow-hidden">
-                    <motion.div key={active} className="h-full rounded-full" style={{ background:SERVICES[active].accent }}
-                      initial={{ width:"0%" }} animate={{ width:"100%" }} transition={{ duration:4.6, ease:"linear" }} />
+
+                {/* PROGRESS BAR */}
+                <div className="mt-6 pt-5 border-t border-gray-200">
+                  <div className="h-0.5 bg-gray-200 rounded-full overflow-hidden">
+                    <motion.div
+                      key={active}
+                      className="h-full rounded-full"
+                      style={{ background: SERVICES[active].accent }}
+                      initial={{ width: "0%" }}
+                      animate={{ width: "100%" }}
+                      transition={{ duration: 12, ease: "linear" }}
+                    />
                   </div>
                 </div>
+
+                {/* DOT NAV */}
                 <div className="mt-4 flex items-center justify-between">
-                  <span className="text-white/25 text-xs">{active+1} / {SERVICES.length}</span>
+                  <span className="text-gray-400 text-xs">
+                    {active + 1} / {SERVICES.length}
+                  </span>
                   <div className="flex gap-2">
-                    {SERVICES.map((_,i) => (
-                      <button key={i} onClick={() => setActive(i)} className="h-1.5 rounded-full transition-all"
-                        style={{ width:i===active?24:6, background:i===active?SERVICES[active].accent:"rgba(255,255,255,0.18)" }} />
+                    {SERVICES.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          setActive(i);
+                          dwellRef.current = 0;
+                        }}
+                        className="h-1.5 rounded-full transition-all"
+                        style={{
+                          width: i === active ? 24 : 6,
+                          background:
+                            i === active
+                              ? SERVICES[active].accent
+                              : "rgba(0,0,0,0.2)",
+                        }}
+                      />
                     ))}
                   </div>
                 </div>
@@ -959,65 +1053,51 @@ function ServicesSection() {
             </AnimatePresence>
           </Reveal>
 
-          {/* Orbital */}
-          <Reveal from="right" className="w-full lg:w-[58%]" delay={.1}>
-            <div className="relative h-[440px] md:h-[520px] flex items-center justify-center"
-              onMouseEnter={() => setRotating(false)} onMouseLeave={() => setRotating(true)}>
-              {[218,160,102].map((r,i)=>(
-                <motion.div key={i} className="absolute rounded-full"
-                  style={{ width:r*2, height:r*2, border:`1px solid rgba(255,255,255,${.025+i*.015})` }}
-                  animate={{ rotate:i%2===0?360:-360 }} transition={{ duration:22+i*9, repeat:Infinity, ease:"linear" }} />
+          {/* RIGHT ORBITAL */}
+          <Reveal from="right" className="w-full lg:w-[58%]">
+            <div
+              className="relative h-[440px] md:h-[520px] flex items-center justify-center"
+              onMouseEnter={() => setPaused(true)}
+              onMouseLeave={() => setPaused(false)}
+            >
+              {/* Slow rotating rings */}
+              {[218, 160, 102].map((r, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute rounded-full"
+                  style={{
+                    width: r * 2,
+                    height: r * 2,
+                    border: `1px solid rgba(0,0,0,${0.05 + i * 0.03})`,
+                  }}
+                  animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
+                  transition={{
+                    duration: 45 + i * 14,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                />
               ))}
-              <motion.div
-               
-                animate={{ scale:[1,1.08,1], boxShadow:[`0 0 24px ${SERVICES[active].accent}3a`,`0 0 55px ${SERVICES[active].accent}55`,`0 0 24px ${SERVICES[active].accent}3a`] }}
-                transition={{ duration:2.6, repeat:Infinity, ease:"easeInOut" }}
-                className="absolute w-20 h-20 rounded-2xl flex items-center justify-center z-20 border"
-                style={{ background:`${SERVICES[active].accent}1a`, borderColor:`${SERVICES[active].accent}48` }}>
-                <Sparkles className="w-8 h-8" style={{ color:SERVICES[active].accent }} />
-              </motion.div>
 
-              {SERVICES.map((svc,i) => {
-                const ang = (i-active)*(360/SERVICES.length);
-                const rad = typeof window!=="undefined"&&window.innerWidth<768?130:184;
-                const ox = Math.sin((ang*Math.PI)/180)*rad;
-                const oy = -Math.cos((ang*Math.PI)/180)*rad*.72;
-                const isA = i===active;
+              {/* Orbital cards */}
+              {SERVICES.map((svc, i) => {
                 const Icon = svc.icon;
                 return (
-                  <motion.div key={svc.id} className="absolute"
-                    animate={{ x:ox, y:oy, scale:isA?1.15:.72, zIndex:isA?20:10, opacity:Math.abs(i-active)<=2||Math.abs(i-active)>=SERVICES.length-2?1:.14 }}
-                    transition={{ type:"spring", stiffness:88, damping:17 }}
-                    onClick={() => setActive(i)}>
-                    <motion.div
-                     
-                      whileHover={{ scale:1.08 }} className="w-[140px] cursor-pointer rounded-2xl p-4 border backdrop-blur-sm"
-                      style={{ borderColor:isA?`${svc.accent}55`:"rgba(255,255,255,0.07)", background:isA?`${svc.accent}11`:"rgba(255,255,255,0.035)", boxShadow:isA?`0 0 30px ${svc.accent}22`:"none" }}>
-                      <div
-                        data-tbi={svc.icon===CpuIcon?"svc-cpu":svc.icon===Code2?"svc-code":svc.icon===TrendingUp?"svc-trend":undefined}
-                        className="inline-flex p-2 rounded-xl mb-2.5" style={{ background:`${svc.accent}1e` }}>
-                        <Icon className="w-4 h-4" style={{ color:svc.accent }} />
-                      </div>
-                      <h4 className="font-bold text-xs text-white mb-1 line-clamp-2">{svc.title}</h4>
-                      <p className="text-[10px] text-white/38 line-clamp-2">{svc.shortDesc}</p>
-                      {isA && <motion.div layoutId="svc-dot" className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full border-2 border-[#0f0f0f]"
-                        style={{ background:svc.accent }} initial={{ scale:0 }} animate={{ scale:1 }} />}
-                    </motion.div>
-                  </motion.div>
+                  <OrbitalCard
+                    key={svc.id}
+                    index={i}
+                    total={SERVICES.length}
+                    active={active}
+                    angleRef={angleRef}
+                    svc={svc}
+                    Icon={Icon}
+                    onClick={() => {
+                      setActive(i);
+                      dwellRef.current = 0;
+                    }}
+                  />
                 );
               })}
-            </div>
-            <div className="flex justify-center gap-3 mt-2">
-              {[
-                { l:"‹", f:()=>setActive(p=>(p-1+SERVICES.length)%SERVICES.length) },
-                { l:rotating?"⏸":"▶", f:()=>setRotating(p=>!p) },
-                { l:"›", f:()=>setActive(p=>(p+1)%SERVICES.length) },
-              ].map((b,i)=>(
-                <motion.button key={i} whileHover={{ scale:1.1 }} whileTap={{ scale:.9 }} onClick={b.f}
-                  className="w-10 h-10 rounded-full border border-white/10 bg-white/5 hover:bg-white/12 text-white text-lg flex items-center justify-center transition-colors">
-                  {b.l}
-                </motion.button>
-              ))}
             </div>
           </Reveal>
         </div>
@@ -1025,7 +1105,6 @@ function ServicesSection() {
     </section>
   );
 }
-
 /* ════════════════════════════════════════════════════════════
    STATS
 ════════════════════════════════════════════════════════════ */
@@ -1039,14 +1118,14 @@ function StatsSection() {
           {Array.from({length:4}).map((_,i)=>(
             <Float key={i} duration={6+i} delay={i*1.2} yRange={24}
               className="absolute" style={{ left:`${15+i*22}%`, bottom:`${10+i*8}%` }}>
-              <div className="rounded-full bg-[#E66B26]/[0.04]" style={{ width:80+i*30, height:80+i*30 }} />
+              <div className="rounded-full bg-[#F04A06]/[0.04]" style={{ width:80+i*30, height:80+i*30 }} />
             </Float>
           ))}
         </div>
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <SLabel text="Company Impact" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06]" delay={.05}>
               Our Impact in Numbers
             </AHeading>
           </div>
@@ -1059,10 +1138,10 @@ function StatsSection() {
                     <motion.div whileHover={{ rotate:18, scale:1.18 }} className="inline-flex justify-center mb-5">
                       <div
                         data-tbi={s.icon === Users ? "stat-users" : s.icon === Package ? "stat-package" : s.icon === Globe ? "stat-globe" : undefined}
-                        className="bg-[#E66B26] p-3 rounded-xl shadow-lg shadow-[#E66B26]/22"><Icon className="w-6 h-6 text-white" /></div>
+                        className="bg-[#F04A06] p-3 rounded-xl shadow-lg shadow-[#F04A06]/22"><Icon className="w-6 h-6 text-white" /></div>
                     </motion.div>
                     <h3 className="text-3xl md:text-4xl font-black text-[#1A1A1A] mb-1"><Counter value={s.value} /></h3>
-                    <p className="text-[#E66B26] uppercase tracking-widest text-[11px] font-bold mb-1">{s.label}</p>
+                    <p className="text-[#F04A06] uppercase tracking-widest text-[11px] font-bold mb-1">{s.label}</p>
                     <p className="text-xs text-gray-400">{s.description}</p>
                   </motion.div>
                 </TiltCard>
@@ -1086,9 +1165,12 @@ function ProgramsSection() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <SLabel text="Our Core Programs" />
-          <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
-            Programs We Deliver
-          </AHeading>
+          <AHeading
+  className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06] leading-tight pt-1"
+  delay={.05}
+>
+  Programs We Deliver
+</AHeading>
           <Reveal from="scale" delay={.3}>
             <div className="w-20 h-0.5 bg-[#D4AF37] mx-auto mt-5" />
           </Reveal>
@@ -1150,9 +1232,9 @@ function ProgramsSection() {
 function WhyUsSection() {
   return (
     <>
-      <MarqueeStrip />
+      
       <section data-dots-anchor className="py-24 px-4 sm:px-6 relative overflow-hidden" style={{ background:"#F7F4EF" }}>
-        <div className="absolute inset-0 opacity-[.03]" style={{ backgroundImage:"radial-gradient(circle,#E66B26 1px,transparent 1px)", backgroundSize:"24px 24px" }} />
+        <div className="absolute inset-0 opacity-[.03]" style={{ backgroundImage:"radial-gradient(circle,#F04A06 1px,transparent 1px)", backgroundSize:"24px 24px" }} />
         {/* Big floating background text */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none">
           <motion.span className="text-[18vw] font-black leading-none tracking-tighter uppercase"
@@ -1164,7 +1246,7 @@ function WhyUsSection() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <SLabel text="Why Stackenzo" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06] leading-tight pt-1" delay={.05}>
               Why Choose Stackenzo
             </AHeading>
           </div>
@@ -1178,7 +1260,7 @@ function WhyUsSection() {
                       <motion.div className="inline-flex justify-center mb-6" whileHover={{ scale:1.22, rotate:12 }}>
                         <div
                           data-tbi={i===0?"why-zap":i===1?"why-target":i===2?"why-heart":undefined}
-                          className="p-4 rounded-2xl bg-[#FFF4ED]"><Icon className="w-7 h-7 text-[#E66B26]" /></div>
+                          className="p-4 rounded-2xl bg-[#FFF4ED]"><Icon className="w-7 h-7 text-[#F04A06]" /></div>
                       </motion.div>
                     </Float>
                     <h3 className="text-lg font-black text-[#1A1A1A] mb-3">{f.title}</h3>
@@ -1190,7 +1272,7 @@ function WhyUsSection() {
           </StaggerContainer>
         </div>
       </section>
-      <MarqueeStrip reverse />
+      
     </>
   );
 }
@@ -1212,13 +1294,13 @@ function AboutSection() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <SLabel text="About Stackenzo" />
-          <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+          <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06]" delay={.05}>
             Our Mission & Vision
           </AHeading>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Reveal from="left">
-            <GlowCard accent="#E66B26" className="h-full">
+            <GlowCard accent="#F04A06" className="h-full">
               <TiltCard>
                 <motion.div whileHover={{ boxShadow:"0 28px 65px rgba(0,0,0,0.09)" }}
                   className="bg-white border border-gray-100 rounded-2xl p-8 md:p-10 hover:border-[#D4AF37] transition-all shadow-sm h-full">
@@ -1226,24 +1308,14 @@ function AboutSection() {
                     <Float duration={4} yRange={6}>
                       <motion.div whileHover={{ rotate:16, scale:1.12 }}
                         data-tbi="about-target"
-                        className="bg-[#E66B26] p-3 rounded-xl shadow-lg shadow-[#E66B26]/18">
+                        className="bg-[#F04A06] p-3 rounded-xl shadow-lg shadow-[#F04A06]/18">
                         <Target className="w-6 h-6 text-white" />
                       </motion.div>
                     </Float>
-                    <h3 className="text-2xl font-black text-[#E66B26]">Our Mission</h3>
+                    <h3 className="text-2xl font-black text-[#F04A06]">Our Mission</h3>
                   </div>
-                  <p className="text-sm text-gray-500 leading-relaxed mb-7">Our mission is to design, develop, and deliver intelligent technology solutions that solve real-world challenges with precision, scalability, and long-term impact—across IT services, R&D, and EdTech.</p>
-                  <StaggerContainer className="space-y-3" stagger={0.08} from="left">
-                    {ITEMS.map((item,i) => (
-                      <div key={i} className="flex items-start gap-3">
-                        <motion.div
-                         
-                          className="w-1.5 h-1.5 bg-[#D4AF37] rounded-full mt-2 shrink-0"
-                          animate={{ scale:[1,1.45,1] }} transition={{ duration:2.2, repeat:Infinity, delay:i*.24 }} />
-                        <span className="text-sm text-gray-600">{item}</span>
-                      </div>
-                    ))}
-                  </StaggerContainer>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-7">Our mission is to design, develop, and deliver intelligent technology solutions that solve real-world challenges with precision, scalability, and long-term impact—across IT services, R&D, and EdTech. We focus on building scalable, secure, and future-ready digital solutions while seamlessly bridging academic knowledge with real-world implementation. By empowering startups, institutions, and enterprises through innovation, we enable sustainable growth and digital transformation. We automate complex processes to enhance productivity and efficiency, foster a strong research-driven engineering culture, and continuously promote learning, skill development, and technological excellence to prepare individuals and organizations for the future.</p>
+                  
                 </motion.div>
               </TiltCard>
             </GlowCard>
@@ -1258,11 +1330,11 @@ function AboutSection() {
                     <Float duration={4.5} yRange={6}>
                       <motion.div whileHover={{ rotate:16, scale:1.12 }}
                         data-tbi="about-eye"
-                        className="bg-[#E66B26] p-3 rounded-xl shadow-lg shadow-[#E66B26]/18">
+                        className="bg-[#F04A06] p-3 rounded-xl shadow-lg shadow-[#F04A06]/18">
                         <Eye className="w-6 h-6 text-white" />
                       </motion.div>
                     </Float>
-                    <h3 className="text-2xl font-black text-[#E66B26]">Our Vision</h3>
+                    <h3 className="text-2xl font-black text-[#F04A06]">Our Vision</h3>
                   </div>
                   <p className="text-sm text-gray-500 leading-relaxed mb-7">To become a leading innovation-driven technology ecosystem where IT services, R&D, and EdTech converge to create meaningful impact. We aim to advance applied research, transform breakthrough ideas into scalable digital solutions, and deliver intelligent systems that empower businesses and learners alike. By integrating technological excellence with innovation and education, we strive to shape a smarter, more connected future.</p>
                   <Reveal from="bottom" delay={.35}>
@@ -1281,57 +1353,100 @@ function AboutSection() {
   );
 }
 
-/* ════════════════════════════════════════════════════════════
-   TESTIMONIALS
-════════════════════════════════════════════════════════════ */
 function TestimonialsSection() {
   const [idx, setIdx] = useState(0);
-  useEffect(() => { const t = setInterval(() => setIdx(p=>(p+1)%TESTIMONIALS.length), 5500); return ()=>clearInterval(t); },[]);
+
+  useEffect(() => {
+    const t = setInterval(() => setIdx(p => (p + 1) % TESTIMONIALS.length), 5500);
+    return () => clearInterval(t);
+  }, []);
 
   return (
-    <section id="testimonials-section" data-dots-anchor className="py-24 px-4 sm:px-6 relative overflow-hidden" style={{ background:"#0f0f0f" }}>
-      <Spotlight color="rgba(230,107,38,0.09)" />
-      <div className="absolute inset-0"><ParticleCanvas count={16} color="rgba(212,175,55,0.07)" /></div>
+    <section
+      id="testimonials-section"
+      data-dots-anchor
+      className="py-24 px-4 sm:px-6 relative overflow-hidden"
+      style={{
+        background: "linear-gradient(120deg, #ffffff, #fff5f0, #ffffff)"
+      }}
+    >
+      <Spotlight color="rgba(240,74,6,0.08)" />
+
+      <div className="absolute inset-0">
+        <ParticleCanvas count={16} color="rgba(240,74,6,0.08)" />
+      </div>
+
       {/* Floating orbs */}
-      {[{x:"10%",y:"20%",s:80,d:5},{x:"85%",y:"15%",s:60,d:7},{x:"70%",y:"75%",s:100,d:6}].map((o,i)=>(
-        <Float key={i} duration={o.d} yRange={15} className="absolute pointer-events-none" style={{ left:o.x, top:o.y }}>
-          <div className="rounded-full bg-[#D4AF37]/[0.04]" style={{ width:o.s, height:o.s }} />
+      {[{ x: "10%", y: "20%", s: 80, d: 5 }, { x: "85%", y: "15%", s: 60, d: 7 }, { x: "70%", y: "75%", s: 100, d: 6 }].map((o, i) => (
+        <Float key={i} duration={o.d} yRange={15} className="absolute pointer-events-none" style={{ left: o.x, top: o.y }}>
+          <div className="rounded-full bg-[#F04A06]/[0.08]" style={{ width: o.s, height: o.s }} />
         </Float>
       ))}
+
       <div className="max-w-4xl mx-auto relative z-10">
+        
+        {/* Heading */}
         <div className="text-center mb-14">
           <SLabel text="Testimonials" />
-          <AHeading className="text-[clamp(2rem,4vw,3.5rem)] font-black mt-2 text-white" delay={.05}>What People Say</AHeading>
+          <AHeading
+            className="text-[clamp(2rem,4vw,3.5rem)] font-black mt-2 text-gray-900"
+            delay={.05}
+          >
+            What People Say
+          </AHeading>
         </div>
 
+        {/* Card */}
         <Reveal from="bottom">
           <AnimatePresence mode="wait">
-            <motion.div key={idx}
-              initial={{ opacity:0, y:60, scale:.96, filter:"blur(8px)" }}
-              animate={{ opacity:1, y:0,  scale:1,   filter:"blur(0px)"  }}
-              exit={{ opacity:0, y:-60, scale:.96, filter:"blur(8px)" }}
-              transition={{ duration:.6, ease: EASE_EXPO }}
-              drag="x" dragConstraints={{ left:0, right:0 }}
-              onDragEnd={(_,i) => { if(i.offset.x<-55) setIdx(p=>(p+1)%TESTIMONIALS.length); if(i.offset.x>55) setIdx(p=>(p-1+TESTIMONIALS.length)%TESTIMONIALS.length); }}
-              className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 backdrop-blur-sm cursor-grab active:cursor-grabbing select-none"
-              style={{ boxShadow:"0 0 0 1px rgba(212,175,55,0.1)" }}>
-              <div className="text-[#D4AF37] text-7xl font-black leading-none mb-4 opacity-25">"</div>
-              <p className="text-lg md:text-xl text-white/78 italic leading-relaxed mb-8">{TESTIMONIALS[idx].quote}</p>
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              onDragEnd={(_, i) => {
+                if (i.offset.x < -55) setIdx(p => (p + 1) % TESTIMONIALS.length);
+                if (i.offset.x > 55) setIdx(p => (p - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+              }}
+              className="bg-white border border-gray-200 shadow-xl rounded-3xl p-8 md:p-12 cursor-grab active:cursor-grabbing select-none"
+            >
+              <div className="text-[#F04A06] text-7xl font-black leading-none mb-4 opacity-20">"</div>
+
+              <p className="text-lg md:text-xl text-gray-600 italic leading-relaxed mb-8">
+                {TESTIMONIALS[idx].quote}
+              </p>
+
               <div className="flex items-center gap-5">
-                <motion.img initial={{ scale:.7, opacity:0 }} animate={{ scale:1, opacity:1 }} transition={{ duration:.38 }}
-                  src={TESTIMONIALS[idx].img} alt={TESTIMONIALS[idx].name}
-                  className="w-14 h-14 rounded-full object-cover border-2 border-[#D4AF37]" />
+                <motion.img
+                  initial={{ scale: .7, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: .38 }}
+                  src={TESTIMONIALS[idx].img}
+                  alt={TESTIMONIALS[idx].name}
+                  className="w-14 h-14 rounded-full object-cover border-2 border-[#F04A06]"
+                />
+
                 <div>
-                  <h4 className="text-base font-black text-white">{TESTIMONIALS[idx].name}</h4>
-                  <p className="text-sm text-white/38">{TESTIMONIALS[idx].role}</p>
+                  <h4 className="text-base font-bold text-gray-900">
+                    {TESTIMONIALS[idx].name}
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    {TESTIMONIALS[idx].role}
+                  </p>
                 </div>
+
                 <div className="ml-auto flex gap-1">
-                  {[...Array(5)].map((_,i)=>(
+                  {[...Array(5)].map((_, i) => (
                     <motion.div
                       key={i}
-                      data-tbi={i < 3 ? "testi-star" : undefined}
-                      initial={{ scale:0 }} animate={{ scale:1 }} transition={{ delay:i*.06, type:"spring" }}>
-                      <Star className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]" />
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: i * .06, type: "spring" }}
+                    >
+                      <Star className="w-4 h-4 fill-[#F04A06] text-[#F04A06]" />
                     </motion.div>
                   ))}
                 </div>
@@ -1340,15 +1455,29 @@ function TestimonialsSection() {
           </AnimatePresence>
         </Reveal>
 
+        {/* Dots */}
         <Reveal from="bottom" delay={.2}>
           <div className="flex justify-center gap-2.5 mt-7 items-center">
-            {TESTIMONIALS.map((_,i)=>(
-              <motion.button key={i} onClick={()=>setIdx(i)} animate={{ scale:i===idx?1.3:1 }} className="rounded-full transition-all"
-                style={{ width:i===idx?28:8, height:8, background:i===idx?"#D4AF37":"rgba(255,255,255,0.18)" }} />
+            {TESTIMONIALS.map((_, i) => (
+              <motion.button
+                key={i}
+                onClick={() => setIdx(i)}
+                animate={{ scale: i === idx ? 1.3 : 1 }}
+                className="rounded-full transition-all"
+                style={{
+                  width: i === idx ? 28 : 8,
+                  height: 8,
+                  background: i === idx ? "#F04A06" : "rgba(0,0,0,0.2)"
+                }}
+              />
             ))}
           </div>
-          <p className="text-center text-white/22 text-xs mt-3">Drag or click to navigate</p>
+
+          <p className="text-center text-gray-400 text-xs mt-3">
+            Drag or click to navigate
+          </p>
         </Reveal>
+
       </div>
     </section>
   );
@@ -1369,7 +1498,7 @@ function CTASection() {
 
   return (
     <>
-      <WaveDivider color="#C5531A" fromBg="#fff" toBg="#3D1A0A" />
+      <WaveDivider color="#F04A06" fromBg="#fff" toBg="#3D1A0A" />
       <section ref={ref} className="relative py-16 overflow-hidden">
         <motion.div className="absolute inset-0" style={{ y:bgY }}>
           <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=100" alt="Team" className="w-full h-full object-cover" />
@@ -1405,7 +1534,7 @@ function CTASection() {
           <Reveal from="bottom" delay={.35}>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <MagBtn onClick={()=>document.getElementById("programs")?.scrollIntoView({ behavior:"smooth" })}
-                className="group relative px-10 py-4 bg-white text-[#E66B26] rounded-full font-black overflow-hidden shadow-2xl shadow-white/18">
+                className="group relative px-10 py-4 bg-white text-[#F04A06] rounded-full font-black overflow-hidden shadow-2xl shadow-white/18">
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   Start Your Journey
                   <motion.span animate={{ x:[0,5,0] }} transition={{ duration:1.5, repeat:Infinity }}><ArrowRight className="w-4 h-4" /></motion.span>
@@ -1426,334 +1555,6 @@ function CTASection() {
   );
 }
 
-/* ════════════════════════════════════════════════════════════
-   TRAVELING ICON BUBBLES  — section-aware + disappear/reappear
-════════════════════════════════════════════════════════════ */
-
-const SECTION_ICON_CONFIG = {
-  hero: [
-    { Icon:Users,    bg:"#E66B26", iconKey:"stat-users",   size:44, iconSize:20, radius:"12px" },
-    { Icon:Package,  bg:"#E66B26", iconKey:"stat-package", size:40, iconSize:18, radius:"12px" },
-    { Icon:Globe,    bg:"#E66B26", iconKey:"stat-globe",   size:36, iconSize:16, radius:"12px" },
-  ],
-  services: [
-    { Icon:CpuIcon,    bg:"#4CAF50", iconKey:"svc-cpu",   size:44, iconSize:20, radius:"12px" },
-    { Icon:Code2,      bg:"#2196F3", iconKey:"svc-code",  size:40, iconSize:18, radius:"12px" },
-    { Icon:TrendingUp, bg:"#E91E63", iconKey:"svc-trend", size:36, iconSize:16, radius:"12px" },
-  ],
-  stats: [
-    { Icon:Users,   bg:"#E66B26", iconKey:"stat-users",   size:44, iconSize:20, radius:"12px" },
-    { Icon:Package, bg:"#E66B26", iconKey:"stat-package", size:40, iconSize:18, radius:"12px" },
-    { Icon:Globe,   bg:"#E66B26", iconKey:"stat-globe",   size:36, iconSize:16, radius:"12px" },
-  ],
-  programs: [
-    { Icon:CpuIcon, bg:"#4CAF50", iconKey:"prog-cpu",   size:42, iconSize:18, radius:"12px" },
-    { Icon:Users,   bg:"#FF9800", iconKey:"prog-users",  size:38, iconSize:17, radius:"12px" },
-    { Icon:Globe,   bg:"#00BCD4", iconKey:"prog-globe",  size:34, iconSize:15, radius:"12px" },
-  ],
-  whyus: [
-    { Icon:Zap,    bg:"#FFF4ED", iconColor:"#E66B26", iconKey:"why-zap",    size:48, iconSize:22, radius:"16px" },
-    { Icon:Target, bg:"#FFF4ED", iconColor:"#E66B26", iconKey:"why-target", size:44, iconSize:20, radius:"16px" },
-    { Icon:Heart,  bg:"#FFF4ED", iconColor:"#E66B26", iconKey:"why-heart",  size:40, iconSize:18, radius:"16px" },
-  ],
-  about: [
-    { Icon:Target, bg:"#E66B26", iconKey:"about-target", size:44, iconSize:20, radius:"12px" },
-    { Icon:Eye,    bg:"#E66B26", iconKey:"about-eye",    size:40, iconSize:18, radius:"12px" },
-    { Icon:Target, bg:"#E66B26", iconKey:null,           size:36, iconSize:16, radius:"12px" }, // no 3rd icon → hide
-  ],
-  // testimonials: no config — bubbles disappear here
-};
-
-const SECTION_CONFIG_MAP = ["hero","services","stats","programs","whyus","about","testimonials"];
-const TESTIMONIALS_IDX   = 6;   // index in SECTION_CONFIG_MAP that triggers disappear
-
-const TBI_FLY_SPEED  = 0.25;   // faster travel
-const TBI_HOLD_MS    = 900;
-const TBI_STAGGER_MS = 500;
-
-function TravelingIconBubbles() {
-  const [bubbleIcons, setBubbleIcons] = useState(SECTION_ICON_CONFIG.hero);
-  const [positions,   setPositions]   = useState([
-    { x:-300, y:-300, scale:1, opacity:1 },
-    { x:-300, y:-300, scale:1, opacity:1 },
-    { x:-300, y:-300, scale:1, opacity:1 },
-  ]);
-  const [ready, setReady] = useState(false);
-
-  /* ── refs (all RAF-safe) ── */
-  const curRef        = useRef([{x:-300,y:-300},{x:-300,y:-300},{x:-300,y:-300}]);
-  const tgtRef        = useRef([{x:-300,y:-300},{x:-300,y:-300},{x:-300,y:-300}]);
-  const mergedRef     = useRef([false,false,false]);
-  const scaleRef      = useRef([1,1,1]);
-  const opacityRef    = useRef([1,1,1]);      // 0 = disappeared, 1 = visible
-  const iconsRef      = useRef(SECTION_ICON_CONFIG.hero);
-  const sectionRef    = useRef(0);
-  const takenEls      = useRef(new Set());
-  const pausedRef     = useRef(false);        // true while in testimonials
-  const disappearing  = useRef([false,false,false]);
-  const rafRef        = useRef(null);
-
-  /* Restore any icon whose opacity/transform we dimmed */
-  const restoreAllIcons = useCallback(() => {
-    document.querySelectorAll("[data-tbi]").forEach(el => {
-      el.style.transition = "opacity 0.35s, transform 0.35s";
-      el.style.opacity    = "";
-      el.style.transform  = "";
-    });
-  }, []);
-
-  /* Read visible icons for a key */
-  const getVisibleIcons = useCallback((iconKey) => {
-    if (!iconKey) return [];
-    return Array.from(document.querySelectorAll(`[data-tbi="${iconKey}"]`))
-      .map(el => {
-        const r = el.getBoundingClientRect();
-        if (r.top < -80 || r.top > window.innerHeight + 80) return null;
-        return { el, cx:r.left+r.width/2, cy:r.top+r.height/2, w:r.width, h:r.height };
-      }).filter(Boolean);
-  }, []);
-
-
-  /* ── Single bubble cycle: find → fly → merge → (maybe disappear) → lift → repeat ── */
-  const runBubble = useCallback((bi) => {
-    const go = () => {
-      if (pausedRef.current) { setTimeout(go, 400); return; }
-
-      const cfg = iconsRef.current[bi];
-
-      /* No iconKey → hide this bubble */
-      if (!cfg || !cfg.iconKey) {
-        opacityRef.current[bi] = 0;
-        setTimeout(go, 800);
-        return;
-      }
-
-      /* Restore if was hidden */
-      if (opacityRef.current[bi] === 0 && !disappearing.current[bi]) {
-        opacityRef.current[bi] = 1;
-      }
-
-      const icons = getVisibleIcons(cfg.iconKey);
-      const avail = icons.filter(ic => !takenEls.current.has(ic.el));
-      if (!avail.length) { setTimeout(go, 400); return; }
-
-      const target = avail[Math.floor(Math.random() * avail.length)];
-      takenEls.current.add(target.el);
-      tgtRef.current[bi] = { x: target.cx, y: target.cy };
-
-      /* ── Arrive: poll every frame, snap when close ── */
-      const arrive = () => {
-        if (pausedRef.current) {
-          target.el.style.opacity   = "";
-          target.el.style.transform = "";
-          takenEls.current.delete(target.el);
-          mergedRef.current[bi] = false;
-          scaleRef.current[bi]  = 1;
-          setTimeout(go, 300);
-          return;
-        }
-
-        /* Re-read target position each frame (icons move with scroll/animation) */
-        const r    = target.el.getBoundingClientRect();
-        const tcx  = r.left + r.width  / 2;
-        const tcy  = r.top  + r.height / 2;
-        tgtRef.current[bi] = { x: tcx, y: tcy };
-
-        const dist = Math.hypot(curRef.current[bi].x - tcx, curRef.current[bi].y - tcy);
-
-        /* Snap speed increases as bubble gets closer */
-        if (dist > 4) { requestAnimationFrame(arrive); return; }
-
-        /* ── INSTANT SNAP to icon center ── */
-        curRef.current[bi] = { x: tcx, y: tcy };
-
-        /* ── MERGE ── */
-        mergedRef.current[bi] = true;
-        scaleRef.current[bi]  = Math.max(r.width, r.height) / cfg.size * 1.06;
-        target.el.style.transition = "opacity 0.15s ease, transform 0.15s ease";
-        target.el.style.opacity    = "0.06";
-        target.el.style.transform  = "scale(0.85)";
-
-        /* ── Testimonials section → disappear after merge ── */
-        if (sectionRef.current === TESTIMONIALS_IDX) {
-          disappearing.current[bi] = true;
-          /* Fade bubble out immediately */
-          opacityRef.current[bi] = 0;
-          /* Fade real icon to full invisible */
-          setTimeout(() => {
-            target.el.style.transition = "opacity 0.35s ease, transform 0.35s ease";
-            target.el.style.opacity    = "0";
-            target.el.style.transform  = "scale(0.65)";
-            mergedRef.current[bi]      = false;
-            scaleRef.current[bi]       = 1;
-            disappearing.current[bi]   = false;
-            takenEls.current.delete(target.el);
-            setTimeout(go, 500);
-          }, 300);
-          return;
-        }
-
-        /* ── Normal LIFT OFF ── */
-        setTimeout(() => {
-          target.el.style.transition = "opacity 0.2s ease, transform 0.2s ease";
-          target.el.style.opacity    = "";
-          target.el.style.transform  = "";
-          mergedRef.current[bi]      = false;
-          scaleRef.current[bi]       = 1;
-          takenEls.current.delete(target.el);
-          go();
-        }, TBI_HOLD_MS);
-      };
-
-      requestAnimationFrame(arrive);
-    };
-
-    go();
-  }, [getVisibleIcons]);
-
-  /* ── Section change handler ── */
-  const handleSectionChange = useCallback((idx) => {
-    const cfgKey = SECTION_CONFIG_MAP[Math.min(idx, SECTION_CONFIG_MAP.length - 1)];
-    sectionRef.current = idx;
-
-    if (idx === TESTIMONIALS_IDX) {
-      /* Give bubbles the star config so they fly to stars and disappear */
-      const tConfig = [
-        { Icon:Star, bg:"#D4AF37", iconKey:"testi-star", size:44, iconSize:20, radius:"50%" },
-        { Icon:Star, bg:"#D4AF37", iconKey:"testi-star", size:40, iconSize:18, radius:"50%" },
-        { Icon:Star, bg:"#D4AF37", iconKey:"testi-star", size:36, iconSize:16, radius:"50%" },
-      ];
-      iconsRef.current = tConfig;
-      setBubbleIcons(tConfig);
-      takenEls.current.clear();
-      mergedRef.current = [false,false,false];
-      scaleRef.current  = [1,1,1];
-      pausedRef.current = false;
-      return;
-    }
-
-    pausedRef.current = false;
-    const newCfg = SECTION_ICON_CONFIG[cfgKey];
-    iconsRef.current = newCfg;
-    setBubbleIcons(newCfg);
-
-    restoreAllIcons();
-    takenEls.current.clear();
-    mergedRef.current = [false,false,false];
-    scaleRef.current  = [1,1,1];
-
-    /* Per-bubble opacity: hide null-key bubbles, show others */
-    const wereAllGone = opacityRef.current.every(o => o === 0);
-    opacityRef.current = newCfg.map(cfg => (!cfg || !cfg.iconKey) ? 0 : 1);
-
-    /* If returning from disappeared state, reposition to center */
-    if (wereAllGone) {
-      const cx = window.innerWidth  * 0.5;
-      const cy = window.innerHeight * 0.5;
-      curRef.current.forEach((_, i) => {
-        curRef.current[i] = { x: cx + (i-1)*60, y: cy };
-        tgtRef.current[i] = { x: cx + (i-1)*60, y: cy };
-      });
-    }
-  }, [restoreAllIcons]);
-
-  /* ── RAF lerp + opacity loop ── */
-  useEffect(() => {
-    const getActiveSectionIdx = () => {
-      const anchors = Array.from(document.querySelectorAll("[data-dots-anchor]"));
-      const mid = window.scrollY + window.innerHeight * 0.45;
-      let active = 0;
-      anchors.forEach((el, i) => { if (mid >= el.offsetTop) active = i; });
-      return active;
-    };
-
-    const onScroll = () => {
-      const idx = getActiveSectionIdx();
-      if (idx === sectionRef.current) return;
-      handleSectionChange(idx);
-      setSectionIdx => {};  // trigger re-render via positions update
-    };
-
-    const lerp = (a, b, t) => a + (b - a) * t;
-    const loop = () => {
-      const t    = Date.now() / 1000;
-      const next = curRef.current.map((c, i) => {
-        const tg     = tgtRef.current[i];
-        const merged = mergedRef.current[i];
-        const dist   = Math.hypot(c.x - tg.x, c.y - tg.y);
-        /* Adaptive: fast when far, snappy when close, instant when merged */
-        const speed  = merged ? 0.35 : dist > 150 ? 0.28 : dist > 60 ? 0.22 : 0.18;
-        const bobX   = merged ? 0 : Math.cos(t*(0.55+i*0.18)) * 1.5;
-        const bobY   = merged ? 0 : Math.abs(Math.sin(t*(0.82+i*0.22))) * 2.5;
-        const nx = lerp(c.x, tg.x + bobX, speed * 1.5);
-        const ny = lerp(c.y, tg.y + bobY, speed * 1.5);
-        curRef.current[i] = { x:nx, y:ny };
-        return {
-          x:nx, y:ny,
-          scale:   merged ? scaleRef.current[i] : 1,
-          opacity: opacityRef.current[i],
-        };
-      });
-      setPositions(next);
-      rafRef.current = requestAnimationFrame(loop);
-    };
-
-    const init = () => {
-      const anchors = Array.from(document.querySelectorAll("[data-dots-anchor]"));
-      if (!anchors.length) { setTimeout(init, 200); return; }
-      const idx = getActiveSectionIdx();
-      handleSectionChange(idx);
-      setReady(true);
-      rafRef.current = requestAnimationFrame(loop);
-      [0,1,2].forEach(bi => setTimeout(() => runBubble(bi), 900 + bi * TBI_STAGGER_MS));
-    };
-    setTimeout(init, 900);
-
-    window.addEventListener("scroll", onScroll, { passive:true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, [handleSectionChange, runBubble]);
-
-  if (!ready) return null;
-
-  return (
-    <>
-      {bubbleIcons.map((cfg, i) => {
-        const { bg, Icon, size, iconSize, radius, iconColor } = cfg;
-        const p   = positions[i];
-        const col = iconColor || "white";
-        return (
-          <motion.div
-            key={`tbi-${i}`}
-            className="fixed pointer-events-none z-[495] flex items-center justify-center"
-            style={{
-              width:        size,
-              height:       size,
-              borderRadius: radius,
-              background:   bg,
-              boxShadow:    `0 6px 20px ${bg}66, 0 2px 8px ${bg}44`,
-              left: p.x - size / 2,
-              top:  p.y - size / 2,
-              willChange: "left, top",
-            }}
-            animate={{
-              scale:   p.scale   ?? 1,
-              opacity: p.opacity ?? 1,
-            }}
-            transition={{
-              scale:   { duration: 0.1, ease: "easeOut" },
-              opacity: { duration: 0.4,  ease: "easeInOut" },
-            }}
-          >
-            <Icon style={{ width:iconSize, height:iconSize, color:col, strokeWidth:2 }} />
-          </motion.div>
-        );
-      })}
-    </>
-  );
-}
 
 /* ════════════════════════════════════════════════════════════
    HOME ROOT
@@ -1794,16 +1595,16 @@ export default function Home() {
       <motion.div className="bg-white text-[#1A1A1A] font-sans overflow-x-hidden relative"
         initial={{ opacity:0 }} animate={{ opacity:loaded?1:0 }} transition={{ duration:.55 }}>
 
-        <CustomCursor />
+      
         <ScrollProgressBar />
         <SectionNavDots />
-        <TravelingIconBubbles />
+        
 
         <Toast message={toast.message} isVisible={toast.show} onClose={()=>setToast({show:false,message:""})} />
         <Navbar />
 
         <HeroSection apiPrograms={apiPrograms} loading={programsLoading} />
-        <MarqueeStrip />
+        
         <ServicesSection />
         <StatsSection />
         <ProgramsSection />
@@ -1819,9 +1620,9 @@ export default function Home() {
           <div className="relative group">
             <motion.div className="absolute -inset-2 bg-[#D4AF37] rounded-full opacity-0 group-hover:opacity-35 blur-lg transition-all duration-300"
               animate={{ scale:[1,1.2,1] }} transition={{ duration:2.5, repeat:Infinity }} />
-            <motion.a href="https://wa.me/916281704664" target="_blank" rel="noopener noreferrer"
+            <motion.a href="https://wa.me/919247577907" target="_blank" rel="noopener noreferrer"
               whileHover={{ scale:1.16, rotate:8 }} whileTap={{ scale:.93 }}
-              className="relative flex items-center justify-center w-14 h-14 bg-[#E66B26] text-white rounded-full shadow-2xl border border-[#C5531A]">
+              className="relative flex items-center justify-center w-14 h-14 bg-[#F04A06] text-white rounded-full shadow-2xl border border-[#F04A06]">
               <MessageCircle className="w-6 h-6" />
             </motion.a>
           </div>
@@ -1846,7 +1647,7 @@ export default function Home() {
                       <motion.div animate={{ rotate:[0,20,-20,0] }} transition={{ duration:2, repeat:Infinity, ease:"easeInOut" }}>
                         <Sparkles className="w-6 h-6 text-[#D4AF37]" />
                       </motion.div>
-                      <span className="bg-gradient-to-r from-[#E66B26] to-[#C5531A] bg-clip-text text-transparent">Upcoming Events</span>
+                      <span className="bg-gradient-to-r from-[#F04A06] to-[#F04A06] bg-clip-text text-transparent">Upcoming Events</span>
                     </h2>
                     <p className="text-sm text-gray-400 mt-1">Don't miss out on these exciting opportunities!</p>
                   </div>
@@ -1869,7 +1670,7 @@ export default function Home() {
                                   className="bg-[#FFF4ED] border border-gray-100 rounded-xl p-5 transition-all cursor-pointer">
                                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                                     <div className="flex-1">
-                                      <h3 className="text-base font-black text-[#1A1A1A] mb-2 hover:text-[#E66B26] transition-colors">{program.title}</h3>
+                                      <h3 className="text-base font-black text-[#1A1A1A] mb-2 hover:text-[#F04A06] transition-colors">{program.title}</h3>
                                       <p className="text-sm text-gray-500 mb-3 line-clamp-2">{program.description}</p>
                                       <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400">
                                         <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-[#D4AF37]"/>{new Date(program.date).toLocaleDateString()}</span>

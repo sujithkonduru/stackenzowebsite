@@ -21,7 +21,7 @@ import ScrollToTop from "./ScrollToTop";
    BRAND COLOR MAP  (green → orange swap)
 ══════════════════════════════════════════════
    Old           →  New
-   #1E301E       →  #E66B26   primary
+   #1E301E       →  #F04A06   primary
    #2E7D32       →  #C5531A   primary dark
    #E8F5E9       →  #FFF4ED   primary light
    #C8E6C9       →  #FFD5B8   light tint (noise/blobs)
@@ -34,7 +34,7 @@ import ScrollToTop from "./ScrollToTop";
    #D4AF37        →  #D4AF37  (unchanged) gold accent
 ══════════════════════════════════════════════ */
 const B = {
-  primary:      "#E66B26",
+  primary:      "#F04A06",
   dark:         "#C5531A",
   light:        "#FFF4ED",
   tint:         "#FFD5B8",
@@ -212,42 +212,6 @@ function Counter({ value }) {
   return <span ref={ref}>{d}{sfx}</span>;
 }
 
-/* ══════════════════════════════════════════════
-   CUSTOM CURSOR  — orange
-══════════════════════════════════════════════ */
-function CustomCursor() {
-  const outer=useRef(null), dot=useRef(null), trail=useRef(null);
-  const pos=useRef({x:-300,y:-300}), sm=useRef({x:-300,y:-300});
-  const [hov,setHov]=useState(false), [clk,setClk]=useState(false);
-  useEffect(()=>{
-    const mv=e=>{pos.current={x:e.clientX,y:e.clientY};};
-    const md=()=>setClk(true), mu=()=>setClk(false);
-    document.addEventListener("mousemove",mv); document.addEventListener("mousedown",md); document.addEventListener("mouseup",mu);
-    const att=()=>{ document.querySelectorAll("a,button,[data-hover]").forEach(el=>{ el.addEventListener("mouseenter",()=>setHov(true)); el.addEventListener("mouseleave",()=>setHov(false)); }); };
-    att(); const ob=new MutationObserver(att); ob.observe(document.body,{childList:true,subtree:true});
-    let id;
-    const loop=()=>{
-      sm.current.x+=(pos.current.x-sm.current.x)*.09; sm.current.y+=(pos.current.y-sm.current.y)*.09;
-      const s=clk?.65:hov?2.1:1;
-      if(outer.current) outer.current.style.transform=`translate(${sm.current.x-20}px,${sm.current.y-20}px) scale(${s})`;
-      if(dot.current)   dot.current.style.transform  =`translate(${pos.current.x-3}px,${pos.current.y-3}px) scale(${clk?1.9:1})`;
-      if(trail.current) trail.current.style.transform=`translate(${sm.current.x-30}px,${sm.current.y-30}px) scale(${hov?1.6:.5})`;
-      id=requestAnimationFrame(loop);
-    };
-    id=requestAnimationFrame(loop);
-    return()=>{ document.removeEventListener("mousemove",mv); document.removeEventListener("mousedown",md); document.removeEventListener("mouseup",mu); ob.disconnect(); cancelAnimationFrame(id); };
-  },[hov,clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998]"
-        style={{ border:`1.5px solid ${hov?B.primary:B.p(.42)}`, background:hov?B.p(.07):"transparent", willChange:"transform", transition:"border-color .15s,background .15s" }}/>
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999]"
-        style={{ background:hov?B.primary:B.dark, willChange:"transform", transition:"background .1s" }}/>
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{ background:`radial-gradient(circle,${B.primary},transparent)`, willChange:"transform" }}/>
-    </>
-  );
-}
 
 /* ══════════════════════════════════════════════
    SCROLL PROGRESS BAR
@@ -313,27 +277,7 @@ function SectionNavDots() {
     className="w-2.5 h-2.5 rounded-full"
   />
 
-  {/* 🔥 RING */}
-  {active === i && (
-    <motion.div
-      layoutId="pf-nav-pulse"
-      className="absolute inset-0 rounded-full"
-      style={{ border: "1.5px solid #D4AF37" }}
-      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
-      transition={{ duration: 1.5, repeat: Infinity }}
-    />
-  )}
-
-  {/* 🔥 ARROW (OUTSIDE LEFT) */}
-  {active === i && (
-    <motion.div
-      initial={{ opacity: 0, x: 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute right-6" 
-    >
-      <ArrowRight className="w-4 h-4 text-black" />
-    </motion.div>
-  )}
+  
 </motion.button>
       ))}
     </div>
@@ -542,6 +486,8 @@ const inactivePill= { background:"#fff",     color:B.text, borderColor:B.border,
 function HeroSection({ totalCount }) {
   const secRef=useRef(null);
   const {scrollYProgress}=useScroll({target:secRef,offset:["start start","end start"]});
+  const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
   const hY  =useTransform(scrollYProgress,[0,1],[0,-110]);
   const hO  =useTransform(scrollYProgress,[0,.6],[1,0.9]);
   const hS  =useTransform(scrollYProgress,[0,1],[1,.84]);
@@ -558,7 +504,7 @@ function HeroSection({ totalCount }) {
   },[]);
 
   const STATS=[
-    { icon:Bell,     value:`${totalCount}`, label:"Updates"     },
+    { icon:Bell,     value: `${totalCount === 0 ? 1 : totalCount}`, label:"Updates"     },
     { icon:Users,    value:"5K+",           label:"Participants" },
     { icon:Building, value:"100+",          label:"Partners"    },
     { icon:Rocket,   value:"50+",           label:"Events"      },
@@ -647,7 +593,7 @@ function HeroSection({ totalCount }) {
         <motion.div initial={{opacity:0,y:28}} animate={{opacity:1,y:0}} transition={{delay:.7,ease:EASE_EXPO}}
           className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto px-2">
           {STATS.map((s,i)=>(
-            <Float key={i} duration={4+i*.5} delay={i*.3}>
+            <motion.div key={i} duration={4+i*.5} delay={i*.3}>
               <TiltCard>
                 <motion.div whileHover={{y:-6,boxShadow:`0 18px 44px ${B.p(.18)}`}}
                   className="backdrop-blur-sm border rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-sm text-center cursor-default transition-all"
@@ -657,21 +603,28 @@ function HeroSection({ totalCount }) {
                   <div className="text-xs sm:text-sm" style={{color:"rgba(26,26,26,0.5)"}}>{s.label}</div>
                 </motion.div>
               </TiltCard>
-            </Float>
+            </motion.div>
           ))}
         </motion.div>
 
         {/* Scroll cue */}
-        <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{delay:1.8}}
+        <motion.div
+  style={{ opacity: scrollOpacity }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 2.2 }}
           className="flex justify-center mt-10 cursor-pointer"
           onClick={()=>document.getElementById("updates")?.scrollIntoView({behavior:"smooth"})}>
           <Float duration={2} yRange={10}>
             <div className="flex flex-col items-center gap-1.5" style={{color:B.p(.5)}}>
               <span className="text-xs font-medium">Scroll to explore</span>
-              <div className="w-5 h-8 rounded-full flex justify-center" style={{border:`2px solid ${B.p(.28)}`}}>
-                <motion.div className="w-1 h-2 rounded-full mt-1.5" style={{background:B.gold}}
-                  animate={{y:[0,10,0],opacity:[1,.4,1]}} transition={{duration:1.8,repeat:Infinity}}/>
-              </div>
+              <div className="w-7 h-12 border-2 border-[#F04A06]/28 rounded-full flex justify-center">
+  <motion.div
+    className="w-1.5 h-3 bg-[#D4AF37] rounded-full mt-3"
+    animate={{ y: [0, 14, 0], opacity: [1, 0.4, 1] }}
+    transition={{ duration: 1.8, repeat: Infinity }}
+  />
+</div>
             </div>
           </Float>
         </motion.div>
@@ -941,13 +894,13 @@ function Programs() {
 
   return (
     <div className="min-h-screen overflow-x-hidden" style={{background:"#fff",color:B.text}}>
-      <CustomCursor/>
+     
       <ScrollProgressBar/>
       <SectionNavDots/>
       <Navbar/>
 
       <HeroSection totalCount={programs.length}/>
-      <MarqueeStrip/>
+      
 
       {/* ── Updates section ── */}
       <WaveDivider color={B.gold} toBg={B.light}/>
@@ -968,7 +921,7 @@ function Programs() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-10">
             <SLabel text="Latest Updates"/>
-            <AHeading className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]"
+            <AHeading className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#F04A06]"
               style={{backgroundImage:`linear-gradient(135deg,${B.primary},${B.dark})`}} delay={.05}>
               Explore All Updates
             </AHeading>

@@ -14,7 +14,7 @@ import toast from "react-hot-toast";
    BRAND  (matches orange swap)
 ══════════════════════════════════════════════ */
 const C = {
-  dark:     "#E66B26",
+  dark:     "#F04A06",
   mid:      "#C5531A",
   gold:     "#D4AF37",
   light:    "#FFF4ED",

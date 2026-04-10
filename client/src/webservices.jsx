@@ -215,42 +215,7 @@ function Counter({ value }) {
   return <span ref={ref}>{d}{sfx}</span>;
 }
 
-/* ══════════════════════════════════════════════
-   CUSTOM CURSOR
-══════════════════════════════════════════════ */
-function CustomCursor() {
-  const outer=useRef(null), dot=useRef(null), trail=useRef(null);
-  const pos=useRef({x:-300,y:-300}), sm=useRef({x:-300,y:-300});
-  const [hov,setHov]=useState(false), [clk,setClk]=useState(false);
-  useEffect(()=>{
-    const mv=e=>{pos.current={x:e.clientX,y:e.clientY};};
-    const md=()=>setClk(true), mu=()=>setClk(false);
-    document.addEventListener("mousemove",mv); document.addEventListener("mousedown",md); document.addEventListener("mouseup",mu);
-    const att=()=>{ document.querySelectorAll("a,button,[data-hover]").forEach(el=>{ el.addEventListener("mouseenter",()=>setHov(true)); el.addEventListener("mouseleave",()=>setHov(false)); }); };
-    att(); const ob=new MutationObserver(att); ob.observe(document.body,{childList:true,subtree:true});
-    let id;
-    const loop=()=>{
-      sm.current.x+=(pos.current.x-sm.current.x)*.09; sm.current.y+=(pos.current.y-sm.current.y)*.09;
-      const s=clk?.65:hov?2.1:1;
-      if(outer.current) outer.current.style.transform=`translate(${sm.current.x-20}px,${sm.current.y-20}px) scale(${s})`;
-      if(dot.current)   dot.current.style.transform  =`translate(${pos.current.x-3}px,${pos.current.y-3}px) scale(${clk?1.9:1})`;
-      if(trail.current) trail.current.style.transform=`translate(${sm.current.x-30}px,${sm.current.y-30}px) scale(${hov?1.6:.5})`;
-      id=requestAnimationFrame(loop);
-    };
-    id=requestAnimationFrame(loop);
-    return()=>{ document.removeEventListener("mousemove",mv); document.removeEventListener("mousedown",md); document.removeEventListener("mouseup",mu); ob.disconnect(); cancelAnimationFrame(id); };
-  },[hov,clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998] transition-[border-color,background] duration-150"
-        style={{border:hov?"1.5px solid #D4AF37":"1.5px solid rgba(230,107,38,0.45)",background:hov?"rgba(212,175,55,0.07)":"transparent",willChange:"transform"}}/>
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999] transition-colors duration-100"
-        style={{background:hov?"#D4AF37":"#E66B26",willChange:"transform"}}/>
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{background:"radial-gradient(circle,#D4AF37,transparent)",willChange:"transform"}}/>
-    </>
-  );
-}
+
 
 /* ══════════════════════════════════════════════
    SCROLL PROGRESS BAR
@@ -317,27 +282,7 @@ function SectionNavDots() {
     className="w-2.5 h-2.5 rounded-full"
   />
 
-  {/* 🔥 RING */}
-  {active === i && (
-    <motion.div
-      layoutId="pf-nav-pulse"
-      className="absolute inset-0 rounded-full"
-      style={{ border: "1.5px solid #D4AF37" }}
-      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
-      transition={{ duration: 1.5, repeat: Infinity }}
-    />
-  )}
-
-  {/* 🔥 ARROW (OUTSIDE LEFT) */}
-  {active === i && (
-    <motion.div
-      initial={{ opacity: 0, x: 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute right-6" 
-    >
-      <ArrowRight className="w-4 h-4 text-black" />
-    </motion.div>
-  )}
+  
 </motion.button>
       ))}
     </div>
@@ -489,22 +434,22 @@ function MarqueeStrip({ dark=false }) {
 ══════════════════════════════════════════════ */
 function ServiceCard({ service, index, onOpen }) {
   return (
-    <GlowCard accent="#E66B26" className="h-full">
+    <GlowCard accent="#F04A06" className="h-full">
       <TiltCard intensity={7} className="h-full">
         <motion.div
           whileHover={{ y:-7, boxShadow:"0 28px 60px rgba(230,107,38,0.12)" }}
           onClick={() => onOpen(service)}
           className="group relative bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-200 hover:border-[#D4AF37] transition-all duration-300 cursor-pointer h-full flex flex-col">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#E66B26] to-[#C5531A] opacity-0 group-hover:opacity-[0.04] rounded-xl sm:rounded-2xl transition-opacity duration-300"/>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#F04A06] to-[#C5531A] opacity-0 group-hover:opacity-[0.04] rounded-xl sm:rounded-2xl transition-opacity duration-300"/>
 
           {/* Icon + title */}
           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
             <Float duration={4+index*.3} delay={index*.2} yRange={6}>
-              <div className="p-2 sm:p-2.5 rounded-lg sm:rounded-xl bg-gradient-to-br from-[#E66B26] to-[#C5531A] shadow-md">
+              <div className="p-2 sm:p-2.5 rounded-lg sm:rounded-xl bg-gradient-to-br from-[#F04A06] to-[#C5531A] shadow-md">
                 <div className="text-white">{service.icon}</div>
               </div>
             </Float>
-            <h3 className="text-sm sm:text-base font-black text-[#1A1A1A] group-hover:text-[#E66B26] transition-all line-clamp-2">{service.title}</h3>
+            <h3 className="text-sm sm:text-base font-black text-[#1A1A1A] group-hover:text-[#F04A06] transition-all line-clamp-2">{service.title}</h3>
           </div>
 
           <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4 leading-relaxed line-clamp-2 flex-1">{service.desc}</p>
@@ -512,7 +457,7 @@ function ServiceCard({ service, index, onOpen }) {
           {/* Features */}
           <ul className="space-y-1.5 sm:space-y-2 mb-3">
             {service.features.slice(0,3).map((f,j)=>(
-              <li key={j} className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-[#1A1A1A] group-hover:text-[#E66B26] transition-colors">
+              <li key={j} className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-[#1A1A1A] group-hover:text-[#F04A06] transition-colors">
                 <motion.div animate={{scale:[1,1.3,1]}} transition={{duration:2.2,repeat:Infinity,delay:j*.22}}>
                   <CheckCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#D4AF37] flex-shrink-0"/>
                 </motion.div>
@@ -525,7 +470,7 @@ function ServiceCard({ service, index, onOpen }) {
             <motion.button
               whileHover={{x:3}}
               onClick={e=>{e.stopPropagation(); onOpen(service);}}
-              className="text-xs sm:text-sm text-[#1A1A1A] hover:text-[#E66B26] flex items-center gap-1 font-semibold">
+              className="text-xs sm:text-sm text-[#1A1A1A] hover:text-[#F04A06] flex items-center gap-1 font-semibold">
               Learn More
               <motion.span animate={{x:[0,3,0]}} transition={{duration:1.4,repeat:Infinity}}>
                 <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4"/>
@@ -533,7 +478,7 @@ function ServiceCard({ service, index, onOpen }) {
             </motion.button>
           </div>
           {/* bottom accent */}
-          <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#E66B26] rounded-b-xl sm:rounded-b-2xl"
+          <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#F04A06] rounded-b-xl sm:rounded-b-2xl"
             initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.35}}/>
         </motion.div>
       </TiltCard>
@@ -600,6 +545,9 @@ function WebServices() {
   /* ── hero parallax ── */
   const heroRef=useRef(null);
   const {scrollYProgress:heroP}=useScroll({target:heroRef,offset:["start start","end start"]});
+  const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+
   const heroY=useTransform(heroP,[0,1],[0,-110]);
   const heroO=useTransform(heroP,[0,.6],[1,0.9]);
   const heroS=useTransform(heroP,[0,1],[1,.84]);
@@ -614,16 +562,16 @@ function WebServices() {
   },[]);
 
   const HERO_STATS=[
-    {icon:Rocket, value:"1000+",label:"Projects",   color:"#E66B26"},
+    {icon:Rocket, value:"1000+",label:"Projects",   color:"#F04A06"},
     {icon:Users,  value:"500+", label:"Clients",    color:"#C5531A"},
-    {icon:Zap,    value:"120+", label:"Solutions",  color:"#E66B26"},
+    {icon:Zap,    value:"120+", label:"Solutions",  color:"#F04A06"},
     {icon:Award,  value:"98%",  label:"Satisfaction",color:"#D4AF37"},
   ];
 
   return (
     <div className="bg-white text-[#1A1A1A] min-h-screen overflow-x-hidden">
       <Toast message={toast.message} isVisible={toast.show} onClose={()=>setToast({show:false,message:""})}/>
-      <CustomCursor/>
+     
       <ScrollProgressBar/>
       <SectionNavDots/>
       <Navbar/>
@@ -642,7 +590,7 @@ function WebServices() {
 
         {/* Dot grid */}
         <div className="absolute inset-0 z-[2] opacity-[.03]"
-          style={{backgroundImage:"radial-gradient(circle,#E66B26 1px,transparent 1px)",backgroundSize:"32px 32px"}}/>
+          style={{backgroundImage:"radial-gradient(circle,#F04A06 1px,transparent 1px)",backgroundSize:"32px 32px"}}/>
 
         {/* Blobs */}
         <motion.div style={{x:b1x,y:b1y}} className="absolute top-16 left-[5%] w-80 h-80 pointer-events-none z-[2]">
@@ -654,7 +602,7 @@ function WebServices() {
 
         {/* Floating orbs */}
         <Float className="absolute top-1/4 left-[7%] w-3 h-3 rounded-full bg-[#D4AF37]/25 z-[2]" duration={5} delay={0}/>
-        <Float className="absolute top-1/3 right-[9%] w-2 h-2 rounded-full bg-[#E66B26]/20 z-[2]" duration={4} delay={1}/>
+        <Float className="absolute top-1/3 right-[9%] w-2 h-2 rounded-full bg-[#F04A06]/20 z-[2]" duration={4} delay={1}/>
         <Float className="absolute bottom-1/3 left-[12%] w-3.5 h-3.5 rounded-full bg-[#C5531A]/18 z-[2]" duration={6} delay={2}/>
         <Float className="absolute bottom-1/4 right-[14%] w-2 h-2 rounded-full bg-[#D4AF37]/18 z-[2]" duration={5.5} delay={.5}/>
 
@@ -665,7 +613,7 @@ function WebServices() {
             <motion.div animate={{rotate:[0,20,-20,0]}} transition={{duration:2.8,repeat:Infinity,ease:"easeInOut"}}>
               <Sparkles className="w-4 h-4 text-[#D4AF37]"/>
             </motion.div>
-            <span className="text-sm font-semibold text-[#E66B26]">Enterprise IT Solutions</span>
+            <span className="text-sm font-semibold text-[#F04A06]">Enterprise IT Solutions</span>
           </motion.div>
 
           {/* H1 */}
@@ -673,7 +621,7 @@ function WebServices() {
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-5 leading-[1.06]">
             <span className="text-[#1A1A1A]">Scalable IT Solutions</span>
             <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] via-[#C5531A] to-[#E66B26]">for Modern Businesses</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] via-[#C5531A] to-[#F04A06]">for Modern Businesses</span>
           </motion.h1>
 
           <motion.p initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:.5,ease:EASE_EXPO}}
@@ -685,7 +633,7 @@ function WebServices() {
           <motion.div initial={{opacity:0,y:28}} animate={{opacity:1,y:0}} transition={{delay:.7,ease:EASE_EXPO}}
             className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto mb-8 px-2">
             {HERO_STATS.map((s,i)=>{const Icon=s.icon; return (
-              <Float key={i} duration={4+i*.5} delay={i*.3}>
+              <motion.div key={i} duration={4+i*.5} delay={i*.3}>
                 <TiltCard>
                   <motion.div whileHover={{y:-6,boxShadow:`0 16px 40px ${s.color}18`}}
                     className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-3 sm:p-4 hover:border-[#D4AF37] transition-all shadow-sm text-center cursor-default">
@@ -694,7 +642,7 @@ function WebServices() {
                     <div className="text-[10px] sm:text-xs text-gray-400">{s.label}</div>
                   </motion.div>
                 </TiltCard>
-              </Float>
+              </motion.div>
             );})}
           </motion.div>
 
@@ -702,50 +650,60 @@ function WebServices() {
           <motion.div initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{delay:.88,ease:EASE_EXPO}}
             className="flex flex-col sm:flex-row gap-3 justify-center items-center px-2">
             <MagBtn onClick={()=>navigate("/contact")}
-              className="group relative w-full sm:w-auto px-6 py-3 bg-[#E66B26] text-white rounded-full text-sm font-bold overflow-hidden shadow-xl shadow-[#E66B26]/22">
+              className="group relative w-full sm:w-auto px-6 py-3 bg-[#F04A06] text-white rounded-full text-sm font-bold overflow-hidden shadow-xl shadow-[#F04A06]/22">
               <span className="relative z-10 flex items-center justify-center gap-2">
                 Start Your Project
                 <motion.span animate={{x:[0,4,0]}} transition={{duration:1.5,repeat:Infinity}}><ArrowRight className="w-4 h-4"/></motion.span>
               </span>
               <motion.div className="absolute inset-0 bg-[#C5531A] origin-left" initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.4}}/>
             </MagBtn>
-            <MagBtn onClick={()=>setIsQuoteModalOpen(true)}
-              className="w-full sm:w-auto px-6 py-3 border-2 border-[#E66B26] text-[#E66B26] rounded-full text-sm font-bold hover:bg-[#E66B26] hover:text-white transition-all">
-              Get Free Consultation
-            </MagBtn>
+            <button
+  onClick={() => document.getElementById("about")?.scrollIntoView({ behavior:"smooth" })}
+  className="px-9 py-4 border-2 border-[#F04A06] text-[#F04A06] rounded-full font-bold text-sm bg-white hover:bg-[#FFF4ED] transition-colors"
+>
+  Learn More
+</button>
           </motion.div>
 
           {/* Scroll cue */}
-          <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{delay:1.8}}
+        <motion.div
+  style={{ opacity: scrollOpacity }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 2.2 }}
             className="flex justify-center mt-10 cursor-pointer"
             onClick={()=>document.getElementById("ws-services")?.scrollIntoView({behavior:"smooth"})}>
             <Float duration={2} yRange={10}>
-              <div className="flex flex-col items-center gap-1.5 text-gray-400 hover:text-[#E66B26] transition-colors">
+              <div className="flex flex-col items-center gap-1.5 text-gray-400 hover:text-[#F04A06] transition-colors">
                 <span className="text-xs font-medium">Scroll to explore</span>
-                <div className="w-5 h-8 border-2 border-[#E66B26]/22 rounded-full flex justify-center">
-                  <motion.div className="w-1 h-2 bg-[#D4AF37] rounded-full mt-1.5"
-                    animate={{y:[0,10,0],opacity:[1,.4,1]}} transition={{duration:1.8,repeat:Infinity}}/>
-                </div>
+                <div className="w-7 h-12 border-2 border-[#F04A06]/22 rounded-full flex justify-center">
+                  <motion.div
+    className="w-1.5 h-3 bg-[#D4AF37] rounded-full mt-3"
+    animate={{ y: [0, 14, 0], opacity: [1, 0.4, 1] }}
+    transition={{ duration: 1.8, repeat: Infinity }}
+  />
+</div>
+
               </div>
             </Float>
           </motion.div>
         </motion.div>
       </section>
 
-      <MarqueeStrip/>
+      
 
       {/* ═══ STICKY CATEGORY NAV ═══ */}
       <div className="sticky top-0 z-40 bg-white/85 backdrop-blur-xl border-y border-gray-200 py-2 sm:py-3 px-3 sm:px-4 shadow-sm">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
             <MagBtn onClick={()=>setActiveService("all")}
-              className={`shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition-all ${activeService==="all"?"bg-[#E66B26] text-white shadow-md":"text-[#1A1A1A] bg-[#FFF4ED] hover:bg-[#D4AF37]/20 hover:text-[#E66B26] border border-gray-200"}`}>
+              className={`shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition-all ${activeService==="all"?"bg-[#F04A06] text-white shadow-md":"text-[#1A1A1A] bg-[#FFF4ED] hover:bg-[#D4AF37]/20 hover:text-[#F04A06] border border-gray-200"}`}>
               All Services
             </MagBtn>
             {Object.entries(serviceCategories).map(([key,cat])=>(
               <MagBtn key={key} onClick={()=>setActiveService(key)}
-                className={`shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 ${activeService===key?"bg-[#E66B26] text-white shadow-md":"text-[#1A1A1A] bg-[#FFF4ED] hover:bg-[#D4AF37]/20 hover:text-[#E66B26] border border-gray-200"}`}>
-                <span className={activeService===key?"text-white":"text-[#E66B26]"}>{cat.icon}</span>
+                className={`shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 ${activeService===key?"bg-[#F04A06] text-white shadow-md":"text-[#1A1A1A] bg-[#FFF4ED] hover:bg-[#D4AF37]/20 hover:text-[#F04A06] border border-gray-200"}`}>
+                <span className={activeService===key?"text-white":"text-[#F04A06]"}>{cat.icon}</span>
                 <span className="hidden sm:inline">{cat.title}</span>
                 <span className="sm:hidden">{cat.title.split(" ")[0]}</span>
               </MagBtn>
@@ -762,7 +720,7 @@ function WebServices() {
 
         {/* Kinetic bg */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+          <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
             animate={{y:[0,-10,0]}} transition={{duration:9,repeat:Infinity,ease:"easeInOut"}}>
             {activeService==="all"?"SERVICES":activeService.toUpperCase()}
           </motion.span>
@@ -777,7 +735,7 @@ function WebServices() {
                   <div key={key}>
                     <Reveal from="left">
                       <div className="flex items-center gap-3 mb-5 px-1">
-                        <div className="p-2 rounded-lg bg-gradient-to-br from-[#E66B26] to-[#C5531A] shadow-md">
+                        <div className="p-2 rounded-lg bg-gradient-to-br from-[#F04A06] to-[#C5531A] shadow-md">
                           {cat.icon}
                         </div>
                         <h2 className="text-lg sm:text-xl md:text-2xl font-black text-[#1A1A1A]">{cat.title}</h2>
@@ -798,7 +756,7 @@ function WebServices() {
                 <Reveal from="left">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-7 px-1">
                     <div className="flex items-center gap-3">
-                      <div className="p-2.5 rounded-xl bg-gradient-to-br from-[#E66B26] to-[#C5531A] shadow-md">
+                      <div className="p-2.5 rounded-xl bg-gradient-to-br from-[#F04A06] to-[#C5531A] shadow-md">
                         {serviceCategories[activeService].icon}
                       </div>
                       <div>
@@ -807,7 +765,7 @@ function WebServices() {
                       </div>
                     </div>
                     <motion.button whileHover={{x:3}} onClick={()=>setActiveService("all")}
-                      className="text-xs sm:text-sm text-gray-400 hover:text-[#E66B26] flex items-center gap-1 font-medium">
+                      className="text-xs sm:text-sm text-gray-400 hover:text-[#F04A06] flex items-center gap-1 font-medium">
                       View All Categories <ChevronRight className="w-3.5 h-3.5"/>
                     </motion.button>
                   </div>
@@ -828,11 +786,11 @@ function WebServices() {
       <section id="ws-approach" className="py-12 sm:py-16 px-3 sm:px-4 bg-white relative overflow-hidden">
         <Spotlight color="rgba(230,107,38,0.04)" size={480}/>
         <div className="absolute inset-0 opacity-[.028]"
-          style={{backgroundImage:"radial-gradient(circle,#E66B26 1px,transparent 1px)",backgroundSize:"28px 28px"}}/>
+          style={{backgroundImage:"radial-gradient(circle,#F04A06 1px,transparent 1px)",backgroundSize:"28px 28px"}}/>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="How We Work"/>
-            <AHeading className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Our Development Approach
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -845,7 +803,7 @@ function WebServices() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 relative">
             {/* Connector line desktop */}
-            <div className="absolute top-[3rem] left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-[#D4AF37]/20 via-[#E66B26]/20 to-[#D4AF37]/20 hidden lg:block"/>
+            <div className="absolute top-[3rem] left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-[#D4AF37]/20 via-[#F04A06]/20 to-[#D4AF37]/20 hidden lg:block"/>
             {APPROACH_STEPS.map((s,i)=>(
               <Reveal key={i} from="bottom" delay={i*.1}>
                 <GlowCard accent="#D4AF37">
@@ -855,10 +813,10 @@ function WebServices() {
                       <Float duration={4+i*.5} delay={i*.4} yRange={8}>
                         <div className="text-2xl sm:text-3xl mb-2 sm:mb-3">{s.icon}</div>
                       </Float>
-                      <div className="text-xs font-black mb-1 bg-gradient-to-r from-[#E66B26] to-[#C5531A] bg-clip-text text-transparent">{s.step}</div>
+                      <div className="text-xs font-black mb-1 bg-gradient-to-r from-[#F04A06] to-[#C5531A] bg-clip-text text-transparent">{s.step}</div>
                       <h3 className="text-sm sm:text-base font-black text-[#1A1A1A] mb-2">{s.title}</h3>
                       <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">{s.desc}</p>
-                      <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#E66B26] rounded-b-xl"
+                      <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#F04A06] rounded-b-xl"
                         initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.35}}/>
                     </motion.div>
                   </TiltCard>
@@ -874,13 +832,13 @@ function WebServices() {
       <section id="ws-why" className="py-12 sm:py-16 px-3 sm:px-4 relative overflow-hidden" style={{background:"#FFF4ED"}}>
         <NoiseCanvas color1="#FFD5B8" color2="#FFCBA4" opacity={0.18}/>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+          <motion.span className="text-[14vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
             animate={{y:[0,-10,0]}} transition={{duration:10,repeat:Infinity,ease:"easeInOut"}}>WHY US</motion.span>
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="Why Stackenzo"/>
-            <AHeading className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Why Stackenzo?
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -901,7 +859,7 @@ function WebServices() {
                     </Float>
                     <h3 className="text-sm sm:text-base font-black text-[#1A1A1A] mb-1.5">{b.title}</h3>
                     <p className="text-xs sm:text-sm text-gray-500">{b.desc}</p>
-                    <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#E66B26] rounded-b-xl"
+                    <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#F04A06] rounded-b-xl"
                       initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.35}}/>
                   </motion.div>
                 </TiltCard>
@@ -918,7 +876,7 @@ function WebServices() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="Client Stories"/>
-            <AHeading className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Client Success Stories
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -940,7 +898,7 @@ function WebServices() {
                     <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4 italic leading-relaxed flex-1">"{t.text}"</p>
                     <div className="flex items-center gap-2 sm:gap-3 mt-auto">
                       <Float duration={4+i*.4} yRange={5}>
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-[#E66B26] to-[#C5531A] flex items-center justify-center text-white font-black text-xs sm:text-sm shadow-md">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-[#F04A06] to-[#C5531A] flex items-center justify-center text-white font-black text-xs sm:text-sm shadow-md">
                           {t.initials}
                         </div>
                       </Float>
@@ -964,7 +922,7 @@ function WebServices() {
         <div className="max-w-4xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="FAQ"/>
-            <AHeading className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Frequently Asked Questions
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -1009,7 +967,7 @@ function WebServices() {
         <div className="max-w-4xl mx-auto relative z-10">
           <Reveal from="bottom">
             <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#E66B26] to-[#C5531A]"/>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#F04A06] to-[#C5531A]"/>
               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=2072')] bg-cover bg-center mix-blend-overlay opacity-20"/>
               <div className="absolute inset-0"><ParticleCanvas count={12} color="rgba(212,175,55,0.09)"/></div>
               <Spotlight color="rgba(212,175,55,0.07)" size={360}/>
@@ -1037,7 +995,7 @@ function WebServices() {
                 <Reveal from="bottom" delay={.32}>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
                     <MagBtn onClick={()=>navigate("/contact")}
-                      className="group relative w-full sm:w-auto px-6 py-3 bg-white text-[#E66B26] rounded-full font-black text-sm overflow-hidden shadow-xl">
+                      className="group relative w-full sm:w-auto px-6 py-3 bg-white text-[#F04A06] rounded-full font-black text-sm overflow-hidden shadow-xl">
                       <span className="relative z-10 flex items-center justify-center gap-2">
                         Contact Us Today
                         <motion.span animate={{x:[0,4,0]}} transition={{duration:1.5,repeat:Infinity}}><ArrowRight className="w-4 h-4"/></motion.span>
@@ -1045,7 +1003,7 @@ function WebServices() {
                       <motion.div className="absolute inset-0 bg-[#FFF4ED] origin-left" initial={{scaleX:0}} whileHover={{scaleX:1}} transition={{duration:.4}}/>
                     </MagBtn>
                     <MagBtn onClick={()=>setIsQuoteModalOpen(true)}
-                      className="w-full sm:w-auto px-6 py-3 border-2 border-white text-white rounded-full font-black text-sm hover:bg-white hover:text-[#E66B26] transition-all">
+                      className="w-full sm:w-auto px-6 py-3 border-2 border-white text-white rounded-full font-black text-sm hover:bg-white hover:text-[#F04A06] transition-all">
                       Get Free Consultation
                     </MagBtn>
                   </div>
@@ -1067,7 +1025,7 @@ function WebServices() {
               onClick={e=>e.stopPropagation()}
               className="bg-white rounded-xl sm:rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-gray-100 shadow-2xl">
               {/* Header */}
-              <div className="sticky top-0 bg-gradient-to-r from-[#E66B26] to-[#C5531A] p-3 sm:p-4 flex items-center justify-between z-10 rounded-t-xl sm:rounded-t-2xl">
+              <div className="sticky top-0 bg-gradient-to-r from-[#F04A06] to-[#C5531A] p-3 sm:p-4 flex items-center justify-between z-10 rounded-t-xl sm:rounded-t-2xl">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className="p-1.5 sm:p-2 bg-white/20 rounded-lg text-white">{selectedServiceDetail.icon}</div>
                   <h2 className="text-sm sm:text-base md:text-lg font-black text-white line-clamp-1">{selectedServiceDetail.title}</h2>
@@ -1080,11 +1038,11 @@ function WebServices() {
               {/* Body */}
               <div className="p-3 sm:p-5 space-y-4">
                 <div className="bg-[#FFF4ED] p-3 sm:p-4 rounded-xl border border-gray-200">
-                  <h3 className="text-xs sm:text-sm font-black text-[#E66B26] mb-2">Service Overview</h3>
+                  <h3 className="text-xs sm:text-sm font-black text-[#F04A06] mb-2">Service Overview</h3>
                   <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{selectedServiceDetail.detailedDesc||selectedServiceDetail.desc}</p>
                 </div>
                 <div>
-                  <h3 className="text-xs sm:text-sm font-black text-[#E66B26] mb-2">Key Features</h3>
+                  <h3 className="text-xs sm:text-sm font-black text-[#F04A06] mb-2">Key Features</h3>
                   <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-2" stagger={0.06} from="bottom">
                     {selectedServiceDetail.features.map((f,i)=>(
                       <div key={i} className="flex items-start gap-2 bg-[#FFF4ED] p-2.5 rounded-lg border border-gray-200">
@@ -1096,7 +1054,7 @@ function WebServices() {
                 </div>
                 {selectedServiceDetail.benefits&&(
                   <div>
-                    <h3 className="text-xs sm:text-sm font-black text-[#E66B26] mb-2">Benefits</h3>
+                    <h3 className="text-xs sm:text-sm font-black text-[#F04A06] mb-2">Benefits</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                       {selectedServiceDetail.benefits.map((b,i)=>(
                         <div key={i} className="flex items-start gap-1.5 text-gray-600">
@@ -1109,7 +1067,7 @@ function WebServices() {
                 )}
                 {selectedServiceDetail.technologies&&(
                   <div>
-                    <h3 className="text-xs sm:text-sm font-black text-[#E66B26] mb-2">Technologies</h3>
+                    <h3 className="text-xs sm:text-sm font-black text-[#F04A06] mb-2">Technologies</h3>
                     <div className="flex flex-wrap gap-1.5">
                       {selectedServiceDetail.technologies.map((t,i)=>(
                         <motion.span key={i} whileHover={{scale:1.07}}
@@ -1122,7 +1080,7 @@ function WebServices() {
                   <div className="bg-[#FFF4ED] p-3 rounded-xl border border-gray-200">
                     <div className="flex items-center gap-2 text-xs sm:text-sm text-[#1A1A1A]">
                       <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#D4AF37]"/>
-                      <span className="font-black text-[#E66B26]">Timeline:</span>
+                      <span className="font-black text-[#F04A06]">Timeline:</span>
                       <span className="text-gray-600">{selectedServiceDetail.timeline}</span>
                     </div>
                   </div>
@@ -1130,7 +1088,7 @@ function WebServices() {
                 <div className="pt-2 border-t border-gray-100">
                   <MagBtn
                     onClick={()=>{ setQuoteFormData({...quoteFormData,service:selectedServiceDetail.title}); setSelectedServiceDetail(null); setIsQuoteModalOpen(true); }}
-                    className="w-full px-4 py-2.5 bg-[#E66B26] text-white rounded-xl text-xs sm:text-sm font-black hover:bg-[#C5531A] transition-all flex items-center justify-center gap-2 shadow-md">
+                    className="w-full px-4 py-2.5 bg-[#F04A06] text-white rounded-xl text-xs sm:text-sm font-black hover:bg-[#C5531A] transition-all flex items-center justify-center gap-2 shadow-md">
                     <span>Get Quote for {selectedServiceDetail.title}</span>
                     <motion.span animate={{x:[0,3,0]}} transition={{duration:1.4,repeat:Infinity}}><ChevronRight className="w-3.5 h-3.5"/></motion.span>
                   </MagBtn>
@@ -1151,7 +1109,7 @@ function WebServices() {
               transition={{type:"spring",stiffness:280,damping:24}}
               onClick={e=>e.stopPropagation()}
               className="bg-white rounded-xl sm:rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border border-gray-100 shadow-2xl">
-              <div className="sticky top-0 bg-gradient-to-r from-[#E66B26] to-[#C5531A] p-3 sm:p-4 flex justify-between items-center rounded-t-xl sm:rounded-t-2xl">
+              <div className="sticky top-0 bg-gradient-to-r from-[#F04A06] to-[#C5531A] p-3 sm:p-4 flex justify-between items-center rounded-t-xl sm:rounded-t-2xl">
                 <h2 className="text-sm sm:text-base font-black text-white">Get a Quote</h2>
                 <motion.button whileHover={{rotate:90,scale:1.1}} transition={{duration:.2}}
                   onClick={()=>setIsQuoteModalOpen(false)} className="text-white hover:text-gray-200 p-1 hover:bg-white/20 rounded-lg transition-all">
@@ -1199,7 +1157,7 @@ function WebServices() {
                     Cancel
                   </MagBtn>
                   <MagBtn type="submit"
-                    className="flex-1 px-4 py-2.5 bg-[#E66B26] text-white rounded-xl text-xs sm:text-sm font-black hover:bg-[#C5531A] disabled:opacity-50 transition-all shadow-md">
+                    className="flex-1 px-4 py-2.5 bg-[#F04A06] text-white rounded-xl text-xs sm:text-sm font-black hover:bg-[#C5531A] disabled:opacity-50 transition-all shadow-md">
                     {isSubmitting ? "Submitting…" : "Submit Request"}
                   </MagBtn>
                 </div>

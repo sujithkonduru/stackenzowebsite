@@ -16,7 +16,7 @@ import {
    BRAND — orange + white (company theme)
 ══════════════════════════════════════════════ */
 const C = {
-  dark:     "#E66B26",
+  dark:     "#F04A06",
   mid:      "#C5531A",
   gold:     "#D4AF37",
   light:    "#FFF4ED",
@@ -149,39 +149,7 @@ function MagBtn({ children, className = "", onClick, href, style = {}, type = "b
   );
 }
 
-function CustomCursor() {
-  const outer = useRef(null), dot = useRef(null), trail = useRef(null);
-  const pos = useRef({ x: -300, y: -300 }), sm = useRef({ x: -300, y: -300 });
-  const [hov, setHov] = useState(false), [clk, setClk] = useState(false);
-  useEffect(() => {
-    const mv = e => { pos.current = { x: e.clientX, y: e.clientY }; };
-    const md = () => setClk(true), mu = () => setClk(false);
-    document.addEventListener("mousemove", mv); document.addEventListener("mousedown", md); document.addEventListener("mouseup", mu);
-    const att = () => { document.querySelectorAll("a,button,[data-hover]").forEach(el => { el.addEventListener("mouseenter", () => setHov(true)); el.addEventListener("mouseleave", () => setHov(false)); }); };
-    att(); const ob = new MutationObserver(att); ob.observe(document.body, { childList: true, subtree: true });
-    let id;
-    const loop = () => {
-      sm.current.x += (pos.current.x - sm.current.x) * .09; sm.current.y += (pos.current.y - sm.current.y) * .09;
-      const s = clk ? .65 : hov ? 2.1 : 1;
-      if (outer.current) outer.current.style.transform = `translate(${sm.current.x - 20}px,${sm.current.y - 20}px) scale(${s})`;
-      if (dot.current)   dot.current.style.transform   = `translate(${pos.current.x - 3}px,${pos.current.y - 3}px) scale(${clk ? 1.9 : 1})`;
-      if (trail.current) trail.current.style.transform = `translate(${sm.current.x - 30}px,${sm.current.y - 30}px) scale(${hov ? 1.6 : .5})`;
-      id = requestAnimationFrame(loop);
-    };
-    id = requestAnimationFrame(loop);
-    return () => { document.removeEventListener("mousemove", mv); document.removeEventListener("mousedown", md); document.removeEventListener("mouseup", mu); ob.disconnect(); cancelAnimationFrame(id); };
-  }, [hov, clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998]"
-        style={{ border: hov ? `1.5px solid ${C.gold}` : `1.5px solid ${C.p(.42)}`, background: hov ? C.p(.07) : "transparent", willChange: "transform", transition: "border-color .15s,background .15s" }} />
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999]"
-        style={{ background: hov ? C.gold : C.dark, willChange: "transform", transition: "background .1s" }} />
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{ background: "radial-gradient(circle,#D4AF37,transparent)", willChange: "transform" }} />
-    </>
-  );
-}
+
 
 function ScrollProgressBar() {
   const { scrollYProgress } = useScroll();
@@ -242,27 +210,7 @@ function SectionNavDots() {
     className="w-2.5 h-2.5 rounded-full"
   />
 
-  {/* 🔥 RING */}
-  {active === i && (
-    <motion.div
-      layoutId="pf-nav-pulse"
-      className="absolute inset-0 rounded-full"
-      style={{ border: "1.5px solid #D4AF37" }}
-      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
-      transition={{ duration: 1.5, repeat: Infinity }}
-    />
-  )}
-
-  {/* 🔥 ARROW (OUTSIDE LEFT) */}
-  {active === i && (
-    <motion.div
-      initial={{ opacity: 0, x: 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute right-6" 
-    >
-      <ArrowRight className="w-4 h-4 text-black" />
-    </motion.div>
-  )}
+ 
 </motion.button>
       ))}
     </div>
@@ -402,8 +350,8 @@ const TECH = [
 
 const ROADMAP = [
   { title: "Phase 1 — Core",          accent: C.dark, points: ["Auth, profiles, and presence","Rooms (1/2/10/seminar/mentor)","Chat + whiteboard"] },
-  { title: "Phase 2 — Collaboration", accent: C.gold, points: ["Screen share (WebRTC)","Tasks & adaptive quizzes","Leaderboards & ranks"] },
-  { title: "Phase 3 — Scale",         accent: C.mid,  points: ["Rewards marketplace","Analytics for mentors","Perf & infra scaling"] },
+  { title: "Phase 2 — Collaboration", accent: C.dark, points: ["Screen share (WebRTC)","Tasks & adaptive quizzes","Leaderboards & ranks"] },
+  { title: "Phase 3 — Scale",         accent: C.dark,  points: ["Rewards marketplace","Analytics for mentors","Perf & infra scaling"] },
 ];
 
 const COUNTERS = [
@@ -417,6 +365,9 @@ function Community() {
 
   const heroRef = useRef(null);
   const { scrollYProgress: heroP } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+
   const heroY = useTransform(heroP, [0, 1], [0, -100]);
   const heroO = useTransform(heroP, [0, .6], [1, 0.9]);
   const heroS = useTransform(heroP, [0, 1], [1, .84]);
@@ -436,7 +387,7 @@ function Community() {
 
   return (
     <div className="bg-white text-[#1A1A1A] min-h-screen overflow-x-hidden">
-      <CustomCursor />
+     
       <ScrollProgressBar />
       <SectionNavDots />
 
@@ -565,13 +516,21 @@ function Community() {
             </MagBtn>
           </motion.div>
 
-          <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:1.8 }}
+          <motion.div
+  style={{ opacity: scrollOpacity }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 2.2 }}
             className="flex justify-center mt-14 cursor-pointer"
             onClick={() => document.getElementById("gs-overview")?.scrollIntoView({ behavior:"smooth" })}>
             <Float duration={2} yRange={10}>
-              <div className="w-5 h-8 rounded-full flex justify-center" style={{ border:`2px solid ${C.p(.28)}` }}>
-                <motion.div className="w-1 h-2 rounded-full mt-2" style={{ background:C.gold }}
-                  animate={{ y:[0,10,0],opacity:[1,.4,1] }} transition={{ duration:1.8,repeat:Infinity }} />
+              <div className="w-7 h-12 rounded-full flex justify-center" style={{ border:`2px solid ${C.p(.28)}` }}>
+                <motion.div
+    className="w-1.5 h-3 bg-[#D4AF37] rounded-full mt-3"
+    animate={{ y: [0, 14, 0], opacity: [1, 0.4, 1] }}
+    transition={{ duration: 1.8, repeat: Infinity }}
+  />
+
               </div>
             </Float>
           </motion.div>
@@ -587,7 +546,7 @@ function Community() {
           <div className="grid gap-10 md:grid-cols-2 items-center">
             <Reveal from="left">
               <SLabel text="About the Project" />
-              <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+              <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
                 About the Project
               </AHeading>
               <p className="mb-6 leading-relaxed" style={{ color:"rgba(26,26,26,0.68)" }}>
@@ -634,7 +593,7 @@ function Community() {
         <div className="mx-auto max-w-7xl relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Key Features" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Key Features
             </AHeading>
             <Reveal from="bottom" delay={.15}>
@@ -677,7 +636,7 @@ function Community() {
         <div className="mx-auto max-w-7xl relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Design" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Engaging UI / UX
             </AHeading>
             <Reveal from="bottom" delay={.15}>
@@ -715,7 +674,7 @@ function Community() {
         <div className="mx-auto max-w-7xl relative z-10">
           <div className="text-center mb-14">
             <SLabel text="What's Next" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Platform Overview
             </AHeading>
           </div>
@@ -727,7 +686,7 @@ function Community() {
                     className="bg-white rounded-xl border border-gray-200 p-6 h-full shadow-sm overflow-hidden relative">
                     <div className="flex items-center gap-3 mb-5">
                       <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black text-white shadow-md"
-                        style={{ background:[`linear-gradient(135deg,${C.dark},${C.mid})`,`linear-gradient(135deg,${C.gold},${C.mid})`,`linear-gradient(135deg,${C.mid},${C.veryDark})`][i] }}>
+                        style={{ background:[`linear-gradient(135deg,${C.dark},${C.mid})`,`linear-gradient(135deg,${C.dark},${C.mid})`,`linear-gradient(135deg,${C.dark},${C.mid})`][i] }}>
                         {i+1}
                       </div>
                       <h4 className="font-bold" style={{ color:C.text }}>{col.title}</h4>
@@ -762,7 +721,7 @@ function Community() {
         <div className="mx-auto max-w-7xl relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Challenge & Solution" />
-            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Problem & Solution
             </AHeading>
           </div>
@@ -773,7 +732,7 @@ function Community() {
                   <div className="bg-white rounded-xl border p-6 h-full shadow-sm" style={{ borderColor:C.pd(.25) }}>
                     <div className="flex items-center gap-3 mb-5">
                       <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm"
-                        style={{ background:`linear-gradient(135deg,${C.mid},${C.veryDark})` }}>
+                        style={{ background:`linear-gradient(135deg,${C.mid},${C.mid})` }}>
                         <Target className="w-4 h-4 text-white" />
                       </div>
                       <h3 className="text-xl font-bold" style={{ color:C.text }}>The Problem</h3>
@@ -824,7 +783,7 @@ function Community() {
         <div className="absolute inset-0 opacity-[.025]" style={{ backgroundImage:`radial-gradient(circle,${C.veryDark} 1px,transparent 1px)`,backgroundSize:"28px 28px" }} />
         <div className="mx-auto max-w-7xl relative z-10 text-center">
           <SLabel text="Results" />
-          <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.01}>
+          <AHeading className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" >
             Impact
           </AHeading>
           <Reveal from="bottom" delay={.15}>

@@ -75,10 +75,10 @@ function FocusInput({ as: Tag = "input", focused, children, ...rest }) {
     <div className="relative">
       {children
         ? <Tag className={inputCls}
-            style={{ borderColor: focused ? "#E66B26" : "#e5e7eb", boxShadow: focused ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }}
+            style={{ borderColor: focused ? "#F04A06" : "#e5e7eb", boxShadow: focused ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }}
             {...rest}>{children}</Tag>
         : <Tag className={inputCls}
-            style={{ borderColor: focused ? "#E66B26" : "#e5e7eb", boxShadow: focused ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }}
+            style={{ borderColor: focused ? "#F04A06" : "#e5e7eb", boxShadow: focused ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }}
             {...rest} />
       }
       <AnimatePresence>
@@ -101,7 +101,7 @@ function Field({ label, icon: Icon, required, children }) {
       <div>
         <label className="block text-xs sm:text-sm font-semibold mb-1.5 flex items-center gap-1.5"
           style={{ color: "#1A1A1A" }}>
-          {Icon && <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#E66B26" }} />}
+          {Icon && <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#F04A06" }} />}
           {label}
           {required && <span style={{ color: "#D4AF37" }}>*</span>}
         </label>
@@ -196,7 +196,7 @@ function EnrollmentModal({ isOpen, onClose, title = "Enrollment Form", type = "e
             {/* ── Header ── */}
             <div className="sticky top-0 z-10 rounded-t-2xl sm:rounded-t-3xl overflow-hidden">
               <div className="relative px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between"
-                style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }}>
+                style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)" }}>
                 {/* dot pattern */}
                 <div className="absolute inset-0 opacity-[.07]"
                   style={{ backgroundImage: "radial-gradient(circle at 2px 2px,rgba(255,255,255,0.5) 1px,transparent 0)", backgroundSize: "22px 22px" }} />
@@ -222,7 +222,7 @@ function EnrollmentModal({ isOpen, onClose, title = "Enrollment Form", type = "e
               </div>
               {/* animated gold bar */}
               <motion.div className="h-[3px] w-full origin-left"
-                style={{ background: "linear-gradient(90deg,#D4AF37,#E66B26,#D4AF37)" }}
+                style={{ background: "linear-gradient(90deg,#D4AF37,#F04A06,#D4AF37)" }}
                 initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: .7, ease: EASE_EXPO, delay: .15 }} />
             </div>
 
@@ -233,11 +233,11 @@ function EnrollmentModal({ isOpen, onClose, title = "Enrollment Form", type = "e
                   className="flex items-center gap-3 p-3 rounded-xl border border-[#D4AF37]/30"
                   style={{ background: "linear-gradient(to right,#FFF4ED,#fff)" }}>
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                    style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }}>
+                    style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)" }}>
                     <HeaderIcon className="w-4 h-4 text-white" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-black text-[#E66B26] truncate">{workshopTitle || formData.course}</p>
+                    <p className="text-xs font-black text-[#F04A06] truncate">{workshopTitle || formData.course}</p>
                     <p className="text-[10px] text-gray-400 mt-0.5">{typeLabel} · Stackenzo</p>
                   </div>
                   <motion.div animate={{ opacity: [.5, 1, .5] }} transition={{ duration: 2, repeat: Infinity }}
@@ -292,10 +292,10 @@ function EnrollmentModal({ isOpen, onClose, title = "Enrollment Form", type = "e
                         <div>
                           <label className="block text-xs sm:text-sm font-semibold mb-1.5 flex items-center gap-1.5"
                             style={{ color: "#1A1A1A" }}>
-                            <Layers className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#E66B26" }} />
+                            <Layers className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#F04A06" }} />
                             Department
                           </label>
-                          <div className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-[#D4AF37]/40 text-sm bg-[#FFF4ED] text-[#E66B26] font-semibold cursor-not-allowed flex items-center gap-2">
+                          <div className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-[#D4AF37]/40 text-sm bg-[#FFF4ED] text-[#F04A06] font-semibold cursor-not-allowed flex items-center gap-2">
                             <motion.div animate={{ opacity: [.5, 1, .5] }} transition={{ duration: 2, repeat: Infinity }}
                               className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] flex-shrink-0" />
                             {formData.department}
@@ -312,7 +312,7 @@ function EnrollmentModal({ isOpen, onClose, title = "Enrollment Form", type = "e
                         <select name="education" value={formData.education} onChange={ch} required
                           className={inputCls}
                           onFocus={fo("education")} onBlur={bl}
-                          style={{ borderColor: focused === "education" ? "#E66B26" : "#e5e7eb", boxShadow: focused === "education" ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }}>
+                          style={{ borderColor: focused === "education" ? "#F04A06" : "#e5e7eb", boxShadow: focused === "education" ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }}>
                           <option value="">Select your education level</option>
                           <option value="high-school">High School</option>
                           <option value="undergraduate">Undergraduate</option>
@@ -339,7 +339,7 @@ function EnrollmentModal({ isOpen, onClose, title = "Enrollment Form", type = "e
                           rows="3" placeholder="Tell us about your goals and expectations…"
                           className={inputCls + " resize-none"}
                           onFocus={fo("message")} onBlur={bl}
-                          style={{ borderColor: focused === "message" ? "#E66B26" : "#e5e7eb", boxShadow: focused === "message" ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }} />
+                          style={{ borderColor: focused === "message" ? "#F04A06" : "#e5e7eb", boxShadow: focused === "message" ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }} />
                         <AnimatePresence>
                           {focused === "message" && (
                             <motion.div className="absolute inset-0 rounded-xl pointer-events-none"
@@ -360,7 +360,7 @@ function EnrollmentModal({ isOpen, onClose, title = "Enrollment Form", type = "e
                         <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: .5 }}>
                           <CheckCircle className="w-5 h-5 text-[#D4AF37]" />
                         </motion.div>
-                        <p className="text-sm font-semibold" style={{ color: "#E66B26" }}>
+                        <p className="text-sm font-semibold" style={{ color: "#F04A06" }}>
                           Enrollment submitted! We'll contact you within 24 hours.
                         </p>
                       </motion.div>
@@ -379,12 +379,12 @@ function EnrollmentModal({ isOpen, onClose, title = "Enrollment Form", type = "e
                   <SI>
                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-5 pb-1">
                       <MagBtn type="button" onClick={onClose}
-                        className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-black text-sm border border-gray-200 text-[#1A1A1A] hover:border-[#E66B26] hover:text-[#E66B26] transition-all bg-white order-2 sm:order-1">
+                        className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-black text-sm border border-gray-200 text-[#1A1A1A] hover:border-[#F04A06] hover:text-[#F04A06] transition-all bg-white order-2 sm:order-1">
                         Cancel
                       </MagBtn>
                       <MagBtn type="submit" disabled={isSubmitting}
                         className="flex-1 relative overflow-hidden px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-black text-sm text-white shadow-md hover:shadow-lg disabled:opacity-55 disabled:cursor-not-allowed flex items-center justify-center gap-2 order-1 sm:order-2"
-                        style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }}>
+                        style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)" }}>
                         <span className="relative z-10 flex items-center gap-2">
                           {isSubmitting ? (
                             <>

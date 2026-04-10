@@ -111,42 +111,7 @@ function GlowCard({ children, className = "", accent = "#D4AF37" }) {
   );
 }
 
-/* ══════════════════════════════════════════════
-   CUSTOM CURSOR
-══════════════════════════════════════════════ */
-function CustomCursor() {
-  const outer = useRef(null), dot = useRef(null), trail = useRef(null);
-  const pos = useRef({ x: -300, y: -300 }), sm = useRef({ x: -300, y: -300 });
-  const [hov, setHov] = useState(false), [clk, setClk] = useState(false);
-  useEffect(() => {
-    const mv = e => { pos.current = { x: e.clientX, y: e.clientY }; };
-    const md = () => setClk(true), mu = () => setClk(false);
-    document.addEventListener("mousemove", mv); document.addEventListener("mousedown", md); document.addEventListener("mouseup", mu);
-    const att = () => { document.querySelectorAll("a,button,[data-hover]").forEach(el => { el.addEventListener("mouseenter", () => setHov(true)); el.addEventListener("mouseleave", () => setHov(false)); }); };
-    att(); const ob = new MutationObserver(att); ob.observe(document.body, { childList: true, subtree: true });
-    let id;
-    const loop = () => {
-      sm.current.x += (pos.current.x - sm.current.x) * .09; sm.current.y += (pos.current.y - sm.current.y) * .09;
-      const s = clk ? .65 : hov ? 2.1 : 1;
-      if (outer.current) outer.current.style.transform = `translate(${sm.current.x - 20}px,${sm.current.y - 20}px) scale(${s})`;
-      if (dot.current)   dot.current.style.transform   = `translate(${pos.current.x - 3}px,${pos.current.y - 3}px) scale(${clk ? 1.9 : 1})`;
-      if (trail.current) trail.current.style.transform = `translate(${sm.current.x - 30}px,${sm.current.y - 30}px) scale(${hov ? 1.6 : .5})`;
-      id = requestAnimationFrame(loop);
-    };
-    id = requestAnimationFrame(loop);
-    return () => { document.removeEventListener("mousemove", mv); document.removeEventListener("mousedown", md); document.removeEventListener("mouseup", mu); ob.disconnect(); cancelAnimationFrame(id); };
-  }, [hov, clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998] transition-[border-color,background] duration-150"
-        style={{ border: hov ? "1.5px solid #D4AF37" : "1.5px solid rgba(230,107,38,0.45)", background: hov ? "rgba(212,175,55,0.07)" : "transparent", willChange: "transform" }} />
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999] transition-colors duration-100"
-        style={{ background: hov ? "#D4AF37" : "#E66B26", willChange: "transform" }} />
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{ background: "radial-gradient(circle,#D4AF37,transparent)", willChange: "transform" }} />
-    </>
-  );
-}
+
 
 /* ══════════════════════════════════════════════
    SCROLL PROGRESS BAR
@@ -286,7 +251,7 @@ function Terms() {
 
   return (
     <div className="bg-white text-[#1A1A1A] min-h-screen overflow-x-hidden">
-      <CustomCursor />
+     
       <ScrollProgressBar />
       <Navbar />
 
@@ -310,12 +275,12 @@ function Terms() {
 
         {/* floating orbs */}
         <Float className="absolute top-1/4 left-[8%] w-3 h-3 rounded-full bg-[#D4AF37]/28 z-[2]" duration={5} delay={0} />
-        <Float className="absolute top-1/3 right-[10%] w-2 h-2 rounded-full bg-[#E66B26]/22 z-[2]" duration={4} delay={1} />
+        <Float className="absolute top-1/3 right-[10%] w-2 h-2 rounded-full bg-[#F04A06]/22 z-[2]" duration={4} delay={1} />
         <Float className="absolute bottom-1/3 left-[14%] w-3.5 h-3.5 rounded-full bg-[#C5531A]/18 z-[2]" duration={6} delay={2} />
 
         {/* dot grid */}
         <div className="absolute inset-0 z-[2] opacity-[.03]"
-          style={{ backgroundImage: "radial-gradient(circle,#E66B26 1px,transparent 1px)", backgroundSize: "30px 30px" }} />
+          style={{ backgroundImage: "radial-gradient(circle,#F04A06 1px,transparent 1px)", backgroundSize: "30px 30px" }} />
 
         {/* kinetic bg text */}
         <motion.div style={{ y: bigY }} className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden z-[2]">
@@ -331,7 +296,7 @@ function Terms() {
             <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 3, repeat: Infinity }}>
               <Scale className="w-4 h-4 text-[#D4AF37]" />
             </motion.div>
-            <span className="text-sm font-semibold text-[#E66B26]">Legal Document</span>
+            <span className="text-sm font-semibold text-[#F04A06]">Legal Document</span>
           </motion.div>
 
           {/* icon */}
@@ -339,7 +304,7 @@ function Terms() {
             className="flex justify-center mb-5">
             <Float duration={4} yRange={10}>
               <div className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-xl"
-                style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }}>
+                style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)" }}>
                 <FileText className="w-10 h-10 text-white" />
               </div>
             </Float>
@@ -349,7 +314,7 @@ function Terms() {
           <motion.h1 initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .32, duration: .72, ease: EASE_EXPO }}
             className="text-4xl sm:text-5xl md:text-6xl font-black mb-4 leading-[1.06]">
             <span className="text-[#1A1A1A]">Terms &</span>{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]">Conditions</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]">Conditions</span>
           </motion.h1>
 
           {/* gold bar */}
@@ -364,7 +329,7 @@ function Terms() {
           {/* last updated */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .65 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium border"
-            style={{ background: "#FFF4ED", borderColor: "rgba(212,175,55,0.35)", color: "#E66B26" }}>
+            style={{ background: "#FFF4ED", borderColor: "rgba(212,175,55,0.35)", color: "#F04A06" }}>
             <motion.span animate={{ opacity: [.6, 1, .6] }} transition={{ duration: 2, repeat: Infinity }}>●</motion.span>
             Last Updated: {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
           </motion.div>
@@ -382,11 +347,11 @@ function Terms() {
           <Reveal from="bottom">
             <GlowCard accent="#D4AF37">
               <div className="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
-                <p className="text-xs font-black text-[#E66B26] uppercase tracking-widest mb-4">Quick Navigation</p>
+                <p className="text-xs font-black text-[#F04A06] uppercase tracking-widest mb-4">Quick Navigation</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {SECTIONS.slice(0, 6).map((s, i) => (
                     <motion.a key={i} href={`#term-${s.num}`} whileHover={{ x: 4 }}
-                      className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#E66B26] transition-colors">
+                      className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#F04A06] transition-colors">
                       <span className="text-[#D4AF37] font-bold">{s.num}.</span>
                       {s.title}
                     </motion.a>
@@ -403,14 +368,14 @@ function Terms() {
             const Icon = sec.icon;
             return (
               <Reveal key={idx} from="bottom" delay={Math.min(idx * .04, .25)}>
-                <GlowCard accent={idx % 2 === 0 ? "#D4AF37" : "#E66B26"} id={`term-${sec.num}`}>
+                <GlowCard accent={idx % 2 === 0 ? "#D4AF37" : "#F04A06"} id={`term-${sec.num}`}>
                   <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden hover:border-[#D4AF37] transition-all group">
                     {/* section header */}
                     <div className="flex items-center gap-4 px-6 py-4 border-b border-gray-100"
                       style={{ background: "linear-gradient(to right,#FFF4ED,#fff)" }}>
                       <Float duration={4 + idx * .2} yRange={6} delay={idx * .15}>
                         <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm flex-shrink-0"
-                          style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }}>
+                          style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)" }}>
                           <Icon className="w-5 h-5 text-white" />
                         </div>
                       </Float>
@@ -418,7 +383,7 @@ function Terms() {
                         <span className="text-xs font-black text-[#D4AF37] bg-[#FFF4ED] px-2.5 py-1 rounded-full border border-[#D4AF37]/30">
                           {sec.num}
                         </span>
-                        <h2 className="text-base sm:text-lg font-black text-[#1A1A1A] group-hover:text-[#E66B26] transition-colors">
+                        <h2 className="text-base sm:text-lg font-black text-[#1A1A1A] group-hover:text-[#F04A06] transition-colors">
                           {sec.title}
                         </h2>
                       </div>
@@ -460,7 +425,7 @@ function Terms() {
           <Reveal from="bottom">
             <GlowCard accent="#D4AF37">
               <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                <div className="absolute inset-0" style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }} />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)" }} />
                 <div className="absolute inset-0 opacity-[.06]"
                   style={{ backgroundImage: "radial-gradient(circle at 2px 2px,rgba(255,255,255,0.3) 1px,transparent 0)", backgroundSize: "30px 30px" }} />
                 <ParticleCanvas count={10} color="rgba(212,175,55,0.1)" />
@@ -472,14 +437,14 @@ function Terms() {
                   <div className="flex flex-col sm:flex-row gap-3 shrink-0">
                     <Link to="/Contact">
                       <motion.button whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: .95 }}
-                        className="px-6 py-3 bg-white text-[#E66B26] rounded-xl font-black text-sm shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+                        className="px-6 py-3 bg-white text-[#F04A06] rounded-xl font-black text-sm shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
                         Contact Us
                         <ChevronRight className="w-4 h-4" />
                       </motion.button>
                     </Link>
                     <Link to="/Privacy">
                       <motion.button whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: .95 }}
-                        className="px-6 py-3 border-2 border-white text-white rounded-xl font-black text-sm hover:bg-white hover:text-[#E66B26] transition-all flex items-center gap-2">
+                        className="px-6 py-3 border-2 border-white text-white rounded-xl font-black text-sm hover:bg-white hover:text-[#F04A06] transition-all flex items-center gap-2">
                         Privacy Policy
                         <Shield className="w-4 h-4" />
                       </motion.button>

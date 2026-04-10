@@ -152,42 +152,7 @@ function MagBtn({ children, className = "", onClick }) {
   );
 }
 
-/* ══════════════════════════════════════════════
-   CUSTOM CURSOR
-══════════════════════════════════════════════ */
-function CustomCursor() {
-  const outer = useRef(null), dot = useRef(null), trail = useRef(null);
-  const pos = useRef({ x: -300, y: -300 }), sm = useRef({ x: -300, y: -300 });
-  const [hov, setHov] = useState(false), [clk, setClk] = useState(false);
-  useEffect(() => {
-    const mv = e => { pos.current = { x: e.clientX, y: e.clientY }; };
-    const md = () => setClk(true), mu = () => setClk(false);
-    document.addEventListener("mousemove", mv); document.addEventListener("mousedown", md); document.addEventListener("mouseup", mu);
-    const att = () => { document.querySelectorAll("a,button,[data-hover]").forEach(el => { el.addEventListener("mouseenter", () => setHov(true)); el.addEventListener("mouseleave", () => setHov(false)); }); };
-    att(); const ob = new MutationObserver(att); ob.observe(document.body, { childList: true, subtree: true });
-    let id;
-    const loop = () => {
-      sm.current.x += (pos.current.x - sm.current.x) * .09; sm.current.y += (pos.current.y - sm.current.y) * .09;
-      const s = clk ? .65 : hov ? 2.1 : 1;
-      if (outer.current) outer.current.style.transform = `translate(${sm.current.x - 20}px,${sm.current.y - 20}px) scale(${s})`;
-      if (dot.current) dot.current.style.transform = `translate(${pos.current.x - 3}px,${pos.current.y - 3}px) scale(${clk ? 1.9 : 1})`;
-      if (trail.current) trail.current.style.transform = `translate(${sm.current.x - 30}px,${sm.current.y - 30}px) scale(${hov ? 1.6 : .5})`;
-      id = requestAnimationFrame(loop);
-    };
-    id = requestAnimationFrame(loop);
-    return () => { document.removeEventListener("mousemove", mv); document.removeEventListener("mousedown", md); document.removeEventListener("mouseup", mu); ob.disconnect(); cancelAnimationFrame(id); };
-  }, [hov, clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998] transition-[border-color,background] duration-150"
-        style={{ border: hov ? "1.5px solid #D4AF37" : "1.5px solid rgba(230,107,38,0.45)", background: hov ? "rgba(212,175,55,0.07)" : "transparent", willChange: "transform" }} />
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999] transition-colors duration-100"
-        style={{ background: hov ? "#D4AF37" : "#E66B26", willChange: "transform" }} />
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{ background: "radial-gradient(circle,#D4AF37,transparent)", willChange: "transform" }} />
-    </>
-  );
-}
+
 
 /* ══════════════════════════════════════════════
    SCROLL PROGRESS BAR
@@ -197,7 +162,7 @@ function ScrollProgressBar() {
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
   return (
     <motion.div className="fixed top-0 left-0 right-0 h-[3px] origin-left z-[9997]"
-      style={{ scaleX, background: "linear-gradient(90deg,#3D1A0A,#E66B26,#D4AF37,#C5531A,#D4AF37)" }} />
+      style={{ scaleX, background: "linear-gradient(90deg,#3D1A0A,#F04A06,#D4AF37,#C5531A,#D4AF37)" }} />
   );
 }
 
@@ -393,16 +358,16 @@ function RNDProjectDetail() {
   if (!project) {
     return (
       <div className="bg-white text-gray-900 min-h-screen flex items-center justify-center">
-        <CustomCursor />
+       
         <ScrollProgressBar />
         <Navbar />
         <div className="text-center mt-24">
           <motion.div initial={{ scale: .7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: .6, ease: EASE_BACK }}>
             <div className="text-6xl mb-6">🔬</div>
-            <h1 className="text-4xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]">Project Not Found</h1>
+            <h1 className="text-4xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]">Project Not Found</h1>
             <p className="text-gray-500 mb-8">The research project you're looking for doesn't exist.</p>
             <Link to="/R_AND_D"
-              className="px-7 py-3 bg-[#E66B26] text-white rounded-full font-black hover:bg-[#C5531A] transition-all inline-flex items-center gap-2">
+              className="px-7 py-3 bg-[#F04A06] text-white rounded-full font-black hover:bg-[#C5531A] transition-all inline-flex items-center gap-2">
               <ArrowLeft className="w-4 h-4" /> Back to R&D
             </Link>
           </motion.div>
@@ -413,7 +378,7 @@ function RNDProjectDetail() {
 
   return (
     <div className="bg-white text-gray-900 min-h-screen overflow-x-hidden">
-      <CustomCursor />
+      
       <ScrollProgressBar />
       <Navbar />
 
@@ -431,7 +396,7 @@ function RNDProjectDetail() {
 
         {/* Dot grid */}
         <div className="absolute inset-0 z-[2] opacity-[.03]"
-          style={{ backgroundImage: "radial-gradient(circle,#E66B26 1px,transparent 1px)", backgroundSize: "32px 32px" }} />
+          style={{ backgroundImage: "radial-gradient(circle,#F04A06 1px,transparent 1px)", backgroundSize: "32px 32px" }} />
 
         {/* Parallax blobs */}
         <motion.div style={{ x: b1x, y: b1y }} className="absolute top-16 left-[5%] w-80 h-80 pointer-events-none z-[2]">
@@ -443,7 +408,7 @@ function RNDProjectDetail() {
 
         {/* Floating orbs */}
         <Float className="absolute top-1/4 left-[7%] w-3 h-3 rounded-full bg-[#D4AF37]/25 z-[2]" duration={5} delay={0} />
-        <Float className="absolute top-1/3 right-[9%] w-2 h-2 rounded-full bg-[#E66B26]/20 z-[2]" duration={4} delay={1} />
+        <Float className="absolute top-1/3 right-[9%] w-2 h-2 rounded-full bg-[#F04A06]/20 z-[2]" duration={4} delay={1} />
         <Float className="absolute bottom-1/3 left-[12%] w-3.5 h-3.5 rounded-full bg-[#C5531A]/18 z-[2]" duration={6} delay={2} />
 
         {/* Floating science emojis */}
@@ -455,7 +420,7 @@ function RNDProjectDetail() {
           {/* Back link */}
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: .55, ease: EASE_EXPO }}>
             <Link to="/R_AND_D"
-              className="inline-flex items-center gap-2 text-[#E66B26] hover:text-[#C5531A] font-bold text-sm mb-8 group transition-colors">
+              className="inline-flex items-center gap-2 text-[#F04A06] hover:text-[#C5531A] font-bold text-sm mb-8 group transition-colors">
               <motion.span animate={{ x: [0, -3, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
                 <ArrowLeft className="w-4 h-4" />
               </motion.span>
@@ -469,7 +434,7 @@ function RNDProjectDetail() {
             <motion.div animate={{ rotate: [0, 20, -20, 0] }} transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}>
               <Microscope className="w-4 h-4 sm:w-5 sm:h-5 text-[#D4AF37]" />
             </motion.div>
-            <span className="text-sm sm:text-base text-[#E66B26] font-semibold">{project.domain}</span>
+            <span className="text-sm sm:text-base text-[#F04A06] font-semibold">{project.domain}</span>
             <motion.div animate={{ opacity: [.5, 1, .5] }} transition={{ duration: 2, repeat: Infinity }}>
               <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]/70" />
             </motion.div>
@@ -478,7 +443,7 @@ function RNDProjectDetail() {
           {/* Title */}
           <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .25, duration: .75, ease: EASE_EXPO }}
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-5 leading-[1.06]">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] via-[#C5531A] to-[#E66B26]">{project.title}</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] via-[#C5531A] to-[#F04A06]">{project.title}</span>
           </motion.h1>
 
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .4, ease: EASE_EXPO }}
@@ -491,7 +456,7 @@ function RNDProjectDetail() {
             className="flex flex-wrap gap-3 justify-center mb-10">
             
             <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm border border-[#D4AF37]/40 rounded-full px-4 py-2 shadow-sm">
-              <Users className="w-4 h-4 text-[#E66B26]" />
+              <Users className="w-4 h-4 text-[#F04A06]" />
               <span className="text-sm font-semibold text-gray-700">{project.teamSize}</span>
             </div>
           </motion.div>
@@ -501,7 +466,7 @@ function RNDProjectDetail() {
             <Float duration={2} yRange={10}>
               <div className="flex flex-col items-center gap-1.5 text-gray-400">
                 <span className="text-[10px] font-medium">Scroll to explore</span>
-                <div className="w-5 h-8 border-2 border-[#E66B26]/22 rounded-full flex justify-center">
+                <div className="w-5 h-8 border-2 border-[#F04A06]/22 rounded-full flex justify-center">
                   <motion.div className="w-1 h-2 bg-[#D4AF37] rounded-full mt-1.5"
                     animate={{ y: [0, 10, 0], opacity: [1, .4, 1] }} transition={{ duration: 1.8, repeat: Infinity }} />
                 </div>
@@ -520,7 +485,7 @@ function RNDProjectDetail() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="Overview" />
-            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Project Overview
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -538,17 +503,17 @@ function RNDProjectDetail() {
             </Reveal>
 
             <Reveal from="right" delay={.1}>
-              <GlowCard accent="#E66B26">
+              <GlowCard accent="#F04A06">
                 <TiltCard intensity={6}>
-                  <div className="bg-white p-6 sm:p-8 rounded-xl border border-[#E66B26]/30 shadow-sm">
+                  <div className="bg-white p-6 sm:p-8 rounded-xl border border-[#F04A06]/30 shadow-sm">
                     <div className="flex items-start gap-4">
                       <Float duration={4} yRange={8}>
-                        <div className="w-12 h-12 bg-gradient-to-br from-[#D4AF37] to-[#E66B26] rounded-xl flex items-center justify-center shadow-md shrink-0">
+                        <div className="w-12 h-12 bg-gradient-to-br from-[#D4AF37] to-[#F04A06] rounded-xl flex items-center justify-center shadow-md shrink-0">
                           <Award className="w-6 h-6 text-white" />
                         </div>
                       </Float>
                       <div>
-                        <h3 className="text-base font-black text-[#E66B26] mb-3">Impact Achieved</h3>
+                        <h3 className="text-base font-black text-[#F04A06] mb-3">Impact Achieved</h3>
                         <p className="text-sm text-gray-600 leading-relaxed">{project.impact}</p>
                       </div>
                     </div>
@@ -569,13 +534,13 @@ function RNDProjectDetail() {
       <section className="py-16 sm:py-20 px-4 sm:px-6 relative overflow-hidden" style={{ background: "#FFF4ED" }}>
         <NoiseCanvas color1="#FFD5B8" color2="#FFCBA4" opacity={0.18} />
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[13vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+          <motion.span className="text-[13vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
             animate={{ y: [0, -10, 0] }} transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}>GOALS</motion.span>
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="Research Goals" />
-            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Research Objectives
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -592,7 +557,7 @@ function RNDProjectDetail() {
                     className="group bg-white p-5 sm:p-6 rounded-xl border border-gray-200 hover:border-[#D4AF37] relative overflow-hidden shadow-sm transition-all h-full">
                     <div className="flex items-start gap-3">
                       <Float duration={4 + i * .4} yRange={7} delay={i * .2}>
-                        <div className="w-9 h-9 bg-gradient-to-br from-[#E66B26] to-[#C5531A] rounded-lg flex items-center justify-center text-white font-black text-sm shadow-md shrink-0">
+                        <div className="w-9 h-9 bg-gradient-to-br from-[#F04A06] to-[#C5531A] rounded-lg flex items-center justify-center text-white font-black text-sm shadow-md shrink-0">
                           {String(i + 1).padStart(2, "0")}
                         </div>
                       </Float>
@@ -605,7 +570,7 @@ function RNDProjectDetail() {
                         <p className="text-sm text-gray-600 leading-relaxed">{objective}</p>
                       </div>
                     </div>
-                    <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#E66B26] rounded-b-xl"
+                    <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#F04A06] rounded-b-xl"
                       initial={{ scaleX: 0 }} whileHover={{ scaleX: 1 }} transition={{ duration: .35 }} />
                   </motion.div>
                 </TiltCard>
@@ -622,7 +587,7 @@ function RNDProjectDetail() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="Deliverables" />
-            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Expected Outcomes
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -645,7 +610,7 @@ function RNDProjectDetail() {
                       </Float>
                       <p className="text-sm text-gray-600 leading-relaxed pt-1">{outcome}</p>
                     </div>
-                    <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#E66B26] rounded-b-xl"
+                    <motion.div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#F04A06] rounded-b-xl"
                       initial={{ scaleX: 0 }} whileHover={{ scaleX: 1 }} transition={{ duration: .35 }} />
                   </motion.div>
                 </TiltCard>
@@ -660,13 +625,13 @@ function RNDProjectDetail() {
       <section className="py-16 sm:py-20 px-4 sm:px-6 relative overflow-hidden" style={{ background: "#FFF4ED" }}>
         <NoiseCanvas color1="#FFD5B8" color2="#FFCBA4" opacity={0.18} />
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="text-[13vw] font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.018]"
+          <motion.span className="text-[13vw] font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.018]"
             animate={{ y: [0, -10, 0] }} transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}>TOOLS</motion.span>
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="Tech Stack" />
-            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Technologies & Tools
             </AHeading>
             <Reveal from="bottom" delay={.2}>
@@ -685,7 +650,7 @@ function RNDProjectDetail() {
                       <motion.div animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 2.2, repeat: Infinity, delay: i * .18 }}>
                         <span className="w-2 h-2 rounded-full bg-[#D4AF37] inline-block" />
                       </motion.div>
-                      <span className="text-sm font-bold text-gray-700 group-hover:text-[#E66B26] transition-colors">{tech}</span>
+                      <span className="text-sm font-bold text-gray-700 group-hover:text-[#F04A06] transition-colors">{tech}</span>
                     </div>
                   </motion.div>
                 </TiltCard>

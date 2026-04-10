@@ -46,34 +46,34 @@ function Footer() {
               <img 
           src="/images/logo for footer.png" 
           alt="Stackenzo" 
-          className="h-8 sm:h-10 md:h-12 w-auto hover:opacity-80 transition-opacity"
+          className="h-8 sm:h-10 md:h-12 w-auto transition-opacity"
         />
-              <p className="text-lg sm:text-xl font-semibold text-[#1A1A1A]">
-              Learn Build Inspire
-              </p>
+              <p className="ml-6 m-0 text-lg sm:text-xl font-semibold text-[#1A1A1A]">
+  Learn Build Inspire
+</p>
             </Link>
             <div className="flex flex-col items-center md:items-start">
               <a
                 href="mailto:hello@stackenzo.com"
-                className="flex items-center gap-3 text-[#1A1A1A] hover:text-[#E66B26] transition-colors group"
+                className="flex items-center gap-3 text-[#1A1A1A] hover:text-[#F04A06] transition-colors group"
               >
                 <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:bg-[#D4AF37]/20 transition-colors border border-gray-200">
-                  <Mail className="w-4 h-4 text-[#E66B26]" />
+                  <Mail className="w-4 h-4 text-[#F04A06]" />
                 </div>
                 <span className="text-sm sm:text-base">hello@stackenzo.com</span>
               </a>
               <a
                 href="tel:+919247577907"
-                className="flex items-center gap-3 text-[#1A1A1A] hover:text-[#E66B26] transition-colors group"
+                className="flex items-center gap-3 text-[#1A1A1A] hover:text-[#F04A06] transition-colors group"
               >
                 <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:bg-[#D4AF37]/20 transition-colors border border-gray-200">
-                  <Phone className="w-4 h-4 text-[#E66B26]" />
+                  <Phone className="w-4 h-4 text-[#F04A06]" />
                 </div>
                 <span className="text-sm sm:text-base">+91 9247577907</span>
               </a>
               <div className="flex items-center gap-3 text-[#1A1A1A] group">
                 <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center border border-gray-200">
-                  <MapPin className="w-4 h-4 text-[#E66B26]" />
+                  <MapPin className="w-4 h-4 text-[#F04A06]" />
                 </div>
                 <span className="text-sm sm:text-base">Nellore, Andhra Pradesh, India</span>
               </div>
@@ -91,7 +91,7 @@ function Footer() {
                 <li key={service.path}>
                   <Link
                     to={service.path}
-                    className="text-[#1A1A1A] hover:text-[#E66B26] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
+                    className="text-[#1A1A1A] hover:text-[#F04A06] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
                   >
                     {service.name}
                   </Link>
@@ -111,7 +111,7 @@ function Footer() {
                 <li key={program.path}>
                   <Link
                     to={program.path}
-                    className="text-[#1A1A1A] hover:text-[#E66B26] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
+                    className="text-[#1A1A1A] hover:text-[#F04A06] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
                   >
                     {program.name}
                   </Link>
@@ -131,7 +131,7 @@ function Footer() {
                 <li key={item.path}>
                   <Link
                     to={item.path}
-                    className="text-[#1A1A1A] hover:text-[#E66B26] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
+                    className="text-[#1A1A1A] hover:text-[#F04A06] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
                   >
                     {item.name}
                   </Link>
@@ -151,7 +151,7 @@ function Footer() {
                 <li key={item.path}>
                   <Link
                     to={item.path}
-                    className="text-[#1A1A1A] hover:text-[#E66B26] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
+                    className="text-[#1A1A1A] hover:text-[#F04A06] transition-colors text-sm sm:text-base inline-block hover:translate-x-1 transform duration-200"
                   >
                     {item.name}
                   </Link>
@@ -173,7 +173,7 @@ function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-[#1A1A1A] hover:bg-[#E66B26] hover:text-white transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 border border-gray-200"
+                    className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-[#1A1A1A] hover:bg-[#F04A06] hover:text-white transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 border border-gray-200"
                   >
                     <Icon className="w-5 h-5" />
                   </a>
@@ -191,7 +191,7 @@ function Footer() {
               <div className="relative bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-2xl">
                 <div className="aspect-[21/9] w-full">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.123!2d79.9865!3d14.4426!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4cf3ce3e08ed79%3A0x3301359c6ed40031!2sNellore%2C%20Andhra%20Pradesh!5e0!3m2!1sen!2sin!4v1700000000!5m2!1sen!2sin"
+                    src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d1462.208654815225!2d79.94902621077726!3d14.40748826002402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTTCsDI0JzI2LjkiTiA3OcKwNTYnNTcuMCJF!5e1!3m2!1sen!2sin!4v1775304227880!5m2!1sen!2sin"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -203,7 +203,7 @@ function Footer() {
 
                 {/* Map overlay with location info */}
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-4 py-2 border border-[#D4AF37]/20">
-                  <p className="text-sm font-medium text-[#E66B26] flex items-center gap-2">
+                  <p className="text-sm font-medium text-[#F04A06] flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-[#D4AF37]" />
                     Our Headquarters
                   </p>
@@ -221,16 +221,16 @@ function Footer() {
               © {new Date().getFullYear()} Stackenzo. All Rights Reserved.
             </p>
             <div className="flex items-center gap-4 order-1 md:order-2">
-              <Link to="/Terms" className="text-[#1A1A1A] hover:text-[#E66B26] text-xs sm:text-sm transition-colors">
+              <Link to="/Terms" className="text-[#1A1A1A] hover:text-[#F04A06] text-xs sm:text-sm transition-colors">
                 Terms
               </Link>
               <span className="text-gray-400">•</span>
-              <Link to="/Privacy" className="text-[#1A1A1A] hover:text-[#E66B26] text-xs sm:text-sm transition-colors">
+              <Link to="/Privacy" className="text-[#1A1A1A] hover:text-[#F04A06] text-xs sm:text-sm transition-colors">
                 Privacy
               </Link>
             </div>
             <p className="text-[#1A1A1A] text-xs sm:text-sm order-3 flex items-center gap-1">
-              Made with <span className="text-red-500 animate-pulse">❤️</span> in India
+              Developed By Stackenzo
             </p>
           </div>
         </div>

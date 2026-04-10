@@ -73,7 +73,7 @@ function Field({ label, icon: Icon, required, children }) {
       <div>
         <label className="block text-xs sm:text-sm font-semibold mb-1.5 flex items-center gap-1.5"
           style={{ color: "#1A1A1A" }}>
-          {Icon && <Icon className="w-3.5 h-3.5" style={{ color: "#E66B26" }} />}
+          {Icon && <Icon className="w-3.5 h-3.5" style={{ color: "#F04A06" }} />}
           {label}
           {required && <span style={{ color: "#D4AF37" }}>*</span>}
         </label>
@@ -94,7 +94,7 @@ function FocusInput({ as: Tag = "input", name, value, onChange, onFocus, onBlur,
       <Tag name={name} value={value} onChange={onChange} onFocus={onFocus} onBlur={onBlur}
         className={inputCls}
         style={{
-          borderColor: focused ? "#E66B26" : "#e5e7eb",
+          borderColor: focused ? "#F04A06" : "#e5e7eb",
           boxShadow: focused ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined,
         }}
         {...rest} />
@@ -186,7 +186,7 @@ function ResumeModal({ isOpen, onClose, jobTitle = "" }) {
             {/* ── Header ── */}
             <div className="sticky top-0 z-10 rounded-t-2xl sm:rounded-t-3xl overflow-hidden">
               <div className="relative px-5 sm:px-7 py-4 sm:py-5 flex items-center justify-between"
-                style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }}>
+                style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)" }}>
                 {/* dot pattern */}
                 <div className="absolute inset-0 opacity-[.07]"
                   style={{ backgroundImage: "radial-gradient(circle at 2px 2px,rgba(255,255,255,0.5) 1px,transparent 0)", backgroundSize: "22px 22px" }} />
@@ -212,7 +212,7 @@ function ResumeModal({ isOpen, onClose, jobTitle = "" }) {
               </div>
 
               {/* gold accent bar */}
-              <motion.div className="h-[3px] w-full origin-left" style={{ background: "linear-gradient(90deg,#D4AF37,#E66B26,#D4AF37)" }}
+              <motion.div className="h-[3px] w-full origin-left" style={{ background: "linear-gradient(90deg,#D4AF37,#F04A06,#D4AF37)" }}
                 initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: .7, ease: EASE_EXPO, delay: .15 }} />
             </div>
 
@@ -263,7 +263,7 @@ function ResumeModal({ isOpen, onClose, jobTitle = "" }) {
                           <select name="experience" value={formData.experience} onChange={handleChange}
                             onFocus={() => setFocused("experience")} onBlur={() => setFocused(null)}
                             className={inputCls}
-                            style={{ borderColor: focused === "experience" ? "#E66B26" : "#e5e7eb", boxShadow: focused === "experience" ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }}>
+                            style={{ borderColor: focused === "experience" ? "#F04A06" : "#e5e7eb", boxShadow: focused === "experience" ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }}>
                             <option value="">Select Experience</option>
                             <option value="Fresher">Fresher</option>
                             <option value="0-1 years">0–1 years</option>
@@ -289,13 +289,13 @@ function ResumeModal({ isOpen, onClose, jobTitle = "" }) {
                     <div className="mt-4">
                       <label className="block text-xs sm:text-sm font-semibold mb-1.5 flex items-center gap-1.5"
                         style={{ color: "#1A1A1A" }}>
-                        <Upload className="w-3.5 h-3.5" style={{ color: "#E66B26" }} />
+                        <Upload className="w-3.5 h-3.5" style={{ color: "#F04A06" }} />
                         Upload Resume (PDF only)
                         <span style={{ color: "#D4AF37" }}>*</span>
                       </label>
                       <input type="file" accept=".pdf" onChange={handleFileChange} required className="hidden" id="resume-upload" />
                       <motion.label htmlFor="resume-upload"
-                        animate={{ borderColor: dragOver ? "#E66B26" : resumeFile ? "#D4AF37" : "#e5e7eb", background: dragOver ? "rgba(230,107,38,0.06)" : resumeFile ? "rgba(212,175,55,0.06)" : "#FFF4ED" }}
+                        animate={{ borderColor: dragOver ? "#F04A06" : resumeFile ? "#D4AF37" : "#e5e7eb", background: dragOver ? "rgba(230,107,38,0.06)" : resumeFile ? "rgba(212,175,55,0.06)" : "#FFF4ED" }}
                         transition={{ duration: .2 }}
                         onDragOver={e => { e.preventDefault(); setDragOver(true); }}
                         onDragLeave={() => setDragOver(false)}
@@ -304,11 +304,11 @@ function ResumeModal({ isOpen, onClose, jobTitle = "" }) {
                         {resumeFile ? (
                           <motion.div initial={{ scale: .9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="flex items-center gap-2.5">
                             <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm"
-                              style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }}>
+                              style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)" }}>
                               <FileText className="w-5 h-5 text-white" />
                             </div>
                             <div>
-                              <p className="text-sm font-semibold" style={{ color: "#E66B26" }}>{resumeFile.name}</p>
+                              <p className="text-sm font-semibold" style={{ color: "#F04A06" }}>{resumeFile.name}</p>
                               <p className="text-xs text-gray-400">{(resumeFile.size / 1024 / 1024).toFixed(2)} MB • PDF</p>
                             </div>
                             <motion.div whileHover={{ scale: 1.1 }}
@@ -322,7 +322,7 @@ function ResumeModal({ isOpen, onClose, jobTitle = "" }) {
                             <motion.div animate={{ y: dragOver ? -4 : 0 }} transition={{ duration: .2 }}
                               className="w-10 h-10 rounded-xl flex items-center justify-center border border-gray-200"
                               style={{ background: "#FFF4ED" }}>
-                              <Upload className="w-5 h-5" style={{ color: "#E66B26" }} />
+                              <Upload className="w-5 h-5" style={{ color: "#F04A06" }} />
                             </motion.div>
                             <div>
                               <p className="text-sm font-semibold" style={{ color: "#1A1A1A" }}>
@@ -345,7 +345,7 @@ function ResumeModal({ isOpen, onClose, jobTitle = "" }) {
                             onFocus={() => setFocused("message")} onBlur={() => setFocused(null)}
                             rows="3" placeholder="Tell us why you'd be a great fit…"
                             className={inputCls + " resize-none"}
-                            style={{ borderColor: focused === "message" ? "#E66B26" : "#e5e7eb", boxShadow: focused === "message" ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }} />
+                            style={{ borderColor: focused === "message" ? "#F04A06" : "#e5e7eb", boxShadow: focused === "message" ? "0 0 0 3px rgba(230,107,38,0.12)" : undefined }} />
                           <AnimatePresence>
                             {focused === "message" && (
                               <motion.div className="absolute inset-0 rounded-xl pointer-events-none"
@@ -367,7 +367,7 @@ function ResumeModal({ isOpen, onClose, jobTitle = "" }) {
                         <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: .5 }}>
                           <CheckCircle className="w-5 h-5 text-[#D4AF37]" />
                         </motion.div>
-                        <p className="text-sm font-semibold" style={{ color: "#E66B26" }}>
+                        <p className="text-sm font-semibold" style={{ color: "#F04A06" }}>
                           Resume submitted! We'll contact you soon.
                         </p>
                       </motion.div>
@@ -387,7 +387,7 @@ function ResumeModal({ isOpen, onClose, jobTitle = "" }) {
                     <div className="flex gap-3 mt-5 sm:mt-6 pb-1">
                       <MagBtn type="submit" disabled={isSubmitting}
                         className="flex-1 relative overflow-hidden py-3 sm:py-3.5 rounded-xl font-black text-sm sm:text-base text-black transition-all shadow-md hover:shadow-lg disabled:opacity-55 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
-                        style={{ background: "linear-gradient(135deg,#E66B26,#C5531A)" }}>
+                        style={{ background: "linear-gradient(135deg,#F04A06,#C5531A)" }}>
                         <span className="relative z-10 flex items-center gap-2">
                           {isSubmitting ? (
                             <>
@@ -408,7 +408,7 @@ function ResumeModal({ isOpen, onClose, jobTitle = "" }) {
                       </MagBtn>
 
                       <MagBtn type="button" onClick={onClose}
-                        className="px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl font-black text-sm border border-gray-200 text-[#1A1A1A] hover:border-[#E66B26] hover:text-[#E66B26] transition-all bg-white">
+                        className="px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl font-black text-sm border border-gray-200 text-[#1A1A1A] hover:border-[#F04A06] hover:text-[#F04A06] transition-all bg-white">
                         Cancel
                       </MagBtn>
                     </div>

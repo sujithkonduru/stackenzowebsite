@@ -23,7 +23,7 @@ const EASE_BACK = [0.34, 1.56, 0.64, 1];
 /* ══════════════════════════════════════════════
    BRAND  — updated to new orange palette
 ══════════════════════════════════════════════ */
-const C = { dark: "#E66B26", mid: "#C5531A", gold: "#D4AF37", light: "#FFF4ED", text: "#1A1A1A" };
+const C = { dark: "#F04A06", mid: "#C5531A", gold: "#D4AF37", light: "#FFF4ED", text: "#1A1A1A" };
 
 /* ══════════════════════════════════════════════
    NAV SECTIONS
@@ -175,47 +175,7 @@ function MagBtn({ children, className = "", onClick, type = "button", disabled =
   );
 }
 
-/* ══════════════════════════════════════════════
-   CUSTOM CURSOR
-══════════════════════════════════════════════ */
-function CustomCursor() {
-  const outer = useRef(null), dot = useRef(null), trail = useRef(null);
-  const pos = useRef({ x: -300, y: -300 }), sm = useRef({ x: -300, y: -300 });
-  const [hov, setHov] = useState(false), [clk, setClk] = useState(false);
-  useEffect(() => {
-    const mv = e => { pos.current = { x: e.clientX, y: e.clientY }; };
-    const md = () => setClk(true), mu = () => setClk(false);
-    document.addEventListener("mousemove", mv);
-    document.addEventListener("mousedown", md);
-    document.addEventListener("mouseup", mu);
-    const att = () => { document.querySelectorAll("a,button,[data-hover]").forEach(el => { el.addEventListener("mouseenter", () => setHov(true)); el.addEventListener("mouseleave", () => setHov(false)); }); };
-    att();
-    const ob = new MutationObserver(att);
-    ob.observe(document.body, { childList: true, subtree: true });
-    let id;
-    const loop = () => {
-      sm.current.x += (pos.current.x - sm.current.x) * .09;
-      sm.current.y += (pos.current.y - sm.current.y) * .09;
-      const s = clk ? .65 : hov ? 2.1 : 1;
-      if (outer.current) outer.current.style.transform = `translate(${sm.current.x - 20}px,${sm.current.y - 20}px) scale(${s})`;
-      if (dot.current)   dot.current.style.transform   = `translate(${pos.current.x - 3}px,${pos.current.y - 3}px) scale(${clk ? 1.9 : 1})`;
-      if (trail.current) trail.current.style.transform = `translate(${sm.current.x - 30}px,${sm.current.y - 30}px) scale(${hov ? 1.6 : .5})`;
-      id = requestAnimationFrame(loop);
-    };
-    id = requestAnimationFrame(loop);
-    return () => { document.removeEventListener("mousemove", mv); document.removeEventListener("mousedown", md); document.removeEventListener("mouseup", mu); ob.disconnect(); cancelAnimationFrame(id); };
-  }, [hov, clk]);
-  return (
-    <>
-      <div ref={outer} className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9998]"
-        style={{ border: hov ? `1.5px solid ${C.gold}` : "1.5px solid rgba(230,107,38,0.45)", background: hov ? "rgba(212,175,55,0.07)" : "transparent", willChange: "transform", transition: "border-color .15s,background .15s" }} />
-      <div ref={dot} className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full pointer-events-none z-[9999]"
-        style={{ background: hov ? C.gold : C.dark, willChange: "transform", transition: "background .1s" }} />
-      <div ref={trail} className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9996] opacity-[.09]"
-        style={{ background: "radial-gradient(circle,#D4AF37,transparent)", willChange: "transform" }} />
-    </>
-  );
-}
+
 
 /* ══════════════════════════════════════════════
    SCROLL PROGRESS BAR
@@ -282,27 +242,7 @@ function SectionNavDots() {
     className="w-2.5 h-2.5 rounded-full"
   />
 
-  {/* 🔥 RING */}
-  {active === i && (
-    <motion.div
-      layoutId="pf-nav-pulse"
-      className="absolute inset-0 rounded-full"
-      style={{ border: "1.5px solid #D4AF37" }}
-      animate={{ scale: [1.5, 2.2, 1.5], opacity: [0.6, 0, 0.6] }}
-      transition={{ duration: 1.5, repeat: Infinity }}
-    />
-  )}
 
-  {/* 🔥 ARROW (OUTSIDE LEFT) */}
-  {active === i && (
-    <motion.div
-      initial={{ opacity: 0, x: 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute right-6" 
-    >
-      <ArrowRight className="w-4 h-4 text-black" />
-    </motion.div>
-  )}
 </motion.button>
       ))}
     </div>
@@ -490,6 +430,9 @@ function Contact() {
   /* hero parallax */
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const { scrollY } = useScroll();
+const scrollOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+
   const heroY = useTransform(heroScroll, [0, 1], [0, -100]);
   const heroO = useTransform(heroScroll, [0, .6], [1, 0.9]);
   const heroS = useTransform(heroScroll, [0, 1], [1, .85]);
@@ -512,7 +455,7 @@ function Contact() {
   return (
     <div className="bg-white text-[#1A1A1A] min-h-screen overflow-x-hidden">
       <Toast message={toast.message} isVisible={toast.show} onClose={() => setToast({ show: false, message: "" })} />
-      <CustomCursor />
+     
       <ScrollProgressBar />
       <SectionNavDots />
       <Navbar />
@@ -562,7 +505,7 @@ function Contact() {
         </motion.div>
 
         {/* dot grid */}
-        <div className="absolute inset-0 z-[2] opacity-[.03] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle,#E66B26 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
+        <div className="absolute inset-0 z-[2] opacity-[.03] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle,#F04A06 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
 
         {/* content */}
         <motion.div style={{ y: heroY, opacity: heroO, scale: heroS }} className="max-w-6xl mx-auto text-center relative z-10 w-full">
@@ -600,7 +543,7 @@ function Contact() {
           <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .7, ease: EASE_EXPO }}
             className="flex flex-wrap justify-center gap-4 sm:gap-6">
             {stats.map((s, i) => (
-              <Float key={i} duration={4 + i * .5} delay={i * .3}>
+              <motion key={i} duration={4 + i * .5} delay={i * .3}>
                 <GlowCard accent={C.gold}>
                   <motion.div whileHover={{ scale: 1.06, y: -4, boxShadow: "0 14px 32px rgba(0,0,0,0.08)" }}
                     className="flex items-center gap-2 sm:gap-3 bg-white shadow-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 border border-gray-200 cursor-default">
@@ -611,16 +554,20 @@ function Contact() {
                     </div>
                   </motion.div>
                 </GlowCard>
-              </Float>
+              </motion>
             ))}
           </motion.div>
 
           {/* scroll cue */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
+          <motion.div
+  style={{ opacity: scrollOpacity }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 2.2 }}
             className="flex justify-center mt-14 cursor-pointer"
             onClick={() => document.getElementById("ct-form")?.scrollIntoView({ behavior: "smooth" })}>
             <Float duration={2} yRange={10}>
-              <div className="w-5 h-8 rounded-full flex justify-center" style={{ border: "2px solid rgba(230,107,38,0.25)" }}>
+              <div className="w-7 h-12 rounded-full flex justify-center" style={{ border: "2px solid rgba(230,107,38,0.25)" }}>
                 <motion.div className="w-1 h-2 rounded-full mt-2" style={{ background: C.gold }}
                   animate={{ y: [0, 10, 0], opacity: [1, .4, 1] }} transition={{ duration: 1.8, repeat: Infinity }} />
               </div>
@@ -633,7 +580,7 @@ function Contact() {
       <WaveDivider color={C.gold} toBg="#fff" />
       <section id="ct-form" className="py-16 sm:py-20 px-4 sm:px-6 bg-white relative overflow-hidden">
         <Spotlight color="rgba(230,107,38,0.04)" />
-        <div className="absolute inset-0 opacity-[.025]" style={{ backgroundImage: "radial-gradient(circle,#E66B26 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
+        <div className="absolute inset-0 opacity-[.025]" style={{ backgroundImage: "radial-gradient(circle,#F04A06 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-6 sm:gap-10">
 
@@ -643,7 +590,7 @@ function Contact() {
                 <TiltCard intensity={4}>
                   <div className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-xl h-full">
                     <SLabel text="Send a Message" />
-                    <AHeading className="text-2xl sm:text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+                    <AHeading className="text-2xl sm:text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
                       Send Us a Message
                     </AHeading>
                     <Reveal from="bottom" delay={.1}>
@@ -739,7 +686,7 @@ function Contact() {
                 <GlowCard accent={C.dark}>
                   <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-lg">
                     <SLabel text="Reach Out" />
-                    <AHeading className="text-2xl sm:text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+                    <AHeading className="text-2xl sm:text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
                       Contact Information
                     </AHeading>
                     <Reveal from="bottom" delay={.1}>
@@ -771,10 +718,10 @@ function Contact() {
                         </Float>
                         <div className="flex-1">
                           <h3 className="font-semibold text-base mb-0.5" style={{ color: C.text }}>{info.title}</h3>
-                          <p className="text-sm transition-colors group-hover:text-[#E66B26]" style={{ color: "rgba(26,26,26,0.65)" }}>{info.details}</p>
+                          <p className="text-sm transition-colors group-hover:text-[#F04A06]" style={{ color: "rgba(26,26,26,0.65)" }}>{info.details}</p>
                         </div>
                         <motion.div animate={{ x: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity, delay: i * .3 }}>
-                          <ChevronRight className="w-5 h-5 flex-shrink-0 transition-colors group-hover:text-[#E66B26]" style={{ color: C.gold }} />
+                          <ChevronRight className="w-5 h-5 flex-shrink-0 transition-colors group-hover:text-[#F04A06]" style={{ color: C.gold }} />
                         </motion.div>
                       </motion.a>
                     </TiltCard>
@@ -823,11 +770,7 @@ function Contact() {
                         <p className="font-semibold text-base" style={{ color: C.dark }}>100% Response Rate</p>
                         <p className="text-sm" style={{ color: "rgba(26,26,26,0.65)" }}>We typically respond within 2 hours</p>
                         <div className="flex items-center gap-2 mt-2">
-                          <div className="flex -space-x-2">
-                            {[1, 2, 3].map(j => (
-                              <div key={j} className="w-6 h-6 rounded-full border-2 border-white" style={{ background: `linear-gradient(135deg,${C.light},${C.light})` }} />
-                            ))}
-                          </div>
+                          
                           <p className="text-xs" style={{ color: "rgba(26,26,26,0.55)" }}>Trusted by 1000+ clients</p>
                         </div>
                       </div>
@@ -845,7 +788,7 @@ function Contact() {
       <section id="ct-map" className="py-16 sm:py-20 px-4 sm:px-6 relative overflow-hidden" style={{ background: C.light }}>
         <NoiseCanvas opacity={0.18} />
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <motion.span className="font-black leading-none tracking-tighter uppercase text-[#E66B26]/[0.022]"
+          <motion.span className="font-black leading-none tracking-tighter uppercase text-[#F04A06]/[0.022]"
             style={{ fontSize: "16vw" }}
             animate={{ y: [0, -10, 0] }} transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}>
             LOCATION
@@ -854,7 +797,7 @@ function Contact() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <SLabel text="Find Us" />
-            <AHeading className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Find Us Here
             </AHeading>
             <Reveal from="bottom" delay={.15}>
@@ -868,7 +811,7 @@ function Contact() {
                   className="relative rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-gray-200 shadow-xl"
                   style={{ height: "clamp(260px,40vw,420px)" }}>
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15350.123456789012!2d79.986456!3d14.442599!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4cf00abcdef123:0xabcdef123456789!2sNellore,+Andhra+Pradesh,+India!5e0!3m2!1sen!2sin!4v0000000000000!5m2!1sen!2sin"
+                    src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d1462.208654815225!2d79.94902621077726!3d14.40748826002402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTTCsDI0JzI2LjkiTiA3OcKwNTYnNTcuMCJF!5e1!3m2!1sen!2sin!4v1775304227880!5m2!1sen!2sin"
                     width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade" title="Stackenzo Location" />
                   <motion.div className="absolute inset-0 pointer-events-none rounded-2xl"
@@ -885,11 +828,11 @@ function Contact() {
       {/* ══ FAQ ══ */}
       <section id="ct-faq" className="py-16 sm:py-20 px-4 sm:px-6 bg-white relative overflow-hidden">
         <Spotlight color="rgba(230,107,38,0.04)" />
-        <div className="absolute inset-0 opacity-[.025]" style={{ backgroundImage: "radial-gradient(circle,#E66B26 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
+        <div className="absolute inset-0 opacity-[.025]" style={{ backgroundImage: "radial-gradient(circle,#F04A06 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
         <div className="max-w-4xl mx-auto relative z-10">
           <div className="text-center mb-14">
             <SLabel text="Common Questions" />
-            <AHeading className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#E66B26] to-[#C5531A]" delay={.05}>
+            <AHeading className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#F04A06] to-[#C5531A]" delay={.05}>
               Frequently Asked Questions
             </AHeading>
             <Reveal from="bottom" delay={.15}>
